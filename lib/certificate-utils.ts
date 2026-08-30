@@ -1,4 +1,5 @@
 import { generateDefaultCertificateSVG } from '@/components/certificates/default-template';
+import { supabase } from '@/lib/supabase';
 
 /**
  * Binary magic-byte header checks to validate uploaded template files.
@@ -251,5 +252,117 @@ export async function downloadCertificateFile(
   link.click();
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
+}
+
+export interface UserCertificateItem {
+  id: string;
+  certificate_code: string;
+  recipient_name: string;
+  issued_at: string;
+  event_title: string;
+  club_name: string;
+  template_url?: string;
+  template_config?: any;
+}
+
+export async function fetchUserCertificates(authUser: { id: string; email?: string | null; user_metadata?: any }): Promise<UserCertificateItem[]> {
+  if (!authUser?.id) return [];
+
+  const certList: UserCertificateItem[] = [];
+  const currentEmail = authUser.email?.toLowerCase();
+  const currentUserId = authUser.id;
+
+  // 1. Fetch explicitly issued certificates from Supabase table
+  try {
+    const { data: explicitCerts } = await (supabase as any)
+      .from('issued_certificates')
+      .select('*, event:events(title), club:clubs(name)')
+      .or(`user_id.eq.${currentUserId}${currentEmail ? `,recipient_email.eq.${currentEmail}` : ''}`)
+      .order('issued_at', { ascending: false });
+
+    if (explicitCerts && explicitCerts.length > 0) {
+      explicitCerts.forEach((c: any) => {
+        certList.push({
+          id: c.id,
+          certificate_code: c.certificate_code,
+          recipient_name: c.recipient_name,
+          issued_at: c.issued_at,
+          event_title: c.event?.title || c.event_title || 'Campus Event',
+          club_name: c.club?.name || c.club_name || 'Campus Organization',
+          template_url: c.template_url,
+          template_config: c.template_config,
+        });
+      });
+    }
+  } catch (dbErr) {
+    console.warn('Supabase certificates fetch error:', dbErr);
+  }
+
+  // 2. Fetch from Local Storage sync layer (strictly matching current user)
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const localRaw = localStorage.getItem('clunite_issued_certificates');
+      if (localRaw) {
+        const localList = JSON.parse(localRaw);
+        localList.forEach((c: any) => {
+          const matchesEmail = currentEmail && c.recipient_email && c.recipient_email.toLowerCase() === currentEmail;
+          const matchesUser = c.user_id && c.user_id === currentUserId;
+          const matchesAny = matchesEmail || matchesUser;
+
+          const alreadyExists = certList.some(
+            (item) => item.certificate_code === c.certificate_code || item.id === c.id
+          );
+
+          if (matchesAny && !alreadyExists) {
+            certList.push({
+              id: c.id,
+              certificate_code: c.certificate_code,
+              recipient_name: c.recipient_name,
+              issued_at: c.issued_at,
+              event_title: c.event_title || 'Campus Event',
+              club_name: c.club_name || 'Campus Club',
+              template_url: c.template_url,
+              template_config: c.template_config,
+            });
+          }
+        });
+      }
+    }
+  } catch (localErr) {
+    console.warn('Local storage fetch error:', localErr);
+  }
+
+  // 3. Check attended events with certificates_enabled (deduplicating against event title & id)
+  try {
+    const { data: attendedRegs } = await supabase
+      .from('event_registrations')
+      .select('id, registered_at, created_at, event:events(id, title, contact_info, club:clubs(name))')
+      .eq('user_id', currentUserId)
+      .eq('status', 'attended');
+
+    if (attendedRegs) {
+      attendedRegs.forEach((r: any) => {
+        const isCertEnabled = r.event?.contact_info?.certificates_enabled;
+        const alreadyExists = certList.some(
+          (c) => c.event_title?.toLowerCase() === r.event?.title?.toLowerCase() || c.id === r.id
+        );
+
+        if (isCertEnabled && !alreadyExists && r.event?.title) {
+          certList.push({
+            id: r.id,
+            certificate_code: `CLU-${r.id.substring(0, 8).toUpperCase()}`,
+            recipient_name: authUser.user_metadata?.full_name || currentEmail?.split('@')[0] || 'Student',
+            issued_at: r.registered_at || r.created_at || new Date().toISOString(),
+            event_title: r.event?.title || 'Campus Event',
+            club_name: r.event?.club?.name || 'Campus Club',
+          });
+        }
+      });
+    }
+  } catch (regErr) {
+    console.warn('Registrations fetch error:', regErr);
+  }
+
+  return certList;
 }
 

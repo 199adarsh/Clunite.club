@@ -18,6 +18,7 @@ import {
   UserX,
   Eye,
   Loader2,
+  TrendingUp,
 } from "lucide-react"
 import Link from "next/link"
 import { useOrganizerEvents } from "@/hooks/useEventParticipants"
@@ -70,6 +71,7 @@ export default function OrganizerDashboardPage() {
   const totalParticipants = filteredEvents.reduce((sum, event) => sum + event.participantStats.total, 0)
   const totalRegistered = filteredEvents.reduce((sum, event) => sum + event.participantStats.registered, 0)
   const totalAttended = filteredEvents.reduce((sum, event) => sum + event.participantStats.attended, 0)
+  const attendanceRate = totalParticipants > 0 ? Math.round((totalAttended / totalParticipants) * 100) : 0
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -147,7 +149,7 @@ export default function OrganizerDashboardPage() {
           </Card>
         )}
 
-        <div className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 md:gap-6">
           <Card className="border border-black/5 shadow-sm hover:shadow-md hover:border-indigo-500 transition-all duration-300 bg-white rounded-2xl overflow-hidden">
             <CardContent className="p-3 sm:p-4 md:p-6">
               <div className="flex items-center justify-between mb-2 sm:mb-4">
@@ -170,10 +172,10 @@ export default function OrganizerDashboardPage() {
                 <div className="p-2 sm:p-3 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 text-white">
                   <Users className="h-4 w-4 sm:h-6 sm:w-6" />
                 </div>
-                <Badge className="bg-purple-50 text-purple-700 border-purple-200 hidden sm:flex">Club Stats</Badge>
+                <Badge className="bg-purple-50 text-purple-700 border-purple-200 hidden sm:flex">Sign-ups</Badge>
               </div>
               <div className="space-y-0.5 sm:space-y-2">
-                <p className="text-[10px] sm:text-sm font-semibold text-gray-600 uppercase tracking-wide">Participants</p>
+                <p className="text-[10px] sm:text-sm font-semibold text-gray-600 uppercase tracking-wide">Sign-ups</p>
                 <p className="text-xl sm:text-3xl font-bold text-gray-900">{totalParticipants}</p>
                 <p className="text-[10px] sm:text-xs text-gray-600 hidden sm:block">{selectedClubId ? 'For selected club' : 'All your clubs'}</p>
               </div>
@@ -186,12 +188,28 @@ export default function OrganizerDashboardPage() {
                 <div className="p-2 sm:p-3 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 text-white">
                   <UserCheck className="h-4 w-4 sm:h-6 sm:w-6" />
                 </div>
-                <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 hidden sm:flex">Active</Badge>
+                <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 hidden sm:flex">Attended</Badge>
               </div>
               <div className="space-y-0.5 sm:space-y-2">
-                <p className="text-[10px] sm:text-sm font-semibold text-gray-600 uppercase tracking-wide">Registered</p>
-                <p className="text-xl sm:text-3xl font-bold text-gray-900">{totalRegistered}</p>
-                <p className="text-[10px] sm:text-xs text-gray-600 hidden sm:block">Currently registered</p>
+                <p className="text-[10px] sm:text-sm font-semibold text-gray-600 uppercase tracking-wide">Attended</p>
+                <p className="text-xl sm:text-3xl font-bold text-gray-900">{totalAttended}</p>
+                <p className="text-[10px] sm:text-xs text-gray-600 hidden sm:block">Verified check-ins</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border border-black/5 shadow-sm hover:shadow-md hover:border-indigo-500 transition-all duration-300 bg-white rounded-2xl overflow-hidden">
+            <CardContent className="p-3 sm:p-4 md:p-6">
+              <div className="flex items-center justify-between mb-2 sm:mb-4">
+                <div className="p-2 sm:p-3 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 text-white">
+                  <TrendingUp className="h-4 w-4 sm:h-6 sm:w-6" />
+                </div>
+                <Badge className="bg-blue-50 text-blue-700 border-blue-200 hidden sm:flex">Rate</Badge>
+              </div>
+              <div className="space-y-0.5 sm:space-y-2">
+                <p className="text-[10px] sm:text-sm font-semibold text-gray-600 uppercase tracking-wide">Turnout</p>
+                <p className="text-xl sm:text-3xl font-bold text-gray-900">{attendanceRate}%</p>
+                <p className="text-[10px] sm:text-xs text-gray-600 hidden sm:block">Attendance ratio</p>
               </div>
             </CardContent>
           </Card>
@@ -240,7 +258,7 @@ export default function OrganizerDashboardPage() {
                         <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs sm:text-sm text-gray-600 mt-0.5">
                           <div className="flex items-center">
                             <MapPin className="h-3 w-3 sm:h-4 sm:w-4 mr-1 shrink-0" />
-                            <span className="truncate max-w-[120px] sm:max-w-none">{event.location || 'Location TBD'}</span>
+                            <span className="truncate max-w-[120px] sm:max-w-none">{event.venue || event.location || 'Campus Venue'}</span>
                           </div>
                           <div className="flex items-center">
                             <Clock className="h-3 w-3 sm:h-4 sm:w-4 mr-1 shrink-0" />

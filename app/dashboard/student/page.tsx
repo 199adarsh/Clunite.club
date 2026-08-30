@@ -7,7 +7,8 @@ import { useAuth } from '@/lib/auth-context';
 import { getUserFromDatabase } from '@/lib/sync-user';
 import { getUserAvatarUrl } from '@/lib/avatar-utils';
 import { supabase } from '@/lib/supabase';
-import { normalizeCollegeName, formatBranchName, getTier } from '@/app/dashboard/student/rank/page';
+import { normalizeCollegeName, formatBranchName, getTier } from '@/lib/tier-utils';
+import { fetchUserCertificates } from '@/lib/certificate-utils';
 import { cn } from '@/lib/utils';
 
 import {
@@ -182,7 +183,7 @@ export default function StudentDashboard() {
 
         // Fetch parallel data from Supabase
         const [
-          { data: regs },
+          { data: regs, error: regsError },
           { data: memberships },
           { data: explicitCerts },
           { data: publishedEvents },
@@ -202,7 +203,6 @@ export default function StudentDashboard() {
                 end_date,
                 registration_deadline,
                 venue,
-                location,
                 mode,
                 entry_fee,
                 prize_pool,
@@ -253,8 +253,17 @@ export default function StudentDashboard() {
             .limit(300)
         ]);
 
-        // Process Registrations
-        const validRegs = (regs || []).filter((r) => r.event);
+        if (regsError) {
+          console.error('Error fetching student registrations:', regsError);
+        }
+
+        // Process Registrations (handle both aliased event and fallback events)
+        const validRegs = (regs || [])
+          .map((r: any) => ({
+            ...r,
+            event: r.event || r.events,
+          }))
+          .filter((r) => r.event);
         setUserRegistrations(validRegs);
 
         const registeredEventsCount = validRegs.filter((r) => r.status !== 'cancelled').length;
@@ -294,38 +303,10 @@ export default function StudentDashboard() {
         });
         setEventAttendees(attendeesMap);
 
-        // Process Certificates
-        const certCodes = new Set<string>();
-        validRegs.forEach((r) => {
-          if (r.status === 'attended' && (r.event as any)?.contact_info?.certificates_enabled) {
-            certCodes.add(r.id);
-          }
-        });
-        if (explicitCerts) {
-          explicitCerts.forEach((c: any) => certCodes.add(c.certificate_code || c.id));
-        }
-
-        // Local storage sync check
-        try {
-          const localRaw = localStorage.getItem('clunite_issued_certificates');
-          if (localRaw) {
-            const localList = JSON.parse(localRaw);
-            const currentEmail = authUser?.email?.toLowerCase();
-            const currentUserId = authUser?.id;
-            localList.forEach((c: any) => {
-              const matchesEmail = c.recipient_email && c.recipient_email.toLowerCase() === currentEmail;
-              const matchesUser = c.user_id && c.user_id === currentUserId;
-              if (matchesEmail || matchesUser) {
-                certCodes.add(c.certificate_code || c.id);
-              }
-            });
-          }
-        } catch (e) {
-          console.warn('Local cert sync warning:', e);
-        }
-
-        const certificatesCount = certCodes.size;
-        setRecentCerts((explicitCerts || []).slice(0, 3));
+        // Process Certificates via unified fetchUserCertificates
+        const userCerts = authUser ? await fetchUserCertificates(authUser) : [];
+        const certificatesCount = userCerts.length;
+        setRecentCerts(userCerts.slice(0, 3));
 
         // Compute Live XP
         const totalXp =

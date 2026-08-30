@@ -273,7 +273,7 @@ export function useOrganizerEvents(userId?: string) {
           *,
           club:clubs(*)
         `)
-        .eq('created_by', currentUserId)
+        .eq('created_by' as any, currentUserId)
         .order('created_at', { ascending: false })
 
       if (!directEventsError && directEvents) {

@@ -64,10 +64,10 @@ export default async function EditEventPage({ params }: { params: { id: string }
               <div className="space-y-2">
                 <Label>Event Banner</Label>
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-400 transition-colors">
-                  {event.banner_url ? (
+                  {event.image_url || event.banner_url ? (
                     <div className="relative">
                       <img
-                        src={event.banner_url || "/placeholder.svg"}
+                        src={event.image_url || event.banner_url || "/placeholder.svg"}
                         alt="Event banner"
                         className="max-h-48 mx-auto rounded-lg"
                       />
@@ -134,18 +134,18 @@ export default async function EditEventPage({ params }: { params: { id: string }
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="date">Event Date *</Label>
-                  <Input id="date" type="date" defaultValue={event.date?.split("T")[0]} />
+                  <Input id="date" type="date" defaultValue={(event.start_date || event.date)?.split("T")[0]} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="time">Event Time *</Label>
-                  <Input id="time" type="time" defaultValue={event.time} />
+                  <Input id="time" type="time" defaultValue={event.time || (event.start_date ? new Date(event.start_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : '')} />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="location">Location *</Label>
-                  <Input id="location" defaultValue={event.location} placeholder="Event venue or online link" />
+                  <Label htmlFor="location">Location / Venue *</Label>
+                  <Input id="location" defaultValue={event.venue || event.location} placeholder="Event venue or online link" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="duration">Duration (hours)</Label>
@@ -192,8 +192,8 @@ export default async function EditEventPage({ params }: { params: { id: string }
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="price">Price ($)</Label>
-                  <Input id="price" type="number" step="0.01" defaultValue={event.price} placeholder="0.00" />
+                  <Label htmlFor="price">Price (₹)</Label>
+                  <Input id="price" type="number" step="0.01" defaultValue={event.entry_fee || event.price || 0} placeholder="0.00" />
                 </div>
               </div>
             </CardContent>

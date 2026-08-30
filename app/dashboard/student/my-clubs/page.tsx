@@ -46,7 +46,7 @@ import { useEventsForClubIds } from '@/hooks/useEvents';
 import { useAuth } from '@/lib/auth-context';
 import { CollegeAutocomplete } from '@/components/college-autocomplete';
 import { supabase } from '@/lib/supabase';
-import { normalizeCollegeName } from '@/app/dashboard/student/rank/page';
+import { normalizeCollegeName } from '@/lib/tier-utils';
 import { toast } from 'sonner';
 
 export default function MyClubsPage() {

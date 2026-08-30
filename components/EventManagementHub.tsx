@@ -69,7 +69,7 @@ export default function EventManagementHub() {
       const { data, error: fetchError } = await supabase
         .from("events")
         .select("*")
-        .eq("created_by", user.id)
+        .eq("created_by" as any, user.id)
         .order("created_at", { ascending: false })
 
       if (fetchError) throw fetchError

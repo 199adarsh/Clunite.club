@@ -51,15 +51,16 @@ export default function EventAnalyticsPage() {
         }
         setEvent(eventData)
 
-        // Get registrations with created_at timestamp
+        // Get registrations with user details
         const { data: regData, error: regError } = await supabase
           .from("event_registrations")
           .select(`
             *,
+            user:users(*),
             registration_data
           `)
           .eq("event_id", eventId)
-          .order("created_at", { ascending: true })
+          .order("registered_at", { ascending: true })
 
         if (regError) {
           console.error("Error fetching registrations:", regError)
@@ -71,14 +72,16 @@ export default function EventAnalyticsPage() {
         // Generate daily registrations from actual data
         const dailyRegistrationsMap = new Map<string, number>()
         if (regs.length > 0) {
-          const firstRegDate = new Date(regs[0].created_at)
+          const firstReg = (regs[0] as any).registered_at || (regs[0] as any).created_at || new Date().toISOString()
+          const firstRegDate = new Date(firstReg)
           const today = new Date()
           for (let d = new Date(firstRegDate); d <= today; d.setDate(d.getDate() + 1)) {
             const dateStr = d.toISOString().split("T")[0]
             dailyRegistrationsMap.set(dateStr, 0)
           }
-          regs.forEach((reg) => {
-            const dateStr = new Date(reg.created_at).toISOString().split("T")[0]
+          regs.forEach((reg: any) => {
+            const regDateStr = reg.registered_at || reg.created_at || new Date().toISOString()
+            const dateStr = new Date(regDateStr).toISOString().split("T")[0]
             const currentCount = dailyRegistrationsMap.get(dateStr) || 0
             dailyRegistrationsMap.set(dateStr, currentCount + 1)
           })
@@ -98,7 +101,7 @@ export default function EventAnalyticsPage() {
         }))
         setDailyRegistrations(daily)
 
-        // Generate demographic data from registrations
+        // Generate demographic data from registrations & user profiles
         const departmentCounts = new Map<string, number>()
         const cStats = new Map<string, number>()
         const departmentColors: Record<string, string> = {
@@ -106,46 +109,52 @@ export default function EventAnalyticsPage() {
           Engineering: "#10b981",
           Technology: "#f59e0b",
           Science: "#ef4444",
-          Other: "#8b5cf6",
+          Management: "#8b5cf6",
+          General: "#6366f1",
+          Other: "#a855f7",
         }
 
         regs.forEach((reg) => {
-          if (reg.registration_data) {
-            if (reg.registration_data.participant_details) {
-              const college = reg.registration_data.participant_details.college || "Other"
-              cStats.set(college, (cStats.get(college) || 0) + 1)
-              let department = "Other"
-              const collegeLC = college.toLowerCase()
-              if (collegeLC.includes("engineering") || collegeLC.includes("tech")) {
-                department = "Engineering"
-              } else if (collegeLC.includes("computer") || collegeLC.includes("it")) {
-                department = "Computer Science"
-              } else if (collegeLC.includes("science")) {
-                department = "Science"
+          const userCollege = reg.user?.college || reg.registration_data?.participant_details?.college || "General Campus"
+          const userBranch = reg.user?.branch || reg.registration_data?.participant_details?.branch || "Engineering"
+          
+          cStats.set(userCollege, (cStats.get(userCollege) || 0) + 1)
+          
+          let department = "Other"
+          const branchLC = (userBranch + " " + userCollege).toLowerCase()
+          if (branchLC.includes("computer") || branchLC.includes("cs") || branchLC.includes("it") || branchLC.includes("aids") || branchLC.includes("aiml")) {
+            department = "Computer Science"
+          } else if (branchLC.includes("mech") || branchLC.includes("civil") || branchLC.includes("electrical") || branchLC.includes("electronics") || branchLC.includes("tech") || branchLC.includes("engineering")) {
+            department = "Engineering"
+          } else if (branchLC.includes("science") || branchLC.includes("math") || branchLC.includes("physics")) {
+            department = "Science"
+          } else if (branchLC.includes("management") || branchLC.includes("business") || branchLC.includes("commerce")) {
+            department = "Management"
+          }
+          departmentCounts.set(department, (departmentCounts.get(department) || 0) + 1)
+
+          if (reg.registration_data?.team_members && Array.isArray(reg.registration_data.team_members)) {
+            reg.registration_data.team_members.slice(1).forEach((member: any) => {
+              const memberCollege = member.college || userCollege
+              const memberBranch = member.branch || userBranch
+              cStats.set(memberCollege, (cStats.get(memberCollege) || 0) + 1)
+              
+              let memberDept = "Other"
+              const memberLC = (memberBranch + " " + memberCollege).toLowerCase()
+              if (memberLC.includes("computer") || memberLC.includes("cs") || memberLC.includes("it")) {
+                memberDept = "Computer Science"
+              } else if (memberLC.includes("tech") || memberLC.includes("engineering")) {
+                memberDept = "Engineering"
+              } else if (memberLC.includes("science")) {
+                memberDept = "Science"
               }
-              departmentCounts.set(department, (departmentCounts.get(department) || 0) + 1)
-            }
-            if (reg.registration_data.team_members) {
-              reg.registration_data.team_members.forEach((member: any) => {
-                const college = member.college || "Other"
-                cStats.set(college, (cStats.get(college) || 0) + 1)
-                let department = "Other"
-                const collegeLC = college.toLowerCase()
-                if (collegeLC.includes("engineering") || collegeLC.includes("tech")) {
-                  department = "Engineering"
-                } else if (collegeLC.includes("computer") || collegeLC.includes("it")) {
-                  department = "Computer Science"
-                } else if (collegeLC.includes("science")) {
-                  department = "Science"
-                }
-                departmentCounts.set(department, (departmentCounts.get(department) || 0) + 1)
-              })
-            }
+              departmentCounts.set(memberDept, (departmentCounts.get(memberDept) || 0) + 1)
+            })
           }
         })
 
         if (departmentCounts.size === 0) {
-          departmentCounts.set("No Data", 1)
+          departmentCounts.set("General", 1)
         }
 
         const demographics = Array.from(departmentCounts.entries()).map(([name, value]) => ({
@@ -193,19 +202,26 @@ export default function EventAnalyticsPage() {
   }
 
   // Calculate KPI metrics from real data
-  const totalRegistrations = registrations.reduce((total, reg) => {
-    if (reg.registration_data) {
-      if (reg.registration_data.team_members) {
-        return total + 1
-      } else if (reg.registration_data.participant_details) {
-        return total + 1
-      }
-    }
-    return total
-  }, 0)
+  let totalParticipantsCount = 0
+  let attendedParticipantsCount = 0
 
+  registrations.forEach((reg) => {
+    if (reg.status === 'cancelled') return
+    let count = 1
+    if (reg.registration_data?.team_members && Array.isArray(reg.registration_data.team_members)) {
+      count = reg.registration_data.team_members.length
+    }
+    totalParticipantsCount += count
+    if (reg.status === 'attended') {
+      attendedParticipantsCount += count
+    }
+  })
+
+  const totalRegistrations = totalParticipantsCount
+  const totalAttended = attendedParticipantsCount
+  const attendanceRate = totalRegistrations > 0 ? (totalAttended / totalRegistrations) * 100 : 0
   const registrationRate = event.max_participants ? (totalRegistrations / event.max_participants) * 100 : 0
-  const revenue = event.entry_fee ? totalRegistrations * event.entry_fee : 0
+  const revenue = event.entry_fee ? totalRegistrations * Number(event.entry_fee) : 0
   const pageViews = Math.max((event as any).views || 0, totalRegistrations)
 
   return (
@@ -241,14 +257,16 @@ export default function EventAnalyticsPage() {
                 <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600 shrink-0" />
                 <div className="min-w-0">
                   <p className="text-xs text-gray-500">Date</p>
-                  <p className="text-xs sm:text-sm font-semibold truncate">{new Date(event.date).toLocaleDateString()}</p>
+                  <p className="text-xs sm:text-sm font-semibold truncate">
+                    {new Date(event.start_date || event.date || Date.now()).toLocaleDateString()}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-2.5 sm:gap-3">
                 <MapPin className="h-4 w-4 sm:h-5 sm:w-5 text-green-600 shrink-0" />
                 <div className="min-w-0">
-                  <p className="text-xs text-gray-500">Location</p>
-                  <p className="text-xs sm:text-sm font-semibold truncate">{event.location}</p>
+                  <p className="text-xs text-gray-500">Venue</p>
+                  <p className="text-xs sm:text-sm font-semibold truncate">{event.venue || event.location || 'Campus Venue'}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2.5 sm:gap-3">
@@ -261,8 +279,8 @@ export default function EventAnalyticsPage() {
               <div className="flex items-center gap-2.5 sm:gap-3">
                 <DollarSign className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-600 shrink-0" />
                 <div className="min-w-0">
-                  <p className="text-xs text-gray-500">Price</p>
-                  <p className="text-xs sm:text-sm font-semibold truncate">${event.price || "Free"}</p>
+                  <p className="text-xs text-gray-500">Entry Fee</p>
+                  <p className="text-xs sm:text-sm font-semibold truncate">{event.entry_fee ? `₹${event.entry_fee}` : (event.price || "Free")}</p>
                 </div>
               </div>
             </div>
@@ -285,16 +303,16 @@ export default function EventAnalyticsPage() {
                   <div className="p-2 sm:p-2.5 rounded-xl text-blue-600 bg-blue-50">
                     <UserCheck className="h-4 w-4 sm:h-5 sm:w-5" />
                   </div>
-                  <Badge className="bg-green-50 text-green-700 border-green-200 px-1.5 py-0.5 text-[10px] sm:text-xs font-semibold">
-                    +{Math.round(totalRegistrations * 0.1)}%
+                  <Badge className="bg-blue-50 text-blue-700 border-blue-200 px-1.5 py-0.5 text-[10px] sm:text-xs font-semibold">
+                    Sign-ups
                   </Badge>
                 </div>
                 <div className="space-y-1 sm:space-y-2">
                   <p className="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase tracking-wide truncate">Registrations</p>
                   <p className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900">{totalRegistrations}</p>
                   <div className="flex items-center text-xs">
-                    <TrendingUp className="h-3.5 w-3.5 mr-1 text-green-600 shrink-0" />
-                    <span className="text-green-600 font-medium truncate text-[11px] sm:text-xs">Trending upward</span>
+                    <TrendingUp className="h-3.5 w-3.5 mr-1 text-blue-600 shrink-0" />
+                    <span className="text-blue-600 font-medium truncate text-[11px] sm:text-xs">Total sign-ups</span>
                   </div>
                 </div>
               </CardContent>
@@ -303,19 +321,19 @@ export default function EventAnalyticsPage() {
             <Card className="border-0 shadow-md hover:shadow-lg transition-all duration-300 bg-white rounded-2xl overflow-hidden">
               <CardContent className="p-3 sm:p-5">
                 <div className="flex items-center justify-between mb-2 sm:mb-4">
-                  <div className="p-2 sm:p-2.5 rounded-xl text-green-600 bg-green-50">
+                  <div className="p-2 sm:p-2.5 rounded-xl text-emerald-600 bg-emerald-50">
                     <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
                   </div>
-                  <Badge className="bg-green-50 text-green-700 border-green-200 px-1.5 py-0.5 text-[10px] sm:text-xs font-semibold">
-                    +{Math.round(registrationRate * 0.05)}%
+                  <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 px-1.5 py-0.5 text-[10px] sm:text-xs font-semibold">
+                    {Math.round(attendanceRate)}% Turnout
                   </Badge>
                 </div>
                 <div className="space-y-1 sm:space-y-2">
-                  <p className="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase tracking-wide truncate">Reg. Rate</p>
-                  <p className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900">{registrationRate.toFixed(1)}%</p>
+                  <p className="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase tracking-wide truncate">Attended (Check-in)</p>
+                  <p className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900">{totalAttended}</p>
                   <div className="flex items-center text-xs">
-                    <TrendingUp className="h-3.5 w-3.5 mr-1 text-green-600 shrink-0" />
-                    <span className="text-green-600 font-medium truncate text-[11px] sm:text-xs">Above average</span>
+                    <TrendingUp className="h-3.5 w-3.5 mr-1 text-emerald-600 shrink-0" />
+                    <span className="text-emerald-600 font-medium truncate text-[11px] sm:text-xs">{totalAttended} of {totalRegistrations} present</span>
                   </div>
                 </div>
               </CardContent>
@@ -327,16 +345,16 @@ export default function EventAnalyticsPage() {
                   <div className="p-2 sm:p-2.5 rounded-xl text-purple-600 bg-purple-50">
                     <DollarSign className="h-4 w-4 sm:h-5 sm:w-5" />
                   </div>
-                  <Badge className="bg-green-50 text-green-700 border-green-200 px-1.5 py-0.5 text-[10px] sm:text-xs font-semibold">
-                    +12%
+                  <Badge className="bg-purple-50 text-purple-700 border-purple-200 px-1.5 py-0.5 text-[10px] sm:text-xs font-semibold">
+                    Gross
                   </Badge>
                 </div>
                 <div className="space-y-1 sm:space-y-2">
                   <p className="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase tracking-wide truncate">Revenue</p>
-                  <p className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900">${revenue}</p>
+                  <p className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900">₹{revenue.toLocaleString()}</p>
                   <div className="flex items-center text-xs">
-                    <TrendingUp className="h-3.5 w-3.5 mr-1 text-green-600 shrink-0" />
-                    <span className="text-green-600 font-medium truncate text-[11px] sm:text-xs">Growing steadily</span>
+                    <TrendingUp className="h-3.5 w-3.5 mr-1 text-purple-600 shrink-0" />
+                    <span className="text-purple-600 font-medium truncate text-[11px] sm:text-xs">Ticket collections</span>
                   </div>
                 </div>
               </CardContent>
@@ -348,16 +366,16 @@ export default function EventAnalyticsPage() {
                   <div className="p-2 sm:p-2.5 rounded-xl text-orange-600 bg-orange-50">
                     <Eye className="h-4 w-4 sm:h-5 sm:w-5" />
                   </div>
-                  <Badge className="bg-green-50 text-green-700 border-green-200 px-1.5 py-0.5 text-[10px] sm:text-xs font-semibold">
-                    +18%
+                  <Badge className="bg-orange-50 text-orange-700 border-orange-200 px-1.5 py-0.5 text-[10px] sm:text-xs font-semibold">
+                    {registrationRate > 0 ? `${registrationRate.toFixed(0)}%` : 'Active'}
                   </Badge>
                 </div>
                 <div className="space-y-1 sm:space-y-2">
                   <p className="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase tracking-wide truncate">Page Views</p>
                   <p className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900">{pageViews.toLocaleString()}</p>
                   <div className="flex items-center text-xs">
-                    <TrendingUp className="h-3.5 w-3.5 mr-1 text-green-600 shrink-0" />
-                    <span className="text-green-600 font-medium truncate text-[11px] sm:text-xs">High visibility</span>
+                    <TrendingUp className="h-3.5 w-3.5 mr-1 text-orange-600 shrink-0" />
+                    <span className="text-orange-600 font-medium truncate text-[11px] sm:text-xs">Interest traffic</span>
                   </div>
                 </div>
               </CardContent>
@@ -389,26 +407,33 @@ export default function EventAnalyticsPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {registrations.slice(0, 10).map((registration, index) => (
-                    <tr key={registration.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50/50"}>
-                      <td className="py-2.5 px-3 sm:py-3 sm:px-4 text-xs sm:text-sm font-medium text-gray-900">{registration.participant_name || "N/A"}</td>
-                      <td className="py-2.5 px-3 sm:py-3 sm:px-4 text-xs sm:text-sm text-gray-600">{registration.participant_email || "N/A"}</td>
-                      <td className="py-2.5 px-3 sm:py-3 sm:px-4 text-xs sm:text-sm text-gray-600">{new Date(registration.created_at).toLocaleDateString()}</td>
-                      <td className="py-2.5 px-3 sm:py-3 sm:px-4 text-xs sm:text-sm">
-                        <Badge 
-                          variant={
-                            (registration.status === "confirmed" ? "default" : 
-                            registration.status === "cancelled" ? "destructive" : 
-                            registration.status === "pending" ? "outline" : 
-                            "default") as any
-                          }
-                          className="text-[10px] sm:text-xs"
-                        >
-                          {registration.status ? registration.status.charAt(0).toUpperCase() + registration.status.slice(1) : 'Confirmed'}
-                        </Badge>
-                      </td>
-                    </tr>
-                  ))}
+                  {registrations.slice(0, 10).map((registration, index) => {
+                    const participantName = registration.user?.full_name || registration.participant_name || registration.registration_data?.team_members?.[0]?.name || "Participant";
+                    const participantEmail = registration.user?.email || registration.participant_email || registration.registration_data?.team_members?.[0]?.email || "N/A";
+                    const regDate = new Date(registration.registered_at || registration.created_at || Date.now()).toLocaleDateString();
+
+                    return (
+                      <tr key={registration.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50/50"}>
+                        <td className="py-2.5 px-3 sm:py-3 sm:px-4 text-xs sm:text-sm font-medium text-gray-900">{participantName}</td>
+                        <td className="py-2.5 px-3 sm:py-3 sm:px-4 text-xs sm:text-sm text-gray-600">{participantEmail}</td>
+                        <td className="py-2.5 px-3 sm:py-3 sm:px-4 text-xs sm:text-sm text-gray-600">{regDate}</td>
+                        <td className="py-2.5 px-3 sm:py-3 sm:px-4 text-xs sm:text-sm">
+                          <Badge 
+                            variant={
+                              (registration.status === "attended" ? "default" : 
+                              registration.status === "registered" ? "secondary" : 
+                              registration.status === "cancelled" ? "destructive" : 
+                              registration.status === "waitlisted" ? "outline" : 
+                              "default") as any
+                            }
+                            className="text-[10px] sm:text-xs capitalize"
+                          >
+                            {registration.status || 'Registered'}
+                          </Badge>
+                        </td>
+                      </tr>
+                    );
+                  })}
                   {registrations.length === 0 && (
                     <tr>
                       <td colSpan={4} className="text-center py-6 text-xs sm:text-sm text-muted-foreground">

@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Loader2, QrCode, Calendar, MapPin, User, CheckCircle2, ChevronRight, Award, Info } from 'lucide-react';
+import { fetchUserCertificates } from '@/lib/certificate-utils';
 
 export default function StudentQrPage() {
   const router = useRouter();
@@ -59,48 +60,9 @@ export default function StudentQrPage() {
           setTickets(regs || []);
         }
 
-        // Calculate certificates count for Student ID Badge
-        const certCodes = new Set<string>();
-        if (regs) {
-          regs.forEach((r: any) => {
-            if (r.status === 'attended' && r.events?.contact_info?.certificates_enabled) {
-              certCodes.add(r.id);
-            }
-          });
-        }
-
-        try {
-          const { data: explicitCerts } = await (supabase as any)
-            .from('issued_certificates')
-            .select('id, certificate_code')
-            .or(`user_id.eq.${authUser!.id},recipient_email.eq.${authUser!.email}`);
-          if (explicitCerts) {
-            explicitCerts.forEach((c: any) => certCodes.add(c.certificate_code || c.id));
-          }
-        } catch (e) {
-          console.warn('issued_certificates query warning:', e);
-        }
-
-        try {
-          const localRaw = localStorage.getItem('clunite_issued_certificates');
-          if (localRaw) {
-            const localList = JSON.parse(localRaw);
-            const currentEmail = authUser?.email?.toLowerCase();
-            const currentUserId = authUser?.id;
-            localList.forEach((c: any) => {
-              if (
-                (c.recipient_email && c.recipient_email.toLowerCase() === currentEmail) ||
-                (c.user_id && c.user_id === currentUserId)
-              ) {
-                certCodes.add(c.certificate_code || c.id);
-              }
-            });
-          }
-        } catch (e) {
-          console.warn('local storage query warning:', e);
-        }
-
-        setCertificatesCount(certCodes.size);
+        // Calculate certificates count for Student ID Badge via unified fetchUserCertificates
+        const userCerts = authUser ? await fetchUserCertificates(authUser) : [];
+        setCertificatesCount(userCerts.length);
       } catch (err) {
         console.error('Error loading QR data:', err);
       } finally {

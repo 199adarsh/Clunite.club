@@ -202,7 +202,7 @@ export default function CreateClubPage() {
       const clubPIN = await generatePIN()
 
       // Store pending club in database with PIN
-      const { data: pendingClub, error: pendingError } = await supabase
+      const { data: pendingClub, error: pendingError } = await (supabase as any)
         .from('pending_clubs')
         .insert({
           pin: clubPIN,

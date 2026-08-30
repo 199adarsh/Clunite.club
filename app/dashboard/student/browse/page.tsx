@@ -557,7 +557,7 @@ export default function BrowseEventsPage() {
                         </div>
                         <div className="flex items-center gap-2 truncate">
                           <MapPin className="h-3.5 w-3.5 text-slate-400 shrink-0" />
-                          <span className="truncate">{event.venue || event.location || 'Campus Auditorium'}</span>
+                          <span className="truncate">{event.venue || (event as any).location || 'Campus Auditorium'}</span>
                         </div>
                         <div className="flex items-center gap-2 text-indigo-600 font-semibold truncate pt-0.5">
                           <GraduationCap className="h-3.5 w-3.5 text-indigo-500 shrink-0" />
@@ -716,7 +716,7 @@ export default function BrowseEventsPage() {
                           </span>
                           <span className="flex items-center gap-1 truncate">
                             <MapPin className="h-3.5 w-3.5 text-slate-400 shrink-0" />
-                            {event.venue || event.location || 'Campus Auditorium'}
+                            {event.venue || (event as any).location || 'Campus Auditorium'}
                           </span>
                           <span className="flex items-center gap-1 text-indigo-600 font-semibold truncate">
                             <GraduationCap className="h-3.5 w-3.5 text-indigo-500 shrink-0" />

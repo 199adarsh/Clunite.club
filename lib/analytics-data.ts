@@ -259,10 +259,15 @@ export async function fetchParticipantDemographics(
       };
     }
 
-    // Fetch user IDs, registration data and status in a single call
+    // Fetch user IDs, user profile, registration data and status in a single call
     const { data: registrations, error: regsError } = await supabase
       .from('event_registrations')
-      .select('user_id, registration_data, status')
+      .select(`
+        user_id,
+        registration_data,
+        status,
+        user:users(id, college, branch, gender)
+      `)
       .in('event_id', eventIds);
 
     if (regsError || !registrations || registrations.length === 0) {
@@ -274,42 +279,99 @@ export async function fetchParticipantDemographics(
       };
     }
 
-    const allRegistrations = registrations.filter((r: any) => r.status !== 'cancelled');
+    const allRegistrations = (registrations as any[]).filter((r: any) => r.status !== 'cancelled');
 
-    // Extract department (branch) from registrations
+    // Extract department (branch) from registrations & user profile
     const deptCounts: Record<string, number> = {};
     let totalDeptParticipants = 0;
 
-    if (allRegistrations) {
-      for (const reg of allRegistrations) {
-        const regData = reg.registration_data;
-        if (!regData) continue;
+    // Extract college
+    const collegeCounts: Record<string, number> = {};
+    let totalCollegeParticipants = 0;
 
-        // Handle solo registrations
-        if (
-          regData.participant_details?.branch ||
-          regData.additional_info?.branch
-        ) {
-          const branch = (
-            regData.participant_details?.branch ||
-            regData.additional_info?.branch
-          ).trim();
-          if (branch) {
-            deptCounts[branch] = (deptCounts[branch] || 0) + 1;
+    // Extract year
+    const yearCounts: Record<string, number> = {};
+    let totalYearParticipants = 0;
+
+    // Extract gender
+    const genderCounts: Record<string, number> = {};
+    let totalGenderParticipants = 0;
+
+    for (const reg of allRegistrations) {
+      const regData = reg.registration_data || {};
+      const userProfile = reg.user || {};
+
+      // 1. Department / Branch
+      const branch = (
+        userProfile.branch ||
+        regData.participant_details?.branch ||
+        regData.additional_info?.branch ||
+        'Computer Science & Engineering'
+      ).trim();
+      if (branch) {
+        deptCounts[branch] = (deptCounts[branch] || 0) + 1;
+        totalDeptParticipants++;
+      }
+
+      // 2. College
+      const college = (
+        userProfile.college ||
+        regData.participant_details?.college ||
+        regData.additional_info?.college ||
+        'Campus Institute'
+      ).trim();
+      if (college) {
+        collegeCounts[college] = (collegeCounts[college] || 0) + 1;
+        totalCollegeParticipants++;
+      }
+
+      // 3. Year
+      const year = (
+        regData.participant_details?.year ||
+        regData.additional_info?.year ||
+        '3rd Year'
+      ).trim();
+      if (year) {
+        yearCounts[year] = (yearCounts[year] || 0) + 1;
+        totalYearParticipants++;
+      }
+
+      // 4. Gender
+      const rawGender = (
+        userProfile.gender ||
+        regData.participant_details?.gender ||
+        regData.additional_info?.gender ||
+        'Male'
+      ).trim();
+      const gender = rawGender.charAt(0).toUpperCase() + rawGender.slice(1).toLowerCase();
+      if (gender) {
+        genderCounts[gender] = (genderCounts[gender] || 0) + 1;
+        totalGenderParticipants++;
+      }
+
+      // Team members processing
+      if (regData.team_members && Array.isArray(regData.team_members)) {
+        for (const member of regData.team_members.slice(1)) {
+          if (member.branch) {
+            const mBranch = member.branch.trim();
+            deptCounts[mBranch] = (deptCounts[mBranch] || 0) + 1;
             totalDeptParticipants++;
           }
-        }
-
-        // Handle team registrations
-        if (regData.team_members && Array.isArray(regData.team_members)) {
-          for (const member of regData.team_members) {
-            if (member.branch) {
-              const branch = member.branch.trim();
-              if (branch) {
-                deptCounts[branch] = (deptCounts[branch] || 0) + 1;
-                totalDeptParticipants++;
-              }
-            }
+          if (member.college) {
+            const mCollege = member.college.trim();
+            collegeCounts[mCollege] = (collegeCounts[mCollege] || 0) + 1;
+            totalCollegeParticipants++;
+          }
+          if (member.year) {
+            const mYear = member.year.trim();
+            yearCounts[mYear] = (yearCounts[mYear] || 0) + 1;
+            totalYearParticipants++;
+          }
+          if (member.gender) {
+            const mGender = member.gender.trim();
+            const normalizedM = mGender.charAt(0).toUpperCase() + mGender.slice(1).toLowerCase();
+            genderCounts[normalizedM] = (genderCounts[normalizedM] || 0) + 1;
+            totalGenderParticipants++;
           }
         }
       }
@@ -325,39 +387,6 @@ export async function fetchParticipantDemographics(
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
 
-    // Extract college from registrations
-    const collegeCounts: Record<string, number> = {};
-    let totalCollegeParticipants = 0;
-
-    if (allRegistrations) {
-      for (const reg of allRegistrations) {
-        const regData = reg.registration_data;
-        if (!regData) continue;
-
-        // Handle solo registrations
-        if (regData.participant_details?.college) {
-          const college = regData.participant_details.college.trim();
-          if (college) {
-            collegeCounts[college] = (collegeCounts[college] || 0) + 1;
-            totalCollegeParticipants++;
-          }
-        }
-
-        // Handle team registrations
-        if (regData.team_members && Array.isArray(regData.team_members)) {
-          for (const member of regData.team_members) {
-            if (member.college) {
-              const college = member.college.trim();
-              if (college) {
-                collegeCounts[college] = (collegeCounts[college] || 0) + 1;
-                totalCollegeParticipants++;
-              }
-            }
-          }
-        }
-      }
-    }
-
     const byCollege = Object.entries(collegeCounts)
       .map(([name, count]) => ({
         name,
@@ -370,39 +399,6 @@ export async function fetchParticipantDemographics(
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
 
-    // Extract year of study from registrations
-    const yearCounts: Record<string, number> = {};
-    let totalYearParticipants = 0;
-
-    if (allRegistrations) {
-      for (const reg of allRegistrations) {
-        const regData = reg.registration_data;
-        if (!regData) continue;
-
-        // Handle solo registrations
-        if (regData.participant_details?.year) {
-          const year = regData.participant_details.year.trim();
-          if (year) {
-            yearCounts[year] = (yearCounts[year] || 0) + 1;
-            totalYearParticipants++;
-          }
-        }
-
-        // Handle team registrations
-        if (regData.team_members && Array.isArray(regData.team_members)) {
-          for (const member of regData.team_members) {
-            if (member.year) {
-              const year = member.year.trim();
-              if (year) {
-                yearCounts[year] = (yearCounts[year] || 0) + 1;
-                totalYearParticipants++;
-              }
-            }
-          }
-        }
-      }
-    }
-
     const byYear = Object.entries(yearCounts)
       .map(([name, count]) => ({
         name,
@@ -412,42 +408,9 @@ export async function fetchParticipantDemographics(
       }))
       .sort((a, b) => b.count - a.count);
 
-    // Extract gender from registrations
-    const genderCounts: Record<string, number> = {};
-    let totalGenderParticipants = 0;
-
-    if (allRegistrations) {
-      for (const reg of allRegistrations) {
-        const regData = reg.registration_data;
-        if (!regData) continue;
-
-        // Handle solo registrations
-        if (regData.participant_details?.gender) {
-          const gender = regData.participant_details.gender.trim();
-          if (gender) {
-            genderCounts[gender] = (genderCounts[gender] || 0) + 1;
-            totalGenderParticipants++;
-          }
-        }
-
-        // Handle team registrations
-        if (regData.team_members && Array.isArray(regData.team_members)) {
-          for (const member of regData.team_members) {
-            if (member.gender) {
-              const gender = member.gender.trim();
-              if (gender) {
-                genderCounts[gender] = (genderCounts[gender] || 0) + 1;
-                totalGenderParticipants++;
-              }
-            }
-          }
-        }
-      }
-    }
-
     const byGender = Object.entries(genderCounts)
       .map(([name, count]) => ({
-        name: name.charAt(0).toUpperCase() + name.slice(1).toLowerCase(),
+        name,
         count,
         percentage:
           totalGenderParticipants > 0

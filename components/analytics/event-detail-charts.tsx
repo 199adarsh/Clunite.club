@@ -54,8 +54,8 @@ export function EventAnalyticsCharts({ dailyRegistrations, demographicData }: Ev
                   borderRadius: "8px",
                   boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
                 }}
-                labelFormatter={(date) => {
-                  return new Date(date).toLocaleDateString();
+                labelFormatter={(date: any) => {
+                  return date ? new Date(date).toLocaleDateString() : "";
                 }}
               />
               <Area

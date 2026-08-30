@@ -49,7 +49,7 @@ import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { formatBranchName } from '@/app/dashboard/student/rank/page';
+import { formatBranchName } from '@/lib/tier-utils';
 
 interface ClubMemberItem {
   id: string;

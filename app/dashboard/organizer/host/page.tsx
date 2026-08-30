@@ -45,6 +45,7 @@ export default function HostEventPage() {
   const [stats, setStats] = useState({
     totalEvents: 0,
     totalRegistrations: 0,
+    attendedCount: 0,
     attendanceRate: 0,
     engagementRate: 0,
   });
@@ -198,6 +199,7 @@ export default function HostEventPage() {
       setStats({
         totalEvents,
         totalRegistrations,
+        attendedCount: attendedParticipantCount,
         attendanceRate,
         engagementRate: Math.min(engagementRate, 100),
       });
@@ -278,32 +280,32 @@ export default function HostEventPage() {
               icon: Calendar,
               label: 'Total Events',
               value: loading ? '...' : stats.totalEvents.toString(),
-              trend: '+18%',
-              desc: 'Events hosted',
+              badge: 'Events',
+              desc: `${stats.totalEvents} hosted for club`,
               gradient: 'from-blue-500 to-blue-600',
             },
             {
               icon: Users,
               label: 'Registrations',
               value: loading ? '...' : stats.totalRegistrations.toString(),
-              trend: '+5%',
-              desc: 'Sign-ups received',
+              badge: 'Sign-ups',
+              desc: 'Total participant entries',
               gradient: 'from-purple-500 to-purple-600',
             },
             {
               icon: TrendingUp,
-              label: 'Attendance',
+              label: 'Attendance Rate',
               value: loading ? '...' : `${stats.attendanceRate}%`,
-              trend: '+8%',
-              desc: 'Average rate',
+              badge: `${stats.attendedCount} Attended`,
+              desc: `${stats.attendedCount} verified check-ins`,
               gradient: 'from-green-500 to-green-600',
             },
             {
               icon: Award,
-              label: 'Engagement',
+              label: 'Engagement Rate',
               value: loading ? '...' : `${stats.engagementRate}%`,
-              trend: '-2%',
-              desc: 'Interaction level',
+              badge: 'Activity',
+              desc: 'Average interaction ratio',
               gradient: 'from-violet-500 to-purple-600',
             },
           ].map((stat, index) => (
@@ -316,12 +318,8 @@ export default function HostEventPage() {
                   <div className="p-2 bg-white/20 rounded-lg">
                     <stat.icon className="h-5 w-5" />
                   </div>
-                  <span
-                    className={`text-xs font-semibold px-2 py-1 rounded ${
-                      stat.trend.startsWith('+') ? 'bg-white/30' : 'bg-white/20'
-                    }`}
-                  >
-                    {stat.trend}
+                  <span className="text-xs font-semibold px-2 py-1 rounded bg-white/20">
+                    {stat.badge}
                   </span>
                 </div>
                 <div>
