@@ -253,33 +253,33 @@ export default function ModernAnalyticsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FBF7F4] p-6">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="min-h-screen bg-[#FBF7F4] px-3 py-4 sm:px-6 sm:py-6 md:px-8">
+      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6 md:space-y-8">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             <Link href="/dashboard/organizer/host">
-              <Button variant="outline" size="icon" className="rounded-full">
-                <ArrowLeft className="h-5 w-5" />
+              <Button variant="outline" size="icon" className="rounded-full shrink-0 h-9 w-9 sm:h-10 sm:w-10">
+                <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
             </Link>
             <div>
-              <h1 className="text-4xl font-bold text-gray-900">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
                 Analytics Dashboard
               </h1>
-              <p className="text-gray-600 mt-1">
+              <p className="text-xs sm:text-sm text-gray-600 mt-0.5">
                 Real-time insights into your event performance
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 w-full sm:w-auto">
             <Dialog open={expenseOpen} onOpenChange={setExpenseOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-orange-600 hover:bg-orange-700 text-white">
+                <Button className="bg-orange-600 hover:bg-orange-700 text-white w-full sm:w-auto font-semibold rounded-xl shadow-sm">
                   Add Transaction
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-lg">
+              <DialogContent className="max-w-[95vw] sm:max-w-lg p-4 sm:p-6 max-h-[90vh] overflow-y-auto rounded-2xl">
                 <DialogHeader>
                   <DialogTitle>Add Income or Expense</DialogTitle>
                 </DialogHeader>
@@ -501,124 +501,124 @@ export default function ModernAnalyticsPage() {
         </div>
 
         {/* KPI Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-4 md:gap-6">
           {/* Total Events */}
-          <Card className="border-none shadow-md bg-gradient-to-br from-orange-500 to-orange-600 text-white">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-white">
+          <Card className="border-none shadow-md bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-2xl overflow-hidden">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-5 pb-1 sm:pb-2">
+              <CardTitle className="text-xs sm:text-sm font-semibold text-white truncate">
                 Total Events
               </CardTitle>
-              <Calendar className="h-5 w-5 text-white" />
+              <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-white/90 shrink-0" />
             </CardHeader>
-            <CardContent>
-              <div className="text-4xl font-bold mb-1">{stats.totalEvents}</div>
-              <div className="flex items-center gap-1 text-sm text-white/90">
-                <TrendingUp className="h-3.5 w-3.5" />
-                <span>+{stats.growthRate}% from last month</span>
+            <CardContent className="p-3 sm:p-5 pt-0 sm:pt-0">
+              <div className="text-xl sm:text-2xl md:text-3xl font-black mb-0.5 sm:mb-1">{stats.totalEvents}</div>
+              <div className="flex items-center gap-1 text-[10px] sm:text-xs text-white/90 truncate">
+                <TrendingUp className="h-3 w-3 shrink-0" />
+                <span className="truncate">+{stats.growthRate}% vs last mo</span>
               </div>
             </CardContent>
           </Card>
 
           {/* Total Participants */}
-          <Card className="border-none shadow-md bg-gradient-to-br from-blue-500 to-blue-600 text-white">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-white">
-                Total Participants
+          <Card className="border-none shadow-md bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl overflow-hidden">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-5 pb-1 sm:pb-2">
+              <CardTitle className="text-xs sm:text-sm font-semibold text-white truncate">
+                Participants
               </CardTitle>
-              <Users className="h-5 w-5 text-white" />
+              <Users className="h-4 w-4 sm:h-5 sm:w-5 text-white/90 shrink-0" />
             </CardHeader>
-            <CardContent>
-              <div className="text-4xl font-bold mb-1">
+            <CardContent className="p-3 sm:p-5 pt-0 sm:pt-0">
+              <div className="text-xl sm:text-2xl md:text-3xl font-black mb-0.5 sm:mb-1">
                 {stats.totalParticipants.toLocaleString()}
               </div>
-              <div className="flex items-center gap-1 text-sm text-white/90">
-                <TrendingUp className="h-3.5 w-3.5" />
-                <span>Across all events</span>
+              <div className="flex items-center gap-1 text-[10px] sm:text-xs text-white/90 truncate">
+                <TrendingUp className="h-3 w-3 shrink-0" />
+                <span className="truncate">Across all events</span>
               </div>
             </CardContent>
           </Card>
 
           {/* Average Satisfaction */}
-          <Card className="border-none shadow-md bg-gradient-to-br from-purple-500 to-purple-600 text-white">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-white">
+          <Card className="border-none shadow-md bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-2xl overflow-hidden">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-5 pb-1 sm:pb-2">
+              <CardTitle className="text-xs sm:text-sm font-semibold text-white truncate">
                 Avg Satisfaction
               </CardTitle>
-              <Award className="h-5 w-5 text-white" />
+              <Award className="h-4 w-4 sm:h-5 sm:w-5 text-white/90 shrink-0" />
             </CardHeader>
-            <CardContent>
-              <div className="text-4xl font-bold mb-1">
+            <CardContent className="p-3 sm:p-5 pt-0 sm:pt-0">
+              <div className="text-xl sm:text-2xl md:text-3xl font-black mb-0.5 sm:mb-1">
                 {stats.avgSatisfaction}/5.0
               </div>
-              <p className="text-sm text-white/90">Excellent rating</p>
+              <p className="text-[10px] sm:text-xs text-white/90 truncate">Excellent rating</p>
             </CardContent>
           </Card>
 
           {/* Total Revenue */}
-          <Card className="border-none shadow-md bg-gradient-to-br from-green-500 to-green-600 text-white">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-white">
+          <Card className="border-none shadow-md bg-gradient-to-br from-green-500 to-green-600 text-white rounded-2xl overflow-hidden">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-5 pb-1 sm:pb-2">
+              <CardTitle className="text-xs sm:text-sm font-semibold text-white truncate">
                 Total Revenue
               </CardTitle>
-              <DollarSign className="h-5 w-5 text-white" />
+              <DollarSign className="h-4 w-4 sm:h-5 sm:w-5 text-white/90 shrink-0" />
             </CardHeader>
-            <CardContent>
-              <div className="text-4xl font-bold mb-1">
+            <CardContent className="p-3 sm:p-5 pt-0 sm:pt-0">
+              <div className="text-xl sm:text-2xl md:text-3xl font-black mb-0.5 sm:mb-1">
                 ₹{stats.totalRevenue.toLocaleString()}
               </div>
-              <p className="text-sm text-white/90">+18.2% growth</p>
+              <p className="text-[10px] sm:text-xs text-white/90 truncate">+18.2% growth</p>
             </CardContent>
           </Card>
 
           {/* Engagement Rate */}
-          <Card className="border-none shadow-md bg-gradient-to-br from-pink-500 to-pink-600 text-white">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-white">
-                Engagement Rate
+          <Card className="border-none shadow-md bg-gradient-to-br from-pink-500 to-pink-600 text-white rounded-2xl overflow-hidden">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-5 pb-1 sm:pb-2">
+              <CardTitle className="text-xs sm:text-sm font-semibold text-white truncate">
+                Engagement
               </CardTitle>
-              <Zap className="h-5 w-5 text-white" />
+              <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-white/90 shrink-0" />
             </CardHeader>
-            <CardContent>
-              <div className="text-4xl font-bold mb-1">
+            <CardContent className="p-3 sm:p-5 pt-0 sm:pt-0">
+              <div className="text-xl sm:text-2xl md:text-3xl font-black mb-0.5 sm:mb-1">
                 {stats.engagementRate}%
               </div>
-              <p className="text-sm text-white/90">Above average</p>
+              <p className="text-[10px] sm:text-xs text-white/90 truncate">Above average</p>
             </CardContent>
           </Card>
 
           {/* Growth Rate */}
-          <Card className="border-none shadow-md bg-gradient-to-br from-teal-500 to-teal-600 text-white">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-white">
+          <Card className="border-none shadow-md bg-gradient-to-br from-teal-500 to-teal-600 text-white rounded-2xl overflow-hidden">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-5 pb-1 sm:pb-2">
+              <CardTitle className="text-xs sm:text-sm font-semibold text-white truncate">
                 Growth Rate
               </CardTitle>
-              <TrendingUp className="h-5 w-5 text-white" />
+              <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-white/90 shrink-0" />
             </CardHeader>
-            <CardContent>
-              <div className="text-4xl font-bold mb-1">
+            <CardContent className="p-3 sm:p-5 pt-0 sm:pt-0">
+              <div className="text-xl sm:text-2xl md:text-3xl font-black mb-0.5 sm:mb-1">
                 +{stats.growthRate}%
               </div>
-              <p className="text-sm text-white/90">Month over month</p>
+              <p className="text-[10px] sm:text-xs text-white/90 truncate">Month over month</p>
             </CardContent>
           </Card>
         </div>
 
         {/* Insights Section */}
         {insights.length > 0 && (
-          <Card>
-            <CardHeader>
+          <Card className="border border-black/5 shadow-sm rounded-2xl overflow-hidden bg-white">
+            <CardHeader className="p-4 sm:p-6 pb-2 sm:pb-3">
               <div className="flex items-center gap-2">
-                <Lightbulb className="h-5 w-5 text-muted-foreground" />
+                <Lightbulb className="h-5 w-5 text-amber-500" />
                 <div>
-                  <CardTitle>Key Insights</CardTitle>
-                  <CardDescription>
+                  <CardTitle className="text-base sm:text-lg">Key Insights</CardTitle>
+                  <CardDescription className="text-xs">
                     AI-powered analysis of your event performance
                   </CardDescription>
                 </div>
               </div>
             </CardHeader>
-            <CardContent>
-              <div className="grid gap-4 md:grid-cols-2">
+            <CardContent className="p-4 sm:p-6 pt-2 sm:pt-3">
+              <div className="grid gap-2.5 sm:gap-4 sm:grid-cols-2">
                 {insights.map((insight, index) => {
                   const IconComponent = getInsightIcon(insight.icon);
                   const gradients = [
@@ -630,14 +630,14 @@ export default function ModernAnalyticsPage() {
                   return (
                     <div
                       key={index}
-                      className={`flex gap-3 rounded-lg border p-4 ${gradients[index % gradients.length]}`}
+                      className={`flex gap-2.5 sm:gap-3 rounded-xl border p-3 sm:p-4 ${gradients[index % gradients.length]}`}
                     >
-                      <IconComponent className="h-5 w-5 text-gray-700 mt-0.5" />
-                      <div className="flex-1">
-                        <p className="font-semibold text-sm mb-1 text-gray-900">
+                      <IconComponent className="h-4 w-4 sm:h-5 sm:w-5 text-gray-700 mt-0.5 shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="font-bold text-xs sm:text-sm mb-0.5 text-gray-900 truncate">
                           {insight.title}
                         </p>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-xs text-gray-600 leading-relaxed">
                           {insight.message}
                         </p>
                       </div>
@@ -650,12 +650,12 @@ export default function ModernAnalyticsPage() {
         )}
 
         {/* Analytics Tabs */}
-        <Tabs defaultValue="overview" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="participants">Participants</TabsTrigger>
-            <TabsTrigger value="events">Events</TabsTrigger>
-            <TabsTrigger value="financial">Financial</TabsTrigger>
+        <Tabs defaultValue="overview" className="space-y-4 sm:space-y-6">
+          <TabsList className="w-full grid grid-cols-4 bg-slate-200/80 p-1 rounded-xl h-auto">
+            <TabsTrigger value="overview" className="text-xs sm:text-sm py-2 px-1 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm font-semibold">Overview</TabsTrigger>
+            <TabsTrigger value="participants" className="text-xs sm:text-sm py-2 px-1 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm font-semibold">Participants</TabsTrigger>
+            <TabsTrigger value="events" className="text-xs sm:text-sm py-2 px-1 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm font-semibold">Events</TabsTrigger>
+            <TabsTrigger value="financial" className="text-xs sm:text-sm py-2 px-1 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm font-semibold">Financial</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
@@ -742,34 +742,34 @@ export default function ModernAnalyticsPage() {
               )}
             </div>
             {eventComparison.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Event Performance Details</CardTitle>
-                  <CardDescription>
+              <Card className="border border-black/5 shadow-sm rounded-2xl overflow-hidden bg-white">
+                <CardHeader className="p-4 sm:p-6 pb-2 sm:pb-3">
+                  <CardTitle className="text-base sm:text-lg">Event Performance Details</CardTitle>
+                  <CardDescription className="text-xs">
                     Detailed metrics for each event
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
+                <CardContent className="p-0 sm:p-6 sm:pt-0">
+                  <div className="overflow-x-auto no-scrollbar">
+                    <table className="w-full text-left min-w-[500px]">
                       <thead>
-                        <tr className="border-b border-gray-200">
-                          <th className="text-left py-3 px-4 font-semibold text-gray-700">
+                        <tr className="border-b border-gray-200 bg-slate-50/50">
+                          <th className="py-2.5 px-3 sm:py-3 sm:px-4 font-semibold text-gray-700 text-xs sm:text-sm">
                             Event
                           </th>
-                          <th className="text-left py-3 px-4 font-semibold text-gray-700">
+                          <th className="py-2.5 px-3 sm:py-3 sm:px-4 font-semibold text-gray-700 text-xs sm:text-sm">
                             Type
                           </th>
-                          <th className="text-right py-3 px-4 font-semibold text-gray-700">
-                            Registrations
+                          <th className="text-right py-2.5 px-3 sm:py-3 sm:px-4 font-semibold text-gray-700 text-xs sm:text-sm">
+                            Reg.
                           </th>
-                          <th className="text-right py-3 px-4 font-semibold text-gray-700">
-                            Attendance
+                          <th className="text-right py-2.5 px-3 sm:py-3 sm:px-4 font-semibold text-gray-700 text-xs sm:text-sm">
+                            Att.
                           </th>
-                          <th className="text-right py-3 px-4 font-semibold text-gray-700">
+                          <th className="text-right py-2.5 px-3 sm:py-3 sm:px-4 font-semibold text-gray-700 text-xs sm:text-sm">
                             Revenue
                           </th>
-                          <th className="text-right py-3 px-4 font-semibold text-gray-700">
+                          <th className="text-right py-2.5 px-3 sm:py-3 sm:px-4 font-semibold text-gray-700 text-xs sm:text-sm">
                             Rate
                           </th>
                         </tr>
@@ -778,26 +778,26 @@ export default function ModernAnalyticsPage() {
                         {eventComparison.slice(0, 10).map((event, index) => (
                           <tr
                             key={index}
-                            className="border-b border-gray-100 hover:bg-gray-50"
+                            className="border-b border-gray-100 hover:bg-gray-50/80 transition-colors"
                           >
-                            <td className="py-3 px-4 font-medium text-gray-900">
+                            <td className="py-2.5 px-3 sm:py-3 sm:px-4 font-medium text-gray-900 text-xs sm:text-sm truncate max-w-[140px] sm:max-w-none">
                               {event.title}
                             </td>
-                            <td className="py-3 px-4">
-                              <Badge variant="outline" className="capitalize">
+                            <td className="py-2.5 px-3 sm:py-3 sm:px-4 text-xs sm:text-sm">
+                              <Badge variant="outline" className="capitalize text-[10px] sm:text-xs">
                                 {event.type}
                               </Badge>
                             </td>
-                            <td className="text-right py-3 px-4 font-semibold">
+                            <td className="text-right py-2.5 px-3 sm:py-3 sm:px-4 font-semibold text-xs sm:text-sm">
                               {event.registrations}
                             </td>
-                            <td className="text-right py-3 px-4 font-semibold">
+                            <td className="text-right py-2.5 px-3 sm:py-3 sm:px-4 font-semibold text-xs sm:text-sm">
                               {event.attendance}
                             </td>
-                            <td className="text-right py-3 px-4 font-semibold">
+                            <td className="text-right py-2.5 px-3 sm:py-3 sm:px-4 font-semibold text-xs sm:text-sm">
                               ₹{event.revenue.toLocaleString()}
                             </td>
-                            <td className="text-right py-3 px-4">
+                            <td className="text-right py-2.5 px-3 sm:py-3 sm:px-4 text-xs sm:text-sm">
                               <span
                                 className={`font-bold ${
                                   event.registrations > 0 &&
@@ -858,48 +858,48 @@ export default function ModernAnalyticsPage() {
                 </Card>
               )}
             </div>
-            <Card>
-              <CardHeader>
-                <CardTitle>Financial Summary</CardTitle>
-                <CardDescription>
+            <Card className="border border-black/5 shadow-sm rounded-2xl overflow-hidden bg-white">
+              <CardHeader className="p-4 sm:p-6 pb-2 sm:pb-3">
+                <CardTitle className="text-base sm:text-lg">Financial Summary</CardTitle>
+                <CardDescription className="text-xs">
                   Overall financial performance metrics
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="grid gap-4 md:grid-cols-3">
-                  <div className="p-4 rounded-lg bg-gradient-to-br from-green-50 to-emerald-100 border border-green-200">
-                    <div className="flex items-center gap-2 text-sm text-green-700 mb-2">
+              <CardContent className="p-4 sm:p-6 pt-2 sm:pt-3">
+                <div className="grid gap-3 sm:gap-4 sm:grid-cols-3">
+                  <div className="p-3.5 sm:p-4 rounded-xl bg-gradient-to-br from-green-50 to-emerald-100 border border-green-200">
+                    <div className="flex items-center gap-1.5 text-xs sm:text-sm text-green-700 mb-1 sm:mb-2">
                       <TrendingUp className="h-4 w-4" />
-                      <span className="font-medium">Total Income</span>
+                      <span className="font-semibold">Total Income</span>
                     </div>
-                    <p className="text-3xl font-bold text-green-900">
+                    <p className="text-2xl sm:text-3xl font-black text-green-900">
                       ₹{financial.totalIncome.toLocaleString()}
                     </p>
-                    <p className="text-xs text-green-600 mt-1">
+                    <p className="text-[10px] sm:text-xs text-green-600 mt-0.5">
                       From all events
                     </p>
                   </div>
-                  <div className="p-4 rounded-lg bg-gradient-to-br from-red-50 to-rose-100 border border-red-200">
-                    <div className="flex items-center gap-2 text-sm text-red-700 mb-2">
+                  <div className="p-3.5 sm:p-4 rounded-xl bg-gradient-to-br from-red-50 to-rose-100 border border-red-200">
+                    <div className="flex items-center gap-1.5 text-xs sm:text-sm text-red-700 mb-1 sm:mb-2">
                       <TrendingDown className="h-4 w-4" />
-                      <span className="font-medium">Total Expenses</span>
+                      <span className="font-semibold">Total Expenses</span>
                     </div>
-                    <p className="text-3xl font-bold text-red-900">
+                    <p className="text-2xl sm:text-3xl font-black text-red-900">
                       ₹{financial.totalExpenses.toLocaleString()}
                     </p>
-                    <p className="text-xs text-red-600 mt-1">
+                    <p className="text-[10px] sm:text-xs text-red-600 mt-0.5">
                       Operational costs
                     </p>
                   </div>
                   <div
-                    className={`p-4 rounded-lg border ${
+                    className={`p-3.5 sm:p-4 rounded-xl border ${
                       financial.netProfit >= 0
                         ? 'bg-gradient-to-br from-blue-50 to-cyan-100 border-blue-200'
                         : 'bg-gradient-to-br from-orange-50 to-amber-100 border-orange-200'
                     }`}
                   >
                     <div
-                      className={`flex items-center gap-2 text-sm mb-2 ${
+                      className={`flex items-center gap-1.5 text-xs sm:text-sm mb-1 sm:mb-2 ${
                         financial.netProfit >= 0
                           ? 'text-blue-700'
                           : 'text-orange-700'
@@ -910,10 +910,10 @@ export default function ModernAnalyticsPage() {
                       ) : (
                         <TrendingDown className="h-4 w-4" />
                       )}
-                      <span className="font-medium">Net Profit</span>
+                      <span className="font-semibold">Net Profit</span>
                     </div>
                     <p
-                      className={`text-3xl font-bold ${
+                      className={`text-2xl sm:text-3xl font-black ${
                         financial.netProfit >= 0
                           ? 'text-blue-900'
                           : 'text-orange-900'
@@ -922,7 +922,7 @@ export default function ModernAnalyticsPage() {
                       ₹{financial.netProfit.toLocaleString()}
                     </p>
                     <p
-                      className={`text-xs mt-1 ${
+                      className={`text-[10px] sm:text-xs mt-0.5 ${
                         financial.netProfit >= 0
                           ? 'text-blue-600'
                           : 'text-orange-600'

@@ -209,11 +209,11 @@ export default function HostEventPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f5f5f7] px-8 py-6 space-y-10">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="min-h-screen bg-[#f5f5f7] px-3 py-4 sm:px-6 sm:py-5 md:px-8 md:py-6 space-y-6 sm:space-y-8 md:space-y-10">
+      <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8">
         {/* Modern Header with Club Switcher */}
-        <div className="bg-white rounded-2xl p-8 border border-black/5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-2">
+        <div className="bg-white rounded-2xl p-4 sm:p-6 md:p-8 border border-black/5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6">
+          <div className="space-y-1 sm:space-y-2">
             <div className="flex items-center gap-2 mb-1">
               <Sparkles className="h-5 w-5 text-indigo-600" />
               {userClubs.length > 1 ? (
@@ -254,16 +254,16 @@ export default function HostEventPage() {
                 </Badge>
               )}
             </div>
-            <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
               Event Management Hub
             </h1>
-            <p className="text-gray-600 font-medium">
+            <p className="text-gray-600 font-medium text-sm sm:text-base">
               Create engaging events and track your success with powerful analytics.
             </p>
           </div>
           {isOwner && (
             <Link href="/dashboard/organizer/manage-admins">
-              <Button size="lg" className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+              <Button size="lg" className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold px-4 sm:px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto">
                 <Users className="h-5 w-5 mr-2" />
                 Manage Admins
               </Button>
@@ -339,7 +339,7 @@ export default function HostEventPage() {
         {/* Feature Cards - elevated, modern, with subtle animated accents */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Host New Event Card */}
-          <Card className="relative bg-white/95 border border-slate-200/60 rounded-3xl p-8 shadow-sm hover:shadow-xl hover:border-indigo-300 transition-all duration-300 flex flex-col justify-between min-h-[320px] group">
+          <Card className="relative bg-white/95 border border-slate-200/60 rounded-3xl p-4 sm:p-6 md:p-8 shadow-sm hover:shadow-xl hover:border-indigo-300 transition-all duration-300 flex flex-col justify-between min-h-[200px] sm:min-h-[260px] md:min-h-[320px] group">
             <div className="absolute -top-12 -right-12 w-28 h-28 rounded-full bg-indigo-500/5 blur-xl group-hover:scale-125 transition-transform duration-500 pointer-events-none" />
             
             <div className="space-y-6">
@@ -386,7 +386,7 @@ export default function HostEventPage() {
           </Card>
 
           {/* Organizers Panel Card */}
-          <Card className="relative bg-white/95 border border-slate-200/60 rounded-3xl p-8 shadow-sm hover:shadow-xl hover:border-purple-300 transition-all duration-300 flex flex-col justify-between min-h-[320px] group">
+          <Card className="relative bg-white/95 border border-slate-200/60 rounded-3xl p-4 sm:p-6 md:p-8 shadow-sm hover:shadow-xl hover:border-purple-300 transition-all duration-300 flex flex-col justify-between min-h-[200px] sm:min-h-[260px] md:min-h-[320px] group">
             <div className="absolute -top-12 -right-12 w-28 h-28 rounded-full bg-purple-500/5 blur-xl group-hover:scale-125 transition-transform duration-500 pointer-events-none" />
             
             <div className="space-y-6">
@@ -433,7 +433,7 @@ export default function HostEventPage() {
           </Card>
 
           {/* Event Participants Dashboard Card */}
-          <Card className="relative bg-white/95 border border-slate-200/60 rounded-3xl p-8 shadow-sm hover:shadow-xl hover:border-emerald-300 transition-all duration-300 flex flex-col justify-between min-h-[320px] group">
+          <Card className="relative bg-white/95 border border-slate-200/60 rounded-3xl p-4 sm:p-6 md:p-8 shadow-sm hover:shadow-xl hover:border-emerald-300 transition-all duration-300 flex flex-col justify-between min-h-[200px] sm:min-h-[260px] md:min-h-[320px] group">
             <div className="absolute -top-12 -right-12 w-28 h-28 rounded-full bg-emerald-500/5 blur-xl group-hover:scale-125 transition-transform duration-500 pointer-events-none" />
             
             <div className="space-y-6">
@@ -480,7 +480,7 @@ export default function HostEventPage() {
           </Card>
 
           {/* Bulk Certificates & Distribution Card */}
-          <Card className="relative bg-white/95 border border-slate-200/60 rounded-3xl p-8 shadow-sm hover:shadow-xl hover:border-amber-300 transition-all duration-300 flex flex-col justify-between min-h-[320px] group">
+          <Card className="relative bg-white/95 border border-slate-200/60 rounded-3xl p-4 sm:p-6 md:p-8 shadow-sm hover:shadow-xl hover:border-amber-300 transition-all duration-300 flex flex-col justify-between min-h-[200px] sm:min-h-[260px] md:min-h-[320px] group">
             <div className="absolute -top-12 -right-12 w-28 h-28 rounded-full bg-amber-500/5 blur-xl group-hover:scale-125 transition-transform duration-500 pointer-events-none" />
             
             <div className="space-y-6">

@@ -52,12 +52,12 @@ export default function DashboardLayout({
   }
 
   return (
-    <SidebarProvider defaultOpen={true}>
+    <SidebarProvider defaultOpen={false}>
       <div className="flex min-h-screen w-full bg-slate-50">
         <AppSidebar />
-        <div className="flex-1 flex flex-col min-w-0">
+        <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
           <DashboardHeader />
-          <main className="flex-1 p-6 bg-slate-50">{children}</main>
+          <main className="flex-1 p-3 sm:p-4 md:p-6 bg-slate-50 overflow-x-hidden">{children}</main>
         </div>
       </div>
     </SidebarProvider>

@@ -24,15 +24,15 @@ import {
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white/90 backdrop-blur-xl border border-gray-200 rounded-xl p-4 shadow-2xl">
-        <p className="font-semibold text-gray-900 mb-2">{label}</p>
+      <div className="bg-white/95 backdrop-blur-xl border border-gray-200 rounded-xl p-2.5 sm:p-3.5 shadow-xl max-w-[85vw] text-xs sm:text-sm">
+        <p className="font-bold text-gray-900 mb-1">{label}</p>
         {payload.map((entry: any, index: number) => (
-          <div key={index} className="flex items-center gap-2 text-sm">
+          <div key={index} className="flex items-center gap-1.5 text-xs sm:text-sm">
             <div
-              className="w-3 h-3 rounded-full"
+              className="w-2.5 h-2.5 rounded-full shrink-0"
               style={{ backgroundColor: entry.color }}
             />
-            <span className="text-gray-600">{entry.name}:</span>
+            <span className="text-gray-600 truncate">{entry.name}:</span>
             <span className="font-bold text-gray-900">{entry.value}</span>
           </div>
         ))}
@@ -47,32 +47,32 @@ export function ParticipantsByDepartmentChart({ data }: { data: any[] }) {
   const COLORS = ["#3b82f6", "#8b5cf6", "#ec4899", "#f59e0b", "#10b981", "#6366f1", "#f97316", "#14b8a6"]
 
   return (
-    <Card className="border-none shadow-lg hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-blue-50 to-white">
-      <CardHeader>
-        <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg">
-            <Users className="h-6 w-6 text-white" />
+    <Card className="border-none shadow-md hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-blue-50 to-white rounded-2xl overflow-hidden">
+      <CardHeader className="p-3.5 sm:p-5 pb-2 sm:pb-3 border-b border-blue-100/50">
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="p-2 sm:p-2.5 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg shadow-sm">
+            <Users className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
           </div>
           <div>
-            <CardTitle className="text-xl">Participants by Department</CardTitle>
-            <CardDescription>Distribution across academic departments</CardDescription>
+            <CardTitle className="text-sm sm:text-base font-bold">Participants by Department</CardTitle>
+            <CardDescription className="text-[11px] sm:text-xs">Distribution across academic departments</CardDescription>
           </div>
         </div>
       </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={350}>
-          <BarChart data={data} layout="horizontal">
+      <CardContent className="p-2.5 sm:p-6 pt-3 sm:pt-6">
+        <ResponsiveContainer width="100%" height={280}>
+          <BarChart data={data} layout="horizontal" margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-            <XAxis type="number" stroke="#9ca3af" style={{ fontSize: "12px", fontWeight: 500 }} />
+            <XAxis type="number" stroke="#9ca3af" style={{ fontSize: "11px", fontWeight: 500 }} />
             <YAxis
               type="category"
               dataKey="name"
               stroke="#9ca3af"
-              style={{ fontSize: "12px", fontWeight: 500 }}
-              width={120}
+              style={{ fontSize: "11px", fontWeight: 500 }}
+              width={80}
             />
             <Tooltip content={<CustomTooltip />} />
-            <Bar dataKey="count" radius={[0, 8, 8, 0]} animationDuration={1500}>
+            <Bar dataKey="count" radius={[0, 6, 6, 0]} animationDuration={1500}>
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
@@ -112,20 +112,20 @@ export function ParticipantsByYearChart({ data }: { data: any[] }) {
   }
 
   return (
-    <Card className="border-none shadow-lg hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-amber-50 to-white">
-      <CardHeader>
-        <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl shadow-lg">
-            <Calendar className="h-6 w-6 text-white" />
+    <Card className="border-none shadow-md hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-amber-50 to-white rounded-2xl overflow-hidden">
+      <CardHeader className="p-3.5 sm:p-5 pb-2 sm:pb-3 border-b border-amber-100/50">
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="p-2 sm:p-2.5 bg-gradient-to-br from-amber-500 to-orange-600 rounded-lg shadow-sm">
+            <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
           </div>
           <div>
-            <CardTitle className="text-xl">Participants by Year of Study</CardTitle>
-            <CardDescription>Year-wise student distribution</CardDescription>
+            <CardTitle className="text-sm sm:text-base font-bold">Participants by Year of Study</CardTitle>
+            <CardDescription className="text-[11px] sm:text-xs">Year-wise student distribution</CardDescription>
           </div>
         </div>
       </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={300}>
+      <CardContent className="p-2.5 sm:p-6 pt-3 sm:pt-6">
+        <ResponsiveContainer width="100%" height={260}>
           <PieChart>
             <Pie
               data={data}
@@ -133,10 +133,11 @@ export function ParticipantsByYearChart({ data }: { data: any[] }) {
               cy="50%"
               labelLine={false}
               label={(props: any) => `${props.name}: ${(props.payload?.percentage || 0).toFixed(0)}%`}
-              outerRadius={100}
+              outerRadius={90}
               fill="#8884d8"
               dataKey="count"
               animationDuration={1500}
+              style={{ fontSize: "11px", fontWeight: 600 }}
             >
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -153,35 +154,35 @@ export function ParticipantsByYearChart({ data }: { data: any[] }) {
 // Event Comparison Chart
 export function EventComparisonChart({ data }: { data: any[] }) {
   return (
-    <Card className="border-none shadow-lg hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-purple-50 to-white">
-      <CardHeader>
-        <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl shadow-lg">
-            <BarChart3 className="h-6 w-6 text-white" />
+    <Card className="border-none shadow-md hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-purple-50 to-white rounded-2xl overflow-hidden">
+      <CardHeader className="p-3.5 sm:p-5 pb-2 sm:pb-3 border-b border-purple-100/50">
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="p-2 sm:p-2.5 bg-gradient-to-br from-purple-500 to-pink-600 rounded-lg shadow-sm">
+            <BarChart3 className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
           </div>
           <div>
-            <CardTitle className="text-xl">Event Performance Comparison</CardTitle>
-            <CardDescription>Compare registrations and attendance across events</CardDescription>
+            <CardTitle className="text-sm sm:text-base font-bold">Event Performance Comparison</CardTitle>
+            <CardDescription className="text-[11px] sm:text-xs">Compare registrations and attendance across events</CardDescription>
           </div>
         </div>
       </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={350}>
-          <ComposedChart data={data}>
+      <CardContent className="p-2.5 sm:p-6 pt-3 sm:pt-6">
+        <ResponsiveContainer width="100%" height={280}>
+          <ComposedChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 20 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
             <XAxis
               dataKey="title"
               stroke="#9ca3af"
-              style={{ fontSize: "11px", fontWeight: 500 }}
-              angle={-45}
+              style={{ fontSize: "10px", fontWeight: 500 }}
+              angle={-30}
               textAnchor="end"
-              height={100}
+              height={50}
             />
-            <YAxis stroke="#9ca3af" style={{ fontSize: "12px", fontWeight: 500 }} />
+            <YAxis stroke="#9ca3af" style={{ fontSize: "11px", fontWeight: 500 }} />
             <Tooltip content={<CustomTooltip />} />
-            <Legend wrapperStyle={{ paddingTop: "20px", fontSize: "13px", fontWeight: 600 }} />
-            <Bar dataKey="registrations" fill="#8b5cf6" radius={[8, 8, 0, 0]} name="Registrations" />
-            <Bar dataKey="attendance" fill="#ec4899" radius={[8, 8, 0, 0]} name="Attendance" />
+            <Legend wrapperStyle={{ paddingTop: "10px", fontSize: "11px", fontWeight: 600 }} />
+            <Bar dataKey="registrations" fill="#8b5cf6" radius={[6, 6, 0, 0]} name="Registrations" />
+            <Bar dataKey="attendance" fill="#ec4899" radius={[6, 6, 0, 0]} name="Attendance" />
           </ComposedChart>
         </ResponsiveContainer>
       </CardContent>
@@ -194,32 +195,33 @@ export function RegistrationByCategoryChart({ data }: { data: any[] }) {
   const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#ec4899"]
 
   return (
-    <Card className="border-none shadow-lg hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-green-50 to-white">
-      <CardHeader>
-        <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl shadow-lg">
-            <PieChartIcon className="h-6 w-6 text-white" />
+    <Card className="border-none shadow-md hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-green-50 to-white rounded-2xl overflow-hidden">
+      <CardHeader className="p-3.5 sm:p-5 pb-2 sm:pb-3 border-b border-green-100/50">
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="p-2 sm:p-2.5 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg shadow-sm">
+            <PieChartIcon className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
           </div>
           <div>
-            <CardTitle className="text-xl">Registrations by Category</CardTitle>
-            <CardDescription>Event category distribution</CardDescription>
+            <CardTitle className="text-sm sm:text-base font-bold">Registrations by Category</CardTitle>
+            <CardDescription className="text-[11px] sm:text-xs">Event category distribution</CardDescription>
           </div>
         </div>
       </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={300}>
+      <CardContent className="p-2.5 sm:p-6 pt-3 sm:pt-6">
+        <ResponsiveContainer width="100%" height={260}>
           <PieChart>
             <Pie
               data={data}
               cx="50%"
               cy="50%"
-              innerRadius={60}
-              outerRadius={100}
-              paddingAngle={5}
+              innerRadius={50}
+              outerRadius={85}
+              paddingAngle={4}
               dataKey="value"
               animationDuration={1500}
               label={(props: any) => `${props.name} (${(props.percent * 100).toFixed(0)}%)`}
               labelLine={{ stroke: "#9ca3af", strokeWidth: 1 }}
+              style={{ fontSize: "10px", fontWeight: 600 }}
             >
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -242,55 +244,55 @@ export function IncomeVsExpensesChart({ data }: { data: any }) {
   ]
 
   return (
-    <Card className="border-none shadow-lg hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-emerald-50 to-white">
-      <CardHeader>
-        <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl shadow-lg">
-            <DollarSign className="h-6 w-6 text-white" />
+    <Card className="border-none shadow-md hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-emerald-50 to-white rounded-2xl overflow-hidden">
+      <CardHeader className="p-3.5 sm:p-5 pb-2 sm:pb-3 border-b border-emerald-100/50">
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="p-2 sm:p-2.5 bg-gradient-to-br from-emerald-500 to-green-600 rounded-lg shadow-sm">
+            <DollarSign className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
           </div>
           <div>
-            <CardTitle className="text-xl">Income vs Expenses</CardTitle>
-            <CardDescription>Financial performance overview</CardDescription>
+            <CardTitle className="text-sm sm:text-base font-bold">Income vs Expenses</CardTitle>
+            <CardDescription className="text-[11px] sm:text-xs">Financial performance overview</CardDescription>
           </div>
         </div>
       </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={chartData}>
+      <CardContent className="p-2.5 sm:p-6 pt-3 sm:pt-6">
+        <ResponsiveContainer width="100%" height={260}>
+          <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
             <XAxis
               dataKey="name"
               stroke="#9ca3af"
-              style={{ fontSize: "12px", fontWeight: 500 }}
+              style={{ fontSize: "11px", fontWeight: 500 }}
             />
             <YAxis
               stroke="#9ca3af"
-              style={{ fontSize: "12px", fontWeight: 500 }}
+              style={{ fontSize: "11px", fontWeight: 500 }}
               tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`}
             />
             <Tooltip
               content={<CustomTooltip />}
-              formatter={(value: number) => [`₹${value.toLocaleString()}`, ""]}
+              formatter={(value: any) => [`₹${Number(value || 0).toLocaleString()}`, ""]}
             />
-            <Bar dataKey="value" radius={[8, 8, 0, 0]} animationDuration={1500}>
+            <Bar dataKey="value" radius={[6, 6, 0, 0]} animationDuration={1500}>
               {chartData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.fill} />
               ))}
             </Bar>
           </BarChart>
         </ResponsiveContainer>
-        <div className="mt-4 grid grid-cols-3 gap-4">
-          <div className="p-3 bg-green-50 rounded-lg border border-green-200">
-            <p className="text-xs text-green-600 font-semibold mb-1">Total Income</p>
-            <p className="text-lg font-bold text-green-900">₹{data.totalIncome.toLocaleString()}</p>
+        <div className="mt-3 sm:mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-4">
+          <div className="p-2.5 sm:p-3 bg-green-50 rounded-xl border border-green-200">
+            <p className="text-[10px] sm:text-xs text-green-600 font-semibold mb-0.5">Total Income</p>
+            <p className="text-base sm:text-lg font-bold text-green-900">₹{data.totalIncome.toLocaleString()}</p>
           </div>
-          <div className="p-3 bg-red-50 rounded-lg border border-red-200">
-            <p className="text-xs text-red-600 font-semibold mb-1">Total Expenses</p>
-            <p className="text-lg font-bold text-red-900">₹{data.totalExpenses.toLocaleString()}</p>
+          <div className="p-2.5 sm:p-3 bg-red-50 rounded-xl border border-red-200">
+            <p className="text-[10px] sm:text-xs text-red-600 font-semibold mb-0.5">Total Expenses</p>
+            <p className="text-base sm:text-lg font-bold text-red-900">₹{data.totalExpenses.toLocaleString()}</p>
           </div>
-          <div className={`p-3 rounded-lg border ${data.netProfit >= 0 ? 'bg-blue-50 border-blue-200' : 'bg-orange-50 border-orange-200'}`}>
-            <p className={`text-xs font-semibold mb-1 ${data.netProfit >= 0 ? 'text-blue-600' : 'text-orange-600'}`}>Net Profit</p>
-            <p className={`text-lg font-bold ${data.netProfit >= 0 ? 'text-blue-900' : 'text-orange-900'}`}>
+          <div className={`p-2.5 sm:p-3 rounded-xl border ${data.netProfit >= 0 ? 'bg-blue-50 border-blue-200' : 'bg-orange-50 border-orange-200'}`}>
+            <p className={`text-[10px] sm:text-xs font-semibold mb-0.5 ${data.netProfit >= 0 ? 'text-blue-600' : 'text-orange-600'}`}>Net Profit</p>
+            <p className={`text-base sm:text-lg font-bold ${data.netProfit >= 0 ? 'text-blue-900' : 'text-orange-900'}`}>
               ₹{data.netProfit.toLocaleString()}
             </p>
           </div>
@@ -305,20 +307,20 @@ export function ExpenseBreakdownChart({ data }: { data: any[] }) {
   const COLORS = ["#ef4444", "#f59e0b", "#8b5cf6", "#3b82f6", "#10b981"]
 
   return (
-    <Card className="border-none shadow-lg hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-red-50 to-white">
-      <CardHeader>
-        <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-red-500 to-rose-600 rounded-xl shadow-lg">
-            <PieChartIcon className="h-6 w-6 text-white" />
+    <Card className="border-none shadow-md hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-red-50 to-white rounded-2xl overflow-hidden">
+      <CardHeader className="p-3.5 sm:p-5 pb-2 sm:pb-3 border-b border-red-100/50">
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="p-2 sm:p-2.5 bg-gradient-to-br from-red-500 to-rose-600 rounded-lg shadow-sm">
+            <PieChartIcon className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
           </div>
           <div>
-            <CardTitle className="text-xl">Expense Breakdown</CardTitle>
-            <CardDescription>Detailed expense allocation</CardDescription>
+            <CardTitle className="text-sm sm:text-base font-bold">Expense Breakdown</CardTitle>
+            <CardDescription className="text-[11px] sm:text-xs">Detailed expense allocation</CardDescription>
           </div>
         </div>
       </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={300}>
+      <CardContent className="p-2.5 sm:p-6 pt-3 sm:pt-6">
+        <ResponsiveContainer width="100%" height={260}>
           <PieChart>
             <Pie
               data={data}
@@ -326,10 +328,11 @@ export function ExpenseBreakdownChart({ data }: { data: any[] }) {
               cy="50%"
               labelLine={false}
               label={(props: any) => `${props.payload?.category || props.name}: ${(props.payload?.percentage || 0).toFixed(0)}%`}
-              outerRadius={100}
+              outerRadius={85}
               fill="#8884d8"
               dataKey="amount"
               animationDuration={1500}
+              style={{ fontSize: "10px", fontWeight: 600 }}
             >
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -337,21 +340,21 @@ export function ExpenseBreakdownChart({ data }: { data: any[] }) {
             </Pie>
             <Tooltip
               content={<CustomTooltip />}
-              formatter={(value: number) => [`₹${value.toLocaleString()}`, ""]}
+              formatter={(value: any) => [`₹${Number(value || 0).toLocaleString()}`, ""]}
             />
           </PieChart>
         </ResponsiveContainer>
-        <div className="mt-4 space-y-2">
+        <div className="mt-3 sm:mt-4 space-y-1.5 sm:space-y-2 max-h-[220px] overflow-y-auto">
           {data.map((item, index) => (
-            <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
-              <div className="flex items-center gap-2">
+            <div key={index} className="flex items-center justify-between p-2 bg-white/80 border border-red-50 rounded-xl text-xs sm:text-sm">
+              <div className="flex items-center gap-2 min-w-0">
                 <div
-                  className="w-3 h-3 rounded-full"
+                  className="w-2.5 h-2.5 rounded-full shrink-0"
                   style={{ backgroundColor: COLORS[index % COLORS.length] }}
                 />
-                <span className="text-sm font-medium text-gray-700">{item.category}</span>
+                <span className="font-medium text-gray-700 truncate">{item.category}</span>
               </div>
-              <span className="text-sm font-bold text-gray-900">₹{item.amount.toLocaleString()}</span>
+              <span className="font-bold text-gray-900 shrink-0 ml-2">₹{item.amount.toLocaleString()}</span>
             </div>
           ))}
         </div>
@@ -365,31 +368,32 @@ export function ParticipantsByGenderChart({ data }: { data: any[] }) {
   const COLORS = ["#3b82f6", "#ec4899", "#8b5cf6"]
 
   return (
-    <Card className="border-none shadow-lg hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-pink-50 to-white">
-      <CardHeader>
-        <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-pink-500 to-rose-600 rounded-xl shadow-lg">
-            <Users className="h-6 w-6 text-white" />
+    <Card className="border-none shadow-md hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-pink-50 to-white rounded-2xl overflow-hidden">
+      <CardHeader className="p-3.5 sm:p-5 pb-2 sm:pb-3 border-b border-pink-100/50">
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="p-2 sm:p-2.5 bg-gradient-to-br from-pink-500 to-rose-600 rounded-lg shadow-sm">
+            <Users className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
           </div>
           <div>
-            <CardTitle className="text-xl">Participants by Gender</CardTitle>
-            <CardDescription>Gender distribution analysis</CardDescription>
+            <CardTitle className="text-sm sm:text-base font-bold">Participants by Gender</CardTitle>
+            <CardDescription className="text-[11px] sm:text-xs">Gender distribution analysis</CardDescription>
           </div>
         </div>
       </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={250}>
+      <CardContent className="p-2.5 sm:p-6 pt-3 sm:pt-6">
+        <ResponsiveContainer width="100%" height={240}>
           <PieChart>
             <Pie
               data={data}
               cx="50%"
               cy="50%"
-              innerRadius={50}
-              outerRadius={90}
-              paddingAngle={5}
+              innerRadius={45}
+              outerRadius={75}
+              paddingAngle={4}
               dataKey="count"
               animationDuration={1500}
               label={(props: any) => `${props.name}: ${(props.payload?.percentage || 0).toFixed(0)}%`}
+              style={{ fontSize: "10px", fontWeight: 600 }}
             >
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -406,21 +410,21 @@ export function ParticipantsByGenderChart({ data }: { data: any[] }) {
 // Engagement Trends Over Time
 export function EngagementTrendsOverTimeChart({ data }: { data: any[] }) {
   return (
-    <Card className="border-none shadow-lg hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-indigo-50 to-white">
-      <CardHeader>
-        <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl shadow-lg">
-            <TrendingUp className="h-6 w-6 text-white" />
+    <Card className="border-none shadow-md hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-indigo-50 to-white rounded-2xl overflow-hidden">
+      <CardHeader className="p-3.5 sm:p-5 pb-2 sm:pb-3 border-b border-indigo-100/50">
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="p-2 sm:p-2.5 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg shadow-sm">
+            <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
           </div>
           <div>
-            <CardTitle className="text-xl">Engagement Trends Over Time</CardTitle>
-            <CardDescription>Registration and attendance patterns</CardDescription>
+            <CardTitle className="text-sm sm:text-base font-bold">Engagement Trends Over Time</CardTitle>
+            <CardDescription className="text-[11px] sm:text-xs">Registration and attendance patterns</CardDescription>
           </div>
         </div>
       </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={300}>
-          <ComposedChart data={data}>
+      <CardContent className="p-2.5 sm:p-6 pt-3 sm:pt-6">
+        <ResponsiveContainer width="100%" height={260}>
+          <ComposedChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
             <defs>
               <linearGradient id="registrationsGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.8} />
@@ -431,11 +435,11 @@ export function EngagementTrendsOverTimeChart({ data }: { data: any[] }) {
             <XAxis
               dataKey="date"
               stroke="#9ca3af"
-              style={{ fontSize: "12px", fontWeight: 500 }}
+              style={{ fontSize: "11px", fontWeight: 500 }}
             />
-            <YAxis stroke="#9ca3af" style={{ fontSize: "12px", fontWeight: 500 }} />
+            <YAxis stroke="#9ca3af" style={{ fontSize: "11px", fontWeight: 500 }} />
             <Tooltip content={<CustomTooltip />} />
-            <Legend wrapperStyle={{ paddingTop: "20px", fontSize: "13px", fontWeight: 600 }} />
+            <Legend wrapperStyle={{ paddingTop: "10px", fontSize: "11px", fontWeight: 600 }} />
             <Area
               type="monotone"
               dataKey="registrations"
@@ -450,7 +454,7 @@ export function EngagementTrendsOverTimeChart({ data }: { data: any[] }) {
               dataKey="attendance"
               stroke="#ec4899"
               strokeWidth={3}
-              dot={{ fill: "#ec4899", r: 4 }}
+              dot={{ fill: "#ec4899", r: 3 }}
               name="Attendance"
               animationDuration={1500}
             />

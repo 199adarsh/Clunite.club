@@ -115,16 +115,16 @@ export default function OrganizerDashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f5f5f7] px-8 py-6 space-y-8">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="min-h-screen bg-[#f5f5f7] px-3 py-4 sm:px-6 sm:py-5 md:px-8 md:py-6 space-y-4 sm:space-y-6 md:space-y-8">
+      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6 md:space-y-8">
         {/* Enhanced Header */}
-        <div className="bg-white rounded-2xl p-8 border border-black/5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-2">
-            <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">Event Participants Dashboard</h1>
-            <p className="text-gray-600 font-medium">View and manage participants for all events</p>
+        <div className="bg-white rounded-2xl p-4 sm:p-6 md:p-8 border border-black/5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6">
+          <div className="space-y-1 sm:space-y-2">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">Event Participants Dashboard</h1>
+            <p className="text-gray-600 font-medium text-sm sm:text-base">View and manage participants for all events</p>
           </div>
           <Link href="/dashboard/organizer/host">
-            <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+            <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold px-4 sm:px-6 py-2 sm:py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto">
               <Plus className="h-5 w-5 mr-2" />
               Event Management Hub
             </Button>
@@ -147,51 +147,51 @@ export default function OrganizerDashboardPage() {
           </Card>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-6">
           <Card className="border border-black/5 shadow-sm hover:shadow-md hover:border-indigo-500 transition-all duration-300 bg-white rounded-2xl overflow-hidden">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 text-white">
-                  <Calendar className="h-6 w-6" />
+            <CardContent className="p-3 sm:p-4 md:p-6">
+              <div className="flex items-center justify-between mb-2 sm:mb-4">
+                <div className="p-2 sm:p-3 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 text-white">
+                  <Calendar className="h-4 w-4 sm:h-6 sm:w-6" />
                 </div>
-                <Badge className="bg-indigo-50 text-indigo-700 border-indigo-200">Total</Badge>
+                <Badge className="bg-indigo-50 text-indigo-700 border-indigo-200 hidden sm:flex">Total</Badge>
               </div>
-              <div className="space-y-2">
-                <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Total Events</p>
-                <p className="text-3xl font-bold text-gray-900">{filteredEvents.length}</p>
-                <p className="text-xs text-gray-600">{selectedClubId ? 'For selected club' : 'All your clubs'}</p>
+              <div className="space-y-0.5 sm:space-y-2">
+                <p className="text-[10px] sm:text-sm font-semibold text-gray-600 uppercase tracking-wide">Events</p>
+                <p className="text-xl sm:text-3xl font-bold text-gray-900">{filteredEvents.length}</p>
+                <p className="text-[10px] sm:text-xs text-gray-600 hidden sm:block">{selectedClubId ? 'For selected club' : 'All your clubs'}</p>
               </div>
             </CardContent>
           </Card>
 
           <Card className="border border-black/5 shadow-sm hover:shadow-md hover:border-indigo-500 transition-all duration-300 bg-white rounded-2xl overflow-hidden">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 text-white">
-                  <Users className="h-6 w-6" />
+            <CardContent className="p-3 sm:p-4 md:p-6">
+              <div className="flex items-center justify-between mb-2 sm:mb-4">
+                <div className="p-2 sm:p-3 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 text-white">
+                  <Users className="h-4 w-4 sm:h-6 sm:w-6" />
                 </div>
-                <Badge className="bg-purple-50 text-purple-700 border-purple-200">Club Stats</Badge>
+                <Badge className="bg-purple-50 text-purple-700 border-purple-200 hidden sm:flex">Club Stats</Badge>
               </div>
-              <div className="space-y-2">
-                <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Total Participants</p>
-                <p className="text-3xl font-bold text-gray-900">{totalParticipants}</p>
-                <p className="text-xs text-gray-600">{selectedClubId ? 'For selected club' : 'All your clubs'}</p>
+              <div className="space-y-0.5 sm:space-y-2">
+                <p className="text-[10px] sm:text-sm font-semibold text-gray-600 uppercase tracking-wide">Participants</p>
+                <p className="text-xl sm:text-3xl font-bold text-gray-900">{totalParticipants}</p>
+                <p className="text-[10px] sm:text-xs text-gray-600 hidden sm:block">{selectedClubId ? 'For selected club' : 'All your clubs'}</p>
               </div>
             </CardContent>
           </Card>
 
           <Card className="border border-black/5 shadow-sm hover:shadow-md hover:border-indigo-500 transition-all duration-300 bg-white rounded-2xl overflow-hidden">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 text-white">
-                  <UserCheck className="h-6 w-6" />
+            <CardContent className="p-3 sm:p-4 md:p-6">
+              <div className="flex items-center justify-between mb-2 sm:mb-4">
+                <div className="p-2 sm:p-3 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 text-white">
+                  <UserCheck className="h-4 w-4 sm:h-6 sm:w-6" />
                 </div>
-                <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200">Active</Badge>
+                <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 hidden sm:flex">Active</Badge>
               </div>
-              <div className="space-y-2">
-                <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Registered</p>
-                <p className="text-3xl font-bold text-gray-900">{totalRegistered}</p>
-                <p className="text-xs text-gray-600">Currently registered</p>
+              <div className="space-y-0.5 sm:space-y-2">
+                <p className="text-[10px] sm:text-sm font-semibold text-gray-600 uppercase tracking-wide">Registered</p>
+                <p className="text-xl sm:text-3xl font-bold text-gray-900">{totalRegistered}</p>
+                <p className="text-[10px] sm:text-xs text-gray-600 hidden sm:block">Currently registered</p>
               </div>
             </CardContent>
           </Card>
@@ -224,53 +224,57 @@ export default function OrganizerDashboardPage() {
                 <p className="text-gray-400 text-sm">Try adjusting your search or create a new event</p>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {filteredEvents.map((event) => (
                   <div
                     key={event.id}
-                    className="flex flex-col sm:flex-row sm:items-center justify-between p-6 border border-slate-100 rounded-xl hover:shadow-md hover:border-indigo-500 transition-all duration-300 gap-4"
+                    className="flex flex-col p-4 sm:p-6 border border-slate-100 rounded-xl hover:shadow-md hover:border-indigo-500 transition-all duration-300 gap-3"
                   >
-                    <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold shadow-sm">
+                    {/* Top row: avatar + title + meta */}
+                    <div className="flex items-center space-x-3 sm:space-x-4">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 shrink-0 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold shadow-sm">
                         {event.title.charAt(0)}
                       </div>
-                      <div>
-                        <div className="font-bold text-slate-800 text-lg">{event.title}</div>
-                        <div className="flex items-center space-x-3 text-sm text-gray-600">
+                      <div className="min-w-0">
+                        <div className="font-bold text-slate-800 text-base sm:text-lg truncate">{event.title}</div>
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs sm:text-sm text-gray-600 mt-0.5">
                           <div className="flex items-center">
-                            <MapPin className="h-4 w-4 mr-1" />
-                            <span>{event.location || 'Location TBD'}</span>
+                            <MapPin className="h-3 w-3 sm:h-4 sm:w-4 mr-1 shrink-0" />
+                            <span className="truncate max-w-[120px] sm:max-w-none">{event.location || 'Location TBD'}</span>
                           </div>
                           <div className="flex items-center">
-                            <Clock className="h-4 w-4 mr-1" />
+                            <Clock className="h-3 w-3 sm:h-4 sm:w-4 mr-1 shrink-0" />
                             <span>{formatDate(event.start_date)}</span>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center space-x-6">
-                      <div className="text-right">
-                        <div className="text-lg font-bold text-gray-900">{event.participantStats.total}</div>
-                        <div className="text-sm text-gray-600">Total Participants</div>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <div className="flex items-center space-x-1 text-xs">
-                          <UserCheck className="h-3 w-3 text-green-600" />
-                          <span className="text-green-600 font-medium">{event.participantStats.registered}</span>
+                    {/* Bottom row: stats + action */}
+                    <div className="flex items-center justify-between pl-[52px] sm:pl-[64px]">
+                      <div className="flex items-center gap-3 sm:gap-4">
+                        <div>
+                          <div className="text-base sm:text-lg font-bold text-gray-900">{event.participantStats.total}</div>
+                          <div className="text-[10px] sm:text-xs text-gray-500">Total</div>
                         </div>
-                        <div className="flex items-center space-x-1 text-xs">
-                          <UserX className="h-3 w-3 text-red-600" />
-                          <span className="text-red-600 font-medium">{event.participantStats.cancelled}</span>
-                        </div>
-                        <div className="flex items-center space-x-1 text-xs">
-                          <Users className="h-3 w-3 text-blue-600" />
-                          <span className="text-blue-600 font-medium">{event.participantStats.attended}</span>
+                        <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-1 text-xs">
+                            <UserCheck className="h-3 w-3 text-green-600" />
+                            <span className="text-green-600 font-medium">{event.participantStats.registered}</span>
+                          </div>
+                          <div className="flex items-center gap-1 text-xs">
+                            <UserX className="h-3 w-3 text-red-600" />
+                            <span className="text-red-600 font-medium">{event.participantStats.cancelled}</span>
+                          </div>
+                          <div className="flex items-center gap-1 text-xs">
+                            <Users className="h-3 w-3 text-blue-600" />
+                            <span className="text-blue-600 font-medium">{event.participantStats.attended}</span>
+                          </div>
                         </div>
                       </div>
                       <Link href={`/dashboard/organizer/events/${event.id}/participants`}>
-                        <Button size="sm" className="bg-indigo-600 hover:bg-indigo-700">
-                          <Eye className="h-4 w-4 mr-2" />
-                          View Participants
+                        <Button size="sm" className="bg-indigo-600 hover:bg-indigo-700 text-xs sm:text-sm px-3 sm:px-4">
+                          <Eye className="h-3.5 w-3.5 sm:h-4 sm:w-4 sm:mr-2" />
+                          <span className="hidden sm:inline">View Participants</span>
                         </Button>
                       </Link>
                     </div>

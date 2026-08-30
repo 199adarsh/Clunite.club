@@ -44,19 +44,19 @@ export function DashboardHeader() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
-      <div className="flex h-16 items-center justify-between px-4 sm:px-6">
-        {/* Left side - Sidebar Expand/Contract Trigger */}
+      <div className="flex h-14 sm:h-16 items-center justify-between px-3 sm:px-4 md:px-6">
+        {/* Left side - Sidebar Trigger */}
         <div className="flex items-center gap-2">
           <SidebarTrigger className="h-9 w-9 text-slate-700 hover:bg-slate-100 hover:text-slate-900 border border-slate-200 rounded-md" />
         </div>
 
         {/* Right side - Actions */}
-        <div className="flex items-center space-x-4">
-          {/* Host Event Button */}
+        <div className="flex items-center space-x-2 sm:space-x-4">
+          {/* Host Event Button — icon-only on xs, full label on sm+ */}
           <Link href="/dashboard/organizer/host/verify" prefetch>
-            <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold px-4 py-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-              <Plus className="h-4 w-4 mr-2" />
-              Host Event
+            <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold px-2.5 sm:px-4 py-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+              <Plus className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Host Event</span>
             </Button>
           </Link>
 

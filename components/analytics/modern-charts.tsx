@@ -41,15 +41,15 @@ const gradients = {
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white/90 backdrop-blur-xl border border-gray-200 rounded-xl p-4 shadow-2xl">
-        <p className="font-semibold text-gray-900 mb-2">{label}</p>
+      <div className="bg-white/95 backdrop-blur-xl border border-gray-200 rounded-xl p-2.5 sm:p-3.5 shadow-xl max-w-[85vw] text-xs sm:text-sm">
+        <p className="font-bold text-gray-900 mb-1">{label}</p>
         {payload.map((entry: any, index: number) => (
-          <div key={index} className="flex items-center gap-2 text-sm">
+          <div key={index} className="flex items-center gap-1.5 text-xs sm:text-sm">
             <div
-              className="w-3 h-3 rounded-full"
+              className="w-2.5 h-2.5 rounded-full shrink-0"
               style={{ backgroundColor: entry.color }}
             />
-            <span className="text-gray-600">{entry.name}:</span>
+            <span className="text-gray-600 truncate">{entry.name}:</span>
             <span className="font-bold text-gray-900">{entry.value}</span>
           </div>
         ))}
@@ -72,30 +72,30 @@ export function EngagementTrendsChart({ data }: { data: any[] }) {
   const hasData = data.length > 0 && data.some(d => d.engagement > 0)
   
   return (
-    <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 bg-white">
-      <CardHeader className="border-b bg-gradient-to-r from-orange-50 to-red-50">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg shadow-md">
-            <Zap className="h-5 w-5 text-white" />
+    <Card className="border-none shadow-md hover:shadow-xl transition-all duration-300 bg-white rounded-2xl overflow-hidden">
+      <CardHeader className="border-b bg-gradient-to-r from-orange-50 to-red-50 p-3.5 sm:p-5">
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="p-2 sm:p-2.5 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg shadow-sm">
+            <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
           </div>
           <div>
-            <CardTitle className="text-base font-bold">Engagement Trends</CardTitle>
-            <CardDescription className="text-xs">Participant engagement over time</CardDescription>
+            <CardTitle className="text-sm sm:text-base font-bold">Engagement Trends</CardTitle>
+            <CardDescription className="text-[11px] sm:text-xs">Participant engagement over time</CardDescription>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="pt-6">
+      <CardContent className="p-2.5 sm:p-6 pt-3 sm:pt-6">
         {!hasData ? (
-          <div className="h-[300px] flex flex-col items-center justify-center text-center">
-            <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-3">
-              <Zap className="h-8 w-8 text-orange-500" />
+          <div className="h-[240px] sm:h-[300px] flex flex-col items-center justify-center text-center">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-orange-100 rounded-full flex items-center justify-center mb-2 sm:mb-3">
+              <Zap className="h-6 w-6 sm:h-8 sm:w-8 text-orange-500" />
             </div>
-            <p className="text-sm font-semibold text-gray-700 mb-1">No engagement data yet</p>
-            <p className="text-xs text-gray-500">Data will appear as participants register</p>
+            <p className="text-xs sm:text-sm font-semibold text-gray-700 mb-0.5">No engagement data yet</p>
+            <p className="text-[10px] sm:text-xs text-gray-500">Data will appear as participants register</p>
           </div>
         ) : (
-          <ResponsiveContainer width="100%" height={300}>
-            <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+          <ResponsiveContainer width="100%" height={260}>
+            <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
               <defs>
                 <linearGradient id="engagementGradient" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#FF6B35" stopOpacity={0.8} />
@@ -146,30 +146,30 @@ export function PerformanceOverviewChart({ data }: { data: any[] }) {
   const hasData = data.some(d => d.value > 0)
   
   return (
-    <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 bg-white">
-      <CardHeader className="border-b bg-gradient-to-r from-green-50 to-teal-50">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-gradient-to-br from-green-500 to-teal-600 rounded-lg shadow-md">
-            <Target className="h-5 w-5 text-white" />
+    <Card className="border-none shadow-md hover:shadow-xl transition-all duration-300 bg-white rounded-2xl overflow-hidden">
+      <CardHeader className="border-b bg-gradient-to-r from-green-50 to-teal-50 p-3.5 sm:p-5">
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="p-2 sm:p-2.5 bg-gradient-to-br from-green-500 to-teal-600 rounded-lg shadow-sm">
+            <Target className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
           </div>
           <div>
-            <CardTitle className="text-base font-bold">Performance Overview</CardTitle>
-            <CardDescription className="text-xs">Multi-dimensional performance analysis</CardDescription>
+            <CardTitle className="text-sm sm:text-base font-bold">Performance Overview</CardTitle>
+            <CardDescription className="text-[11px] sm:text-xs">Multi-dimensional performance analysis</CardDescription>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="pt-6">
+      <CardContent className="p-2.5 sm:p-6 pt-3 sm:pt-6">
         {!hasData ? (
-          <div className="h-[350px] flex flex-col items-center justify-center text-center">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-3">
-              <Target className="h-8 w-8 text-green-600" />
+          <div className="h-[260px] sm:h-[350px] flex flex-col items-center justify-center text-center">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-green-100 rounded-full flex items-center justify-center mb-2 sm:mb-3">
+              <Target className="h-6 w-6 sm:h-8 sm:w-8 text-green-600" />
             </div>
-            <p className="text-sm font-semibold text-gray-700 mb-1">No performance data yet</p>
-            <p className="text-xs text-gray-500">Metrics will appear as you host events</p>
+            <p className="text-xs sm:text-sm font-semibold text-gray-700 mb-0.5">No performance data yet</p>
+            <p className="text-[10px] sm:text-xs text-gray-500">Metrics will appear as you host events</p>
           </div>
         ) : (
-          <ResponsiveContainer width="100%" height={350}>
-            <RadarChart data={chartData} margin={{ top: 20, right: 30, bottom: 20, left: 30 }}>
+          <ResponsiveContainer width="100%" height={280}>
+            <RadarChart data={chartData} margin={{ top: 10, right: 20, bottom: 10, left: 20 }}>
               <defs>
                 <linearGradient id="radarGradient" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#11998e" stopOpacity={0.8} />
@@ -211,32 +211,32 @@ export function MonthlyTrendsChart({ data }: { data: any[] }) {
   const hasData = data.length > 0 && data.some(d => d.participants > 0 || d.revenue > 0)
   
   return (
-    <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 bg-white">
-      <CardHeader className="border-b bg-gradient-to-r from-blue-50 to-cyan-50">
+    <Card className="border-none shadow-md hover:shadow-xl transition-all duration-300 bg-white rounded-2xl overflow-hidden">
+      <CardHeader className="border-b bg-gradient-to-r from-blue-50 to-cyan-50 p-3.5 sm:p-5">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-lg shadow-md">
-              <Activity className="h-5 w-5 text-white" />
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="p-2 sm:p-2.5 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-lg shadow-sm">
+              <Activity className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
             </div>
             <div>
-              <CardTitle className="text-base font-bold">Monthly Trends</CardTitle>
-              <CardDescription className="text-xs">Participation and revenue over time</CardDescription>
+              <CardTitle className="text-sm sm:text-base font-bold">Monthly Trends</CardTitle>
+              <CardDescription className="text-[11px] sm:text-xs">Participation and revenue over time</CardDescription>
             </div>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="pt-6">
+      <CardContent className="p-2.5 sm:p-6 pt-3 sm:pt-6">
         {!hasData ? (
-          <div className="h-[300px] flex flex-col items-center justify-center text-center">
-            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-3">
-              <Activity className="h-8 w-8 text-blue-600" />
+          <div className="h-[240px] sm:h-[300px] flex flex-col items-center justify-center text-center">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center mb-2 sm:mb-3">
+              <Activity className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600" />
             </div>
-            <p className="text-sm font-semibold text-gray-700 mb-1">No monthly data yet</p>
-            <p className="text-xs text-gray-500">Trends will appear as you host events</p>
+            <p className="text-xs sm:text-sm font-semibold text-gray-700 mb-0.5">No monthly data yet</p>
+            <p className="text-[10px] sm:text-xs text-gray-500">Trends will appear as you host events</p>
           </div>
         ) : (
-          <ResponsiveContainer width="100%" height={300}>
-            <ComposedChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+          <ResponsiveContainer width="100%" height={260}>
+            <ComposedChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
               <defs>
                 <linearGradient id="participantsGradient" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#4facfe" stopOpacity={0.8} />
@@ -299,31 +299,31 @@ export function EventCategoriesChart({ data }: { data: any[] }) {
   const hasData = data.length > 0 && data.some(d => d.value > 0)
 
   return (
-    <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 bg-white">
-      <CardHeader className="border-b bg-gradient-to-r from-purple-50 to-indigo-50">
+    <Card className="border-none shadow-md hover:shadow-xl transition-all duration-300 bg-white rounded-2xl overflow-hidden">
+      <CardHeader className="border-b bg-gradient-to-r from-purple-50 to-indigo-50 p-3.5 sm:p-5">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-lg shadow-md">
-              <Users className="h-5 w-5 text-white" />
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="p-2 sm:p-2.5 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-lg shadow-sm">
+              <Users className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
             </div>
             <div>
-              <CardTitle className="text-base font-bold">Event Categories</CardTitle>
-              <CardDescription className="text-xs">Distribution by category</CardDescription>
+              <CardTitle className="text-sm sm:text-base font-bold">Event Categories</CardTitle>
+              <CardDescription className="text-[11px] sm:text-xs">Distribution by category</CardDescription>
             </div>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="pt-6">
+      <CardContent className="p-2.5 sm:p-6 pt-3 sm:pt-6">
         {!hasData ? (
-          <div className="h-[300px] flex flex-col items-center justify-center text-center">
-            <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-3">
-              <Users className="h-8 w-8 text-purple-600" />
+          <div className="h-[240px] sm:h-[300px] flex flex-col items-center justify-center text-center">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-purple-100 rounded-full flex items-center justify-center mb-2 sm:mb-3">
+              <Users className="h-6 w-6 sm:h-8 sm:w-8 text-purple-600" />
             </div>
-            <p className="text-sm font-semibold text-gray-700 mb-1">No category data yet</p>
-            <p className="text-xs text-gray-500">Create events to see distribution</p>
+            <p className="text-xs sm:text-sm font-semibold text-gray-700 mb-0.5">No category data yet</p>
+            <p className="text-[10px] sm:text-xs text-gray-500">Create events to see distribution</p>
           </div>
         ) : (
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={260}>
             <PieChart>
               <Pie
                 data={data}
@@ -356,30 +356,30 @@ export function ParticipantsSatisfactionChart({ data }: { data: any[] }) {
   const hasData = data.length > 0 && data.some(d => d.participants > 0)
   
   return (
-    <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 bg-white">
-      <CardHeader className="border-b bg-gradient-to-r from-pink-50 to-rose-50">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-gradient-to-br from-pink-500 to-rose-600 rounded-lg shadow-md">
-            <TrendingUp className="h-5 w-5 text-white" />
+    <Card className="border-none shadow-md hover:shadow-xl transition-all duration-300 bg-white rounded-2xl overflow-hidden">
+      <CardHeader className="border-b bg-gradient-to-r from-pink-50 to-rose-50 p-3.5 sm:p-5">
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="p-2 sm:p-2.5 bg-gradient-to-br from-pink-500 to-rose-600 rounded-lg shadow-sm">
+            <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
           </div>
           <div>
-            <CardTitle className="text-base font-bold">Participants vs Satisfaction</CardTitle>
-            <CardDescription className="text-xs">Event size and satisfaction correlation</CardDescription>
+            <CardTitle className="text-sm sm:text-base font-bold">Participants vs Satisfaction</CardTitle>
+            <CardDescription className="text-[11px] sm:text-xs">Event size and satisfaction correlation</CardDescription>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="pt-6">
+      <CardContent className="p-2.5 sm:p-6 pt-3 sm:pt-6">
         {!hasData ? (
-          <div className="h-[300px] flex flex-col items-center justify-center text-center">
-            <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mb-3">
-              <TrendingUp className="h-8 w-8 text-pink-600" />
+          <div className="h-[240px] sm:h-[300px] flex flex-col items-center justify-center text-center">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-pink-100 rounded-full flex items-center justify-center mb-2 sm:mb-3">
+              <TrendingUp className="h-6 w-6 sm:h-8 sm:w-8 text-pink-600" />
             </div>
-            <p className="text-sm font-semibold text-gray-700 mb-1">No satisfaction data yet</p>
-            <p className="text-xs text-gray-500">Data will appear after events complete</p>
+            <p className="text-xs sm:text-sm font-semibold text-gray-700 mb-0.5">No satisfaction data yet</p>
+            <p className="text-[10px] sm:text-xs text-gray-500">Data will appear after events complete</p>
           </div>
         ) : (
-          <ResponsiveContainer width="100%" height={300}>
-            <ComposedChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+          <ResponsiveContainer width="100%" height={260}>
+            <ComposedChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
               <XAxis
                 dataKey="participants"
@@ -427,30 +427,30 @@ export function EventTypeAnalysisChart({ data }: { data: any[] }) {
   const hasData = data.length > 0 && data.some(d => d.value > 0)
   
   return (
-    <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 bg-white">
-      <CardHeader className="border-b bg-gradient-to-r from-red-50 to-orange-50">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-gradient-to-br from-red-500 to-orange-600 rounded-lg shadow-md">
-            <BarChart3 className="h-5 w-5 text-white" />
+    <Card className="border-none shadow-md hover:shadow-xl transition-all duration-300 bg-white rounded-2xl overflow-hidden">
+      <CardHeader className="border-b bg-gradient-to-r from-red-50 to-orange-50 p-3.5 sm:p-5">
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="p-2 sm:p-2.5 bg-gradient-to-br from-red-500 to-orange-600 rounded-lg shadow-sm">
+            <BarChart3 className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
           </div>
           <div>
-            <CardTitle className="text-base font-bold">Event Type Analysis</CardTitle>
-            <CardDescription className="text-xs">Performance by event type</CardDescription>
+            <CardTitle className="text-sm sm:text-base font-bold">Event Type Analysis</CardTitle>
+            <CardDescription className="text-[11px] sm:text-xs">Performance by event type</CardDescription>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="pt-6">
+      <CardContent className="p-2.5 sm:p-6 pt-3 sm:pt-6">
         {!hasData ? (
-          <div className="h-[300px] flex flex-col items-center justify-center text-center">
-            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-3">
-              <BarChart3 className="h-8 w-8 text-red-600" />
+          <div className="h-[240px] sm:h-[300px] flex flex-col items-center justify-center text-center">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-red-100 rounded-full flex items-center justify-center mb-2 sm:mb-3">
+              <BarChart3 className="h-6 w-6 sm:h-8 sm:w-8 text-red-600" />
             </div>
-            <p className="text-sm font-semibold text-gray-700 mb-1">No event type data yet</p>
-            <p className="text-xs text-gray-500">Create different event types to see analysis</p>
+            <p className="text-xs sm:text-sm font-semibold text-gray-700 mb-0.5">No event type data yet</p>
+            <p className="text-[10px] sm:text-xs text-gray-500">Create different event types to see analysis</p>
           </div>
         ) : (
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={data} layout="vertical" margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
+          <ResponsiveContainer width="100%" height={260}>
+            <BarChart data={data} layout="vertical" margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
               <defs>
                 <linearGradient id="barGradient" x1="0" y1="0" x2="1" y2="0">
                   <stop offset="5%" stopColor="#f5576c" stopOpacity={0.9} />

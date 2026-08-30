@@ -72,7 +72,7 @@ export function AppSidebar() {
     .toUpperCase();
 
   return (
-    <Sidebar collapsible="icon" className="border-r bg-background">
+    <Sidebar collapsible="offcanvas" className="border-r bg-background">
       {/* HEADER — with expand/collapse control */}
       <SidebarHeader className="h-16 px-4 border-b">
         <div className="flex w-full items-center justify-between">

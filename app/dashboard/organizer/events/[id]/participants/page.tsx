@@ -447,7 +447,7 @@ export default function EventParticipantsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30 p-6 space-y-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30 p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-6 md:space-y-8">
       {/* Back Button - Top Left */}
       <div className="flex items-center gap-4">
         <Link href="/dashboard/organizer/host">
@@ -459,103 +459,103 @@ export default function EventParticipantsPage() {
       </div>
 
       {/* Header Card */}
-      <Card className="border-0 shadow-md bg-white rounded-2xl p-8 transition-all duration-300">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <Card className="border-0 shadow-md bg-white rounded-2xl p-4 sm:p-6 md:p-8 transition-all duration-300">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6">
           <div>
-            <div className="flex items-center gap-3">
-              <h1 className="text-3xl font-black text-slate-900">Event Participants</h1>
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-slate-900">Event Participants</h1>
               <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 font-semibold px-2 py-1">
                 Live Turnout
               </Badge>
             </div>
-            <p className="text-slate-600 mt-2 font-medium">
+            <p className="text-slate-600 mt-1 sm:mt-2 font-medium text-sm sm:text-base">
               View registrations, check attendance records, and manage participant data for your events.
             </p>
           </div>
-          <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <Button onClick={() => setIsScannerOpen(true)} className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-md font-semibold">
-              <QrCode className="h-4 w-4 mr-2" />
-              Scan QR Tickets
+              <QrCode className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Scan QR Tickets</span>
             </Button>
             <Button onClick={exportParticipants} variant="outline" className="bg-white border-slate-200 text-slate-700 rounded-xl shadow-sm hover:bg-slate-50 font-semibold">
-              <Download className="h-4 w-4 mr-2 text-slate-500" />
-              Export CSV
+              <Download className="h-4 w-4 sm:mr-2 text-slate-500" />
+              <span className="hidden sm:inline">Export CSV</span>
             </Button>
             <Button onClick={sendBulkEmail} className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-md font-semibold">
-              <Mail className="h-4 w-4 mr-2" />
-              Send Bulk Email
+              <Mail className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Send Bulk Email</span>
             </Button>
           </div>
         </div>
       </Card>
 
       {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-3 md:gap-4">
         <Card className="border-0 shadow-md hover:shadow-lg transition-all duration-300 bg-white rounded-2xl">
-          <CardContent className="p-6">
+          <CardContent className="p-3 sm:p-4 md:p-6">
             <div className="flex items-center justify-between">
-              <div className="space-y-1">
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total</p>
-                <p className="text-3xl font-black text-slate-900">{stats.total}</p>
+              <div className="space-y-0.5 sm:space-y-1">
+                <p className="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase tracking-wider">Total</p>
+                <p className="text-xl sm:text-2xl md:text-3xl font-black text-slate-900">{stats.total}</p>
               </div>
-              <div className="p-3 bg-slate-50 text-slate-600 rounded-xl">
-                <Users className="h-6 w-6" />
+              <div className="p-2 sm:p-3 bg-slate-50 text-slate-600 rounded-xl">
+                <Users className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
               </div>
             </div>
           </CardContent>
         </Card>
 
         <Card className="border-0 shadow-md hover:shadow-lg transition-all duration-300 bg-white rounded-2xl">
-          <CardContent className="p-6">
+          <CardContent className="p-3 sm:p-4 md:p-6">
             <div className="flex items-center justify-between">
-              <div className="space-y-1">
-                <p className="text-xs font-semibold text-emerald-600 uppercase tracking-wider">Registered</p>
-                <p className="text-3xl font-black text-emerald-600">{stats.registered}</p>
+              <div className="space-y-0.5 sm:space-y-1">
+                <p className="text-[10px] sm:text-xs font-semibold text-emerald-600 uppercase tracking-wider">Reg.</p>
+                <p className="text-xl sm:text-2xl md:text-3xl font-black text-emerald-600">{stats.registered}</p>
               </div>
-              <div className="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
-                <CheckCircle className="h-6 w-6" />
+              <div className="p-2 sm:p-3 bg-emerald-50 text-emerald-600 rounded-xl">
+                <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
               </div>
             </div>
           </CardContent>
         </Card>
 
         <Card className="border-0 shadow-md hover:shadow-lg transition-all duration-300 bg-white rounded-2xl">
-          <CardContent className="p-6">
+          <CardContent className="p-3 sm:p-4 md:p-6">
             <div className="flex items-center justify-between">
-              <div className="space-y-1">
-                <p className="text-xs font-semibold text-amber-600 uppercase tracking-wider">Waitlisted</p>
-                <p className="text-3xl font-black text-amber-600">{stats.waitlisted}</p>
+              <div className="space-y-0.5 sm:space-y-1">
+                <p className="text-[10px] sm:text-xs font-semibold text-amber-600 uppercase tracking-wider">Wait.</p>
+                <p className="text-xl sm:text-2xl md:text-3xl font-black text-amber-600">{stats.waitlisted}</p>
               </div>
-              <div className="p-3 bg-amber-50 text-amber-600 rounded-xl">
-                <Clock className="h-6 w-6" />
+              <div className="p-2 sm:p-3 bg-amber-50 text-amber-600 rounded-xl">
+                <Clock className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
               </div>
             </div>
           </CardContent>
         </Card>
 
         <Card className="border-0 shadow-md hover:shadow-lg transition-all duration-300 bg-white rounded-2xl">
-          <CardContent className="p-6">
+          <CardContent className="p-3 sm:p-4 md:p-6">
             <div className="flex items-center justify-between">
-              <div className="space-y-1">
-                <p className="text-xs font-semibold text-blue-600 uppercase tracking-wider">Attended</p>
-                <p className="text-3xl font-black text-blue-600">{stats.attended}</p>
+              <div className="space-y-0.5 sm:space-y-1">
+                <p className="text-[10px] sm:text-xs font-semibold text-blue-600 uppercase tracking-wider">Att.</p>
+                <p className="text-xl sm:text-2xl md:text-3xl font-black text-blue-600">{stats.attended}</p>
               </div>
-              <div className="p-3 bg-blue-50 text-blue-600 rounded-xl">
-                <UserCheck className="h-6 w-6" />
+              <div className="p-2 sm:p-3 bg-blue-50 text-blue-600 rounded-xl">
+                <UserCheck className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-0 shadow-md hover:shadow-lg transition-all duration-300 bg-white rounded-2xl">
-          <CardContent className="p-6">
+        <Card className="border-0 shadow-md hover:shadow-lg transition-all duration-300 bg-white rounded-2xl col-span-3 sm:col-span-1">
+          <CardContent className="p-3 sm:p-4 md:p-6">
             <div className="flex items-center justify-between">
-              <div className="space-y-1">
-                <p className="text-xs font-semibold text-red-600 uppercase tracking-wider">Cancelled</p>
-                <p className="text-3xl font-black text-red-600">{stats.cancelled}</p>
+              <div className="space-y-0.5 sm:space-y-1">
+                <p className="text-[10px] sm:text-xs font-semibold text-red-600 uppercase tracking-wider">Cancelled</p>
+                <p className="text-xl sm:text-2xl md:text-3xl font-black text-red-600">{stats.cancelled}</p>
               </div>
-              <div className="p-3 bg-red-50 text-red-600 rounded-xl">
-                <XCircle className="h-6 w-6" />
+              <div className="p-2 sm:p-3 bg-red-50 text-red-600 rounded-xl">
+                <XCircle className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
               </div>
             </div>
           </CardContent>
@@ -564,24 +564,24 @@ export default function EventParticipantsPage() {
 
       {/* Participants List */}
       <Card className="border-0 shadow-md bg-white rounded-2xl overflow-hidden">
-        <CardHeader className="p-8 border-b border-slate-100 bg-slate-50/20">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <CardHeader className="p-4 sm:p-6 md:p-8 border-b border-slate-100 bg-slate-50/20">
+          <div className="flex flex-col gap-3 sm:gap-4">
             <div>
-              <CardTitle className="text-xl font-bold text-slate-900">Participants List</CardTitle>
-              <CardDescription className="text-slate-500 font-medium">View and manage all registered event participants</CardDescription>
+              <CardTitle className="text-lg sm:text-xl font-bold text-slate-900">Participants List</CardTitle>
+              <CardDescription className="text-slate-500 font-medium text-xs sm:text-sm">View and manage all registered event participants</CardDescription>
             </div>
-            <div className="flex flex-wrap items-center gap-3">
-              <div className="relative">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+              <div className="relative flex-1 sm:flex-none">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4" />
                 <Input 
                   placeholder="Search participants..." 
-                  className="pl-10 w-64 bg-slate-50/80 border-slate-200 focus:bg-white rounded-xl transition-colors"
+                  className="pl-10 w-full sm:w-64 bg-slate-50/80 border-slate-200 focus:bg-white rounded-xl transition-colors"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-40 bg-slate-50/80 border-slate-200 rounded-xl">
+                <SelectTrigger className="w-full sm:w-40 bg-slate-50/80 border-slate-200 rounded-xl">
                   <SelectValue placeholder="Filter by status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -595,7 +595,7 @@ export default function EventParticipantsPage() {
             </div>
           </div>
         </CardHeader>
-        <CardContent className="p-8">
+        <CardContent className="p-3 sm:p-4 md:p-8">
           <Tabs defaultValue="list" className="space-y-4">
             <TabsList className="bg-slate-100 p-1 rounded-xl w-fit">
               <TabsTrigger value="list" className="rounded-lg font-semibold px-4 py-2">List View</TabsTrigger>

@@ -209,58 +209,60 @@ export default function EventAnalyticsPage() {
   const pageViews = Math.max((event as any).views || 0, totalRegistrations)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30 p-6">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30 px-3 py-4 sm:px-6 sm:py-6 md:px-8">
+      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6 md:space-y-8">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-3 sm:gap-4">
             <Link href="/dashboard/organizer/host/analytics">
-              <Button variant="outline" size="sm">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Analytics
+              <Button variant="outline" size="sm" className="rounded-xl shrink-0">
+                <ArrowLeft className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">Back to Analytics</span>
               </Button>
             </Link>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">{event.title}</h1>
-              <p className="text-gray-600 mt-1">Event Analytics Dashboard</p>
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">{event.title}</h1>
+              <p className="text-xs sm:text-sm text-gray-600 mt-0.5">Event Analytics Dashboard</p>
             </div>
           </div>
-          <Badge variant={event.status === "published" ? "default" : "secondary"}>{event.status}</Badge>
+          <Badge variant={event.status === "published" ? "default" : "secondary"} className="w-fit">
+            {event.status}
+          </Badge>
         </div>
 
         {/* Event Overview */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Event Overview</CardTitle>
+        <Card className="border-none shadow-md bg-white rounded-2xl overflow-hidden">
+          <CardHeader className="p-4 sm:p-6 pb-2 sm:pb-3">
+            <CardTitle className="text-base sm:text-lg">Event Overview</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div className="flex items-center gap-3">
-                <Calendar className="h-5 w-5 text-blue-600" />
-                <div>
-                  <p className="text-sm text-gray-600">Date</p>
-                  <p className="font-semibold">{new Date(event.date).toLocaleDateString()}</p>
+          <CardContent className="p-4 sm:p-6 pt-2 sm:pt-3">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600 shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-xs text-gray-500">Date</p>
+                  <p className="text-xs sm:text-sm font-semibold truncate">{new Date(event.date).toLocaleDateString()}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
-                <MapPin className="h-5 w-5 text-green-600" />
-                <div>
-                  <p className="text-sm text-gray-600">Location</p>
-                  <p className="font-semibold">{event.location}</p>
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                <MapPin className="h-4 w-4 sm:h-5 sm:w-5 text-green-600 shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-xs text-gray-500">Location</p>
+                  <p className="text-xs sm:text-sm font-semibold truncate">{event.location}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
-                <Users className="h-5 w-5 text-purple-600" />
-                <div>
-                  <p className="text-sm text-gray-600">Capacity</p>
-                  <p className="font-semibold">{event.max_participants || "Unlimited"}</p>
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                <Users className="h-4 w-4 sm:h-5 sm:w-5 text-purple-600 shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-xs text-gray-500">Capacity</p>
+                  <p className="text-xs sm:text-sm font-semibold truncate">{event.max_participants || "Unlimited"}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
-                <DollarSign className="h-5 w-5 text-yellow-600" />
-                <div>
-                  <p className="text-sm text-gray-600">Price</p>
-                  <p className="font-semibold">${event.price || "Free"}</p>
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                <DollarSign className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-600 shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-xs text-gray-500">Price</p>
+                  <p className="text-xs sm:text-sm font-semibold truncate">${event.price || "Free"}</p>
                 </div>
               </div>
             </div>
@@ -268,99 +270,95 @@ export default function EventAnalyticsPage() {
         </Card>
 
         {/* Key Metrics */}
-        <div className="space-y-6">
+        <div className="space-y-3 sm:space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">Key Performance Metrics</h2>
-              <p className="text-gray-600">Real-time metrics for this event</p>
+              <h2 className="text-lg sm:text-xl font-bold text-gray-900">Key Performance Metrics</h2>
+              <p className="text-xs text-gray-500">Real-time metrics for this event</p>
             </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <Card className="border-0 shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 bg-white">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="p-3 rounded-xl text-blue-600 bg-blue-50">
-                    <UserCheck className="h-6 w-6" />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4 md:gap-6">
+            <Card className="border-0 shadow-md hover:shadow-lg transition-all duration-300 bg-white rounded-2xl overflow-hidden">
+              <CardContent className="p-3 sm:p-5">
+                <div className="flex items-center justify-between mb-2 sm:mb-4">
+                  <div className="p-2 sm:p-2.5 rounded-xl text-blue-600 bg-blue-50">
+                    <UserCheck className="h-4 w-4 sm:h-5 sm:w-5" />
                   </div>
-                  <Badge className="bg-green-50 text-green-700 border-green-200 px-2 py-1 text-xs font-semibold">
+                  <Badge className="bg-green-50 text-green-700 border-green-200 px-1.5 py-0.5 text-[10px] sm:text-xs font-semibold">
                     +{Math.round(totalRegistrations * 0.1)}%
                   </Badge>
                 </div>
-                <div className="space-y-2">
-                  <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Total Registrations</p>
-                  <p className="text-3xl font-black text-gray-900">{totalRegistrations}</p>
-                  <div className="flex items-center text-sm">
-                    <TrendingUp className="h-4 w-4 mr-1 text-green-600" />
-                    <span className="text-green-600 font-medium">Trending upward</span>
+                <div className="space-y-1 sm:space-y-2">
+                  <p className="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase tracking-wide truncate">Registrations</p>
+                  <p className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900">{totalRegistrations}</p>
+                  <div className="flex items-center text-xs">
+                    <TrendingUp className="h-3.5 w-3.5 mr-1 text-green-600 shrink-0" />
+                    <span className="text-green-600 font-medium truncate text-[11px] sm:text-xs">Trending upward</span>
                   </div>
-                  <p className="text-xs text-gray-500 font-medium">Compared to similar events</p>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 bg-white">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="p-3 rounded-xl text-green-600 bg-green-50">
-                    <TrendingUp className="h-6 w-6" />
+            <Card className="border-0 shadow-md hover:shadow-lg transition-all duration-300 bg-white rounded-2xl overflow-hidden">
+              <CardContent className="p-3 sm:p-5">
+                <div className="flex items-center justify-between mb-2 sm:mb-4">
+                  <div className="p-2 sm:p-2.5 rounded-xl text-green-600 bg-green-50">
+                    <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
                   </div>
-                  <Badge className="bg-green-50 text-green-700 border-green-200 px-2 py-1 text-xs font-semibold">
+                  <Badge className="bg-green-50 text-green-700 border-green-200 px-1.5 py-0.5 text-[10px] sm:text-xs font-semibold">
                     +{Math.round(registrationRate * 0.05)}%
                   </Badge>
                 </div>
-                <div className="space-y-2">
-                  <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Registration Rate</p>
-                  <p className="text-3xl font-black text-gray-900">{registrationRate.toFixed(1)}%</p>
-                  <div className="flex items-center text-sm">
-                    <TrendingUp className="h-4 w-4 mr-1 text-green-600" />
-                    <span className="text-green-600 font-medium">Above average</span>
+                <div className="space-y-1 sm:space-y-2">
+                  <p className="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase tracking-wide truncate">Reg. Rate</p>
+                  <p className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900">{registrationRate.toFixed(1)}%</p>
+                  <div className="flex items-center text-xs">
+                    <TrendingUp className="h-3.5 w-3.5 mr-1 text-green-600 shrink-0" />
+                    <span className="text-green-600 font-medium truncate text-[11px] sm:text-xs">Above average</span>
                   </div>
-                  <p className="text-xs text-gray-500 font-medium">Of total page views</p>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 bg-white">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="p-3 rounded-xl text-purple-600 bg-purple-50">
-                    <DollarSign className="h-6 w-6" />
+            <Card className="border-0 shadow-md hover:shadow-lg transition-all duration-300 bg-white rounded-2xl overflow-hidden">
+              <CardContent className="p-3 sm:p-5">
+                <div className="flex items-center justify-between mb-2 sm:mb-4">
+                  <div className="p-2 sm:p-2.5 rounded-xl text-purple-600 bg-purple-50">
+                    <DollarSign className="h-4 w-4 sm:h-5 sm:w-5" />
                   </div>
-                  <Badge className="bg-green-50 text-green-700 border-green-200 px-2 py-1 text-xs font-semibold">
+                  <Badge className="bg-green-50 text-green-700 border-green-200 px-1.5 py-0.5 text-[10px] sm:text-xs font-semibold">
                     +12%
                   </Badge>
                 </div>
-                <div className="space-y-2">
-                  <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Total Revenue</p>
-                  <p className="text-3xl font-black text-gray-900">${revenue}</p>
-                  <div className="flex items-center text-sm">
-                    <TrendingUp className="h-4 w-4 mr-1 text-green-600" />
-                    <span className="text-green-600 font-medium">Growing steadily</span>
+                <div className="space-y-1 sm:space-y-2">
+                  <p className="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase tracking-wide truncate">Revenue</p>
+                  <p className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900">${revenue}</p>
+                  <div className="flex items-center text-xs">
+                    <TrendingUp className="h-3.5 w-3.5 mr-1 text-green-600 shrink-0" />
+                    <span className="text-green-600 font-medium truncate text-[11px] sm:text-xs">Growing steadily</span>
                   </div>
-                  <p className="text-xs text-gray-500 font-medium">From ticket sales</p>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 bg-white">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="p-3 rounded-xl text-orange-600 bg-orange-50">
-                    <Eye className="h-6 w-6" />
+            <Card className="border-0 shadow-md hover:shadow-lg transition-all duration-300 bg-white rounded-2xl overflow-hidden">
+              <CardContent className="p-3 sm:p-5">
+                <div className="flex items-center justify-between mb-2 sm:mb-4">
+                  <div className="p-2 sm:p-2.5 rounded-xl text-orange-600 bg-orange-50">
+                    <Eye className="h-4 w-4 sm:h-5 sm:w-5" />
                   </div>
-                  <Badge className="bg-green-50 text-green-700 border-green-200 px-2 py-1 text-xs font-semibold">
+                  <Badge className="bg-green-50 text-green-700 border-green-200 px-1.5 py-0.5 text-[10px] sm:text-xs font-semibold">
                     +18%
                   </Badge>
                 </div>
-                <div className="space-y-2">
-                  <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Page Views</p>
-                  <p className="text-3xl font-black text-gray-900">{pageViews.toLocaleString()}</p>
-                  <div className="flex items-center text-sm">
-                    <TrendingUp className="h-4 w-4 mr-1 text-green-600" />
-                    <span className="text-green-600 font-medium">High visibility</span>
+                <div className="space-y-1 sm:space-y-2">
+                  <p className="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase tracking-wide truncate">Page Views</p>
+                  <p className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900">{pageViews.toLocaleString()}</p>
+                  <div className="flex items-center text-xs">
+                    <TrendingUp className="h-3.5 w-3.5 mr-1 text-green-600 shrink-0" />
+                    <span className="text-green-600 font-medium truncate text-[11px] sm:text-xs">High visibility</span>
                   </div>
-                  <p className="text-xs text-gray-500 font-medium">Last 30 days</p>
                 </div>
               </CardContent>
             </Card>
@@ -374,29 +372,29 @@ export default function EventAnalyticsPage() {
         />
 
         {/* Registrations Table */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Registrations</CardTitle>
-            <CardDescription>Latest participants who registered for this event</CardDescription>
+        <Card className="border-none shadow-md bg-white rounded-2xl overflow-hidden">
+          <CardHeader className="p-4 sm:p-6 pb-2 sm:pb-3">
+            <CardTitle className="text-base sm:text-lg">Recent Registrations</CardTitle>
+            <CardDescription className="text-xs">Latest participants who registered for this event</CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <table className="w-full">
+          <CardContent className="p-0 sm:p-6 sm:pt-0">
+            <div className="overflow-x-auto no-scrollbar">
+              <table className="w-full text-left min-w-[500px]">
                 <thead>
-                  <tr className="border-b">
-                    <th className="text-left p-3">Name</th>
-                    <th className="text-left p-3">Email</th>
-                    <th className="text-left p-3">Registration Date</th>
-                    <th className="text-left p-3">Status</th>
+                  <tr className="border-b bg-slate-50/50">
+                    <th className="py-2.5 px-3 sm:py-3 sm:px-4 font-semibold text-xs sm:text-sm text-gray-700">Name</th>
+                    <th className="py-2.5 px-3 sm:py-3 sm:px-4 font-semibold text-xs sm:text-sm text-gray-700">Email</th>
+                    <th className="py-2.5 px-3 sm:py-3 sm:px-4 font-semibold text-xs sm:text-sm text-gray-700">Registration Date</th>
+                    <th className="py-2.5 px-3 sm:py-3 sm:px-4 font-semibold text-xs sm:text-sm text-gray-700">Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {registrations.slice(0, 10).map((registration, index) => (
-                    <tr key={registration.id} className={index % 2 === 0 ? "bg-gray-50" : "bg-white"}>
-                      <td className="p-3">{registration.participant_name || "N/A"}</td>
-                      <td className="p-3">{registration.participant_email || "N/A"}</td>
-                      <td className="p-3">{new Date(registration.created_at).toLocaleDateString()}</td>
-                      <td className="p-3">
+                    <tr key={registration.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50/50"}>
+                      <td className="py-2.5 px-3 sm:py-3 sm:px-4 text-xs sm:text-sm font-medium text-gray-900">{registration.participant_name || "N/A"}</td>
+                      <td className="py-2.5 px-3 sm:py-3 sm:px-4 text-xs sm:text-sm text-gray-600">{registration.participant_email || "N/A"}</td>
+                      <td className="py-2.5 px-3 sm:py-3 sm:px-4 text-xs sm:text-sm text-gray-600">{new Date(registration.created_at).toLocaleDateString()}</td>
+                      <td className="py-2.5 px-3 sm:py-3 sm:px-4 text-xs sm:text-sm">
                         <Badge 
                           variant={
                             (registration.status === "confirmed" ? "default" : 
@@ -404,6 +402,7 @@ export default function EventAnalyticsPage() {
                             registration.status === "pending" ? "outline" : 
                             "default") as any
                           }
+                          className="text-[10px] sm:text-xs"
                         >
                           {registration.status ? registration.status.charAt(0).toUpperCase() + registration.status.slice(1) : 'Confirmed'}
                         </Badge>
@@ -412,7 +411,7 @@ export default function EventAnalyticsPage() {
                   ))}
                   {registrations.length === 0 && (
                     <tr>
-                      <td colSpan={4} className="text-center py-6 text-muted-foreground">
+                      <td colSpan={4} className="text-center py-6 text-xs sm:text-sm text-muted-foreground">
                         No registrations yet
                       </td>
                     </tr>
