@@ -13,6 +13,7 @@ interface BranchAutocompleteProps {
   required?: boolean;
   id?: string;
   leftIcon?: React.ReactNode;
+  allowPartialOnBlur?: boolean;
 }
 
 export function BranchAutocomplete({
@@ -23,15 +24,31 @@ export function BranchAutocomplete({
   required = false,
   id,
   leftIcon,
+  allowPartialOnBlur = false,
 }: BranchAutocompleteProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState(value || "");
+  const [activeIndex, setActiveIndex] = useState(-1);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Sync internal search query with external value prop
   useEffect(() => {
     setSearchQuery(value || "");
   }, [value]);
+
+  const q = searchQuery.toLowerCase().trim();
+
+  // Filter grouped categories and flattened matching list
+  const filteredCategories = BRANCH_CATEGORIES.map((cat) => {
+    return {
+      category: cat.category,
+      branches: q
+        ? cat.branches.filter((b) => b.toLowerCase().includes(q))
+        : cat.branches,
+    };
+  }).filter((cat) => cat.branches.length > 0);
+
+  const flatBranches = filteredCategories.flatMap((cat) => cat.branches);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -60,7 +77,6 @@ export function BranchAutocomplete({
         onChange(match);
         setSearchQuery(match);
       } else {
-        // If partial match exists
         const partial = ALL_BRANCHES.find((b) =>
           b.toLowerCase().includes(searchQuery.toLowerCase())
         );
@@ -68,8 +84,12 @@ export function BranchAutocomplete({
           onChange(partial);
           setSearchQuery(partial);
         } else {
-          onChange("");
-          setSearchQuery("");
+          if (allowPartialOnBlur) {
+            onChange(searchQuery);
+          } else {
+            onChange("");
+            setSearchQuery("");
+          }
         }
       }
     } else {
@@ -81,19 +101,32 @@ export function BranchAutocomplete({
     onChange(branch);
     setSearchQuery(branch);
     setIsOpen(false);
+    setActiveIndex(-1);
   };
 
-  const q = searchQuery.toLowerCase().trim();
-
-  // Filter grouped categories
-  const filteredCategories = BRANCH_CATEGORIES.map((cat) => {
-    return {
-      category: cat.category,
-      branches: q
-        ? cat.branches.filter((b) => b.toLowerCase().includes(q))
-        : cat.branches,
-    };
-  }).filter((cat) => cat.branches.length > 0);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setIsOpen(true);
+      setActiveIndex((prev) =>
+        prev < flatBranches.length - 1 ? prev + 1 : prev
+      );
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIndex((prev) => (prev > 0 ? prev - 1 : -1));
+    } else if (e.key === "Enter") {
+      if (isOpen && activeIndex >= 0 && activeIndex < flatBranches.length) {
+        e.preventDefault();
+        handleSelect(flatBranches[activeIndex]);
+      } else {
+        handleBlurValidation();
+        setIsOpen(false);
+      }
+    } else if (e.key === "Escape") {
+      setIsOpen(false);
+      setActiveIndex(-1);
+    }
+  };
 
   return (
     <div ref={containerRef} className="relative w-full">
@@ -111,8 +144,10 @@ export function BranchAutocomplete({
           onChange={(e) => {
             setSearchQuery(e.target.value);
             setIsOpen(true);
+            setActiveIndex(-1);
           }}
           onFocus={() => setIsOpen(true)}
+          onKeyDown={handleKeyDown}
           required={required}
           className={`${className} pl-10 pr-9`}
           autoComplete="off"
@@ -140,12 +175,16 @@ export function BranchAutocomplete({
               </div>
               {cat.branches.map((branch) => {
                 const isSelected = value === branch;
+                const flatIndex = flatBranches.indexOf(branch);
+                const isActive = flatIndex === activeIndex;
+
                 return (
                   <div
                     key={branch}
                     onClick={() => handleSelect(branch)}
+                    onMouseEnter={() => setActiveIndex(flatIndex)}
                     className={`flex items-center justify-between px-3.5 py-2 text-xs transition-colors cursor-pointer text-left ${
-                      isSelected
+                      isActive || isSelected
                         ? "bg-indigo-50 text-indigo-900 font-semibold"
                         : "text-slate-700 hover:bg-slate-50"
                     }`}

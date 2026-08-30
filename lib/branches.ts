@@ -57,6 +57,17 @@ export const BRANCH_CATEGORIES: BranchCategory[] = [
       "Polymer Engineering",
     ],
   },
+  {
+    category: "Management & Computer Applications",
+    branches: [
+      "BCA – Bachelor of Computer Applications",
+      "MCA – Master of Computer Applications",
+      "BBA – Bachelor of Business Administration",
+      "MBA – Master of Business Administration",
+      "B.Sc (Computer Science / IT / Data)",
+      "B.Com – Commerce & Finance",
+    ],
+  },
 ];
 
 export const ALL_BRANCHES = BRANCH_CATEGORIES.flatMap((cat) => cat.branches);

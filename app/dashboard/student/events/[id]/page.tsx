@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
 import { CollegeAutocomplete } from '@/components/college-autocomplete';
+import { BranchAutocomplete } from '@/components/branch-autocomplete';
 import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
@@ -1463,17 +1464,17 @@ export default function EventDetailsPage({
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="branch">Branch</Label>
-                    <Input
+                    <Label htmlFor="branch">Branch / Major</Label>
+                    <BranchAutocomplete
                       id="branch"
                       value={registrationData.branch}
-                      onChange={(e) =>
+                      onChange={(val) =>
                         setRegistrationData((prev) => ({
                           ...prev,
-                          branch: e.target.value,
+                          branch: val,
                         }))
                       }
-                      placeholder="Your branch/department"
+                      placeholder="Search or select your branch..."
                     />
                   </div>
                 </div>
@@ -1561,17 +1562,17 @@ export default function EventDetailsPage({
                             />
                           </div>
                           <div>
-                            <Label>Branch/Department</Label>
-                            <Input
+                            <Label>Branch / Major</Label>
+                            <BranchAutocomplete
                               value={member.branch}
-                              onChange={(e) =>
+                              onChange={(val) =>
                                 updateTeamMember(
                                   index,
                                   'branch',
-                                  e.target.value
+                                  val
                                 )
                               }
-                              placeholder="e.g., Computer Science"
+                              placeholder="Search or select branch..."
                             />
                           </div>
                           <div>
