@@ -366,38 +366,40 @@ export default function ClubProfilePage() {
 
       {/* ================= TABS SECTION ================= */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="bg-white border border-black/5 p-1 rounded-2xl h-auto shadow-sm">
-          <TabsTrigger
-            value="overview"
-            className="rounded-xl px-4 py-2 text-xs sm:text-sm font-bold data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all"
-          >
-            Overview & Notices
-          </TabsTrigger>
-          <TabsTrigger
-            value="events"
-            className="rounded-xl px-4 py-2 text-xs sm:text-sm font-bold data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all flex items-center gap-1.5"
-          >
-            <span>Events</span>
-            <Badge className="bg-slate-100 text-slate-700 text-[10px] px-1.5 py-0 h-4 border-0">
-              {events.length}
-            </Badge>
-          </TabsTrigger>
-          <TabsTrigger
-            value="team"
-            className="rounded-xl px-4 py-2 text-xs sm:text-sm font-bold data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all flex items-center gap-1.5"
-          >
-            <span>Team & Members</span>
-            <Badge className="bg-slate-100 text-slate-700 text-[10px] px-1.5 py-0 h-4 border-0">
-              {membersList.length}
-            </Badge>
-          </TabsTrigger>
-          <TabsTrigger
-            value="resources"
-            className="rounded-xl px-4 py-2 text-xs sm:text-sm font-bold data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all"
-          >
-            Community & Links
-          </TabsTrigger>
-        </TabsList>
+        <div className="w-full overflow-x-auto no-scrollbar pb-1 -mb-1">
+          <TabsList className="inline-flex w-auto min-w-full sm:min-w-0 bg-white border border-black/5 p-1 rounded-2xl h-auto shadow-sm gap-1">
+            <TabsTrigger
+              value="overview"
+              className="rounded-xl px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-bold whitespace-nowrap data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all shrink-0"
+            >
+              Overview & Notices
+            </TabsTrigger>
+            <TabsTrigger
+              value="events"
+              className="rounded-xl px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-bold whitespace-nowrap data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all flex items-center gap-1.5 shrink-0"
+            >
+              <span>Events</span>
+              <Badge className="bg-slate-100 text-slate-700 text-[10px] px-1.5 py-0 h-4 border-0">
+                {events.length}
+              </Badge>
+            </TabsTrigger>
+            <TabsTrigger
+              value="team"
+              className="rounded-xl px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-bold whitespace-nowrap data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all flex items-center gap-1.5 shrink-0"
+            >
+              <span>Team & Members</span>
+              <Badge className="bg-slate-100 text-slate-700 text-[10px] px-1.5 py-0 h-4 border-0">
+                {membersList.length}
+              </Badge>
+            </TabsTrigger>
+            <TabsTrigger
+              value="resources"
+              className="rounded-xl px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-bold whitespace-nowrap data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all shrink-0"
+            >
+              Community & Links
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         {/* =========================================================================
             TAB 1: OVERVIEW & NOTICES

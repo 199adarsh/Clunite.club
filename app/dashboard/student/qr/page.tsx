@@ -142,14 +142,16 @@ export default function StudentQrPage() {
 
       {/* TABS CONTAINER */}
       <Tabs defaultValue="tickets" className="w-full space-y-6">
-        <TabsList className="bg-white border border-black/5 p-1 rounded-xl w-fit">
-          <TabsTrigger value="tickets" className="px-6 py-2.5 rounded-lg text-sm font-semibold">
-            My Event Tickets ({tickets.length})
-          </TabsTrigger>
-          <TabsTrigger value="profile" className="px-6 py-2.5 rounded-lg text-sm font-semibold">
-            Profile Badge
-          </TabsTrigger>
-        </TabsList>
+        <div className="w-full overflow-x-auto no-scrollbar pb-1">
+          <TabsList className="bg-white border border-black/5 p-1 rounded-2xl w-full sm:w-fit grid grid-cols-2 sm:inline-flex h-auto shadow-sm gap-1">
+            <TabsTrigger value="tickets" className="px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all">
+              My Tickets ({tickets.length})
+            </TabsTrigger>
+            <TabsTrigger value="profile" className="px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all">
+              Profile Badge
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         {/* TICKETS TAB */}
         <TabsContent value="tickets" className="space-y-6 outline-none">

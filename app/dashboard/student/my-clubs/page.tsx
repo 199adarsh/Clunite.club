@@ -239,28 +239,28 @@ export default function MyClubsPage() {
         {/* Subtle decorative gradient */}
         <div className="absolute inset-0 bg-gradient-to-r from-indigo-200/60 via-purple-100/30 to-transparent pointer-events-none" />
 
-        <div className="relative z-10 space-y-1">
-          <div className="flex items-center gap-3">
+        <div className="relative z-10 space-y-1.5 min-w-0">
+          <div className="flex items-center gap-2.5 flex-wrap">
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
               Campus Clubs & Communities
             </h1>
-            <Badge className="bg-indigo-50 text-indigo-700 border border-indigo-200/80 font-bold text-xs">
+            <Badge className="bg-indigo-50 text-indigo-700 border border-indigo-200/80 font-bold text-xs shrink-0">
               {userClubs.length} Joined
             </Badge>
           </div>
-          <p className="text-sm text-slate-500 font-medium">
+          <p className="text-xs sm:text-sm text-slate-500 font-medium max-w-xl">
             Explore clubs by college, discover upcoming student events, and manage your memberships.
           </p>
         </div>
 
-        <div className="relative z-10 flex items-center gap-3 shrink-0">
-          <Link href="/dashboard/student/my-clubs/discover">
-            <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-xs font-semibold h-9 shadow-sm flex items-center gap-1.5">
+        <div className="relative z-10 flex items-center gap-2.5 shrink-0 pt-2 sm:pt-0">
+          <Link href="/dashboard/student/my-clubs/discover" className="flex-1 sm:flex-initial">
+            <Button className="w-full sm:w-auto bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-xs font-semibold h-9 shadow-sm flex items-center justify-center gap-1.5">
               <Compass className="h-4 w-4" />
               <span>Smart Matchmaker</span>
             </Button>
           </Link>
-          <Link href="/dashboard/student">
+          <Link href="/dashboard/student" className="shrink-0">
             <Button variant="ghost" className="rounded-xl text-xs font-semibold h-9 text-slate-600 hover:bg-slate-100">
               <ArrowLeft className="h-4 w-4 mr-1.5" /> Dashboard
             </Button>
@@ -270,25 +270,25 @@ export default function MyClubsPage() {
 
       {/* ================= TABS NAVIGATION ================= */}
       <Tabs value={activeTab} onValueChange={(val: any) => setActiveTab(val)} className="space-y-6">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-          <TabsList className="bg-white border border-black/5 p-1 rounded-2xl h-auto shadow-sm">
+        <div className="w-full overflow-x-auto no-scrollbar pb-1 -mb-1">
+          <TabsList className="inline-flex w-auto min-w-full sm:min-w-0 bg-white border border-black/5 p-1 rounded-2xl h-auto shadow-sm gap-1">
             <TabsTrigger
               value="joined"
-              className="rounded-xl px-4 py-2 text-xs sm:text-sm font-bold data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all flex items-center gap-2"
+              className="rounded-xl px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-bold whitespace-nowrap data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all flex items-center gap-1.5 sm:gap-2 shrink-0"
             >
               <UserCheck className="h-4 w-4" />
               <span>My Joined Clubs ({userClubs.length})</span>
             </TabsTrigger>
             <TabsTrigger
               value="by-college"
-              className="rounded-xl px-4 py-2 text-xs sm:text-sm font-bold data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all flex items-center gap-2"
+              className="rounded-xl px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-bold whitespace-nowrap data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all flex items-center gap-1.5 sm:gap-2 shrink-0"
             >
               <School className="h-4 w-4" />
               <span>Explore by College</span>
             </TabsTrigger>
             <TabsTrigger
               value="all"
-              className="rounded-xl px-4 py-2 text-xs sm:text-sm font-bold data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all flex items-center gap-2"
+              className="rounded-xl px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-bold whitespace-nowrap data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all flex items-center gap-1.5 sm:gap-2 shrink-0"
             >
               <Globe className="h-4 w-4" />
               <span>All Campus Clubs ({allClubs.length})</span>

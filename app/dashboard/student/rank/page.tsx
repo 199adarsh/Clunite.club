@@ -582,34 +582,34 @@ export default function RankLeaderboardPage() {
   return (
     <div className="min-h-screen bg-[#f5f5f7] px-4 sm:px-8 py-6 space-y-6 sm:space-y-8 antialiased">
       {/* ================= HERO HEADER ================= */}
-      <div className="relative rounded-2xl bg-white border border-black/5 p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm overflow-hidden">
+      <div className="relative rounded-3xl bg-white border border-black/5 p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm overflow-hidden">
         {/* Subtle decorative gradient matching browse events */}
         <div className="absolute inset-0 bg-gradient-to-r from-indigo-200/60 via-purple-100/30 to-transparent pointer-events-none" />
 
-        <div className="relative z-10 space-y-1">
-          <div className="flex items-center gap-3">
+        <div className="relative z-10 space-y-1.5 min-w-0">
+          <div className="flex items-center gap-2.5 flex-wrap">
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
               Rankings & Leaderboard
             </h1>
-            <Badge className="bg-indigo-50 text-indigo-700 border border-indigo-200/80 font-bold text-xs">
+            <Badge className="bg-indigo-50 text-indigo-700 border border-indigo-200/80 font-bold text-xs shrink-0">
               Live Standings
             </Badge>
           </div>
-          <p className="text-sm text-slate-500 font-medium">
+          <p className="text-xs sm:text-sm text-slate-500 font-medium max-w-xl">
             Campus champions, active student clubs, and inter-college rankings
           </p>
         </div>
 
-        <div className="relative z-10 flex items-center gap-3 shrink-0">
+        <div className="relative z-10 flex items-center gap-2.5 shrink-0 pt-2 sm:pt-0">
           <Button
             variant="outline"
             onClick={() => setScoringGuideOpen(true)}
-            className="rounded-xl border-slate-200 text-xs font-semibold h-9 text-slate-700 hover:bg-slate-50"
+            className="flex-1 sm:flex-initial rounded-xl border-slate-200 text-xs font-semibold h-9 text-slate-700 hover:bg-slate-50 flex items-center justify-center gap-1.5"
           >
-            <Info className="h-4 w-4 mr-1.5 text-indigo-600" />
-            Scoring Rules
+            <Info className="h-4 w-4 text-indigo-600" />
+            <span>Scoring Rules</span>
           </Button>
-          <Link href="/dashboard/student">
+          <Link href="/dashboard/student" className="shrink-0">
             <Button variant="ghost" className="rounded-xl text-xs font-semibold h-9 text-slate-600 hover:bg-slate-100">
               <ArrowLeft className="h-4 w-4 mr-1.5" /> Back
             </Button>
@@ -619,27 +619,27 @@ export default function RankLeaderboardPage() {
 
       {/* ================= PERSONAL STANDING BANNER ================= */}
       {currentStudent && (
-        <Card className="border border-black/5 shadow-sm rounded-2xl bg-white overflow-hidden">
-          <CardContent className="p-5 sm:p-6 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-6">
+        <Card className="border border-black/5 shadow-sm rounded-3xl bg-white overflow-hidden">
+          <CardContent className="p-5 sm:p-6 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-5 sm:gap-6">
             {/* User Profile */}
-            <div className="flex items-center gap-4 min-w-0">
+            <div className="flex items-center gap-3.5 sm:gap-4 min-w-0">
               <div className="relative shrink-0">
                 <img
                   src={currentStudent.avatarUrl}
                   alt={currentStudent.name}
-                  className="w-14 h-14 rounded-2xl object-cover border border-slate-200 shadow-sm bg-slate-50"
+                  className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl object-cover border border-slate-200 shadow-sm bg-slate-50"
                 />
                 <div className="absolute -bottom-1 -right-1 bg-indigo-600 text-white rounded-md px-1.5 py-0.5 text-[10px] font-bold shadow-sm">
                   #{myCollegeRankIndex !== -1 ? myCollegeRankIndex + 1 : '—'}
                 </div>
               </div>
 
-              <div className="min-w-0 space-y-1">
+              <div className="min-w-0 space-y-0.5 sm:space-y-1">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="font-extrabold text-slate-900 text-base sm:text-lg truncate">
                     {currentStudent.name}
                   </span>
-                  <Badge className={`${currentStudent.tier.badgeStyle} text-xs font-semibold border shadow-none`}>
+                  <Badge className={`${currentStudent.tier.badgeStyle} text-xs font-semibold border shadow-none shrink-0`}>
                     {currentStudent.tier.name}
                   </Badge>
                 </div>
@@ -651,13 +651,13 @@ export default function RankLeaderboardPage() {
 
             {/* Progress to Next Tier */}
             <div className="flex-1 max-w-md space-y-2">
-              <div className="flex items-center justify-between text-xs font-bold">
-                <span className="text-slate-900 flex items-center gap-1.5">
+              <div className="flex items-center justify-between text-xs font-bold gap-2">
+                <span className="text-slate-900 flex items-center gap-1.5 shrink-0">
                   <Zap className="h-3.5 w-3.5 text-indigo-600 fill-indigo-600" />
                   {currentStudent.totalXp} XP Total
                 </span>
                 {nextTier ? (
-                  <span className="text-slate-500 font-medium text-[11px]">
+                  <span className="text-slate-500 font-medium text-[11px] truncate text-right">
                     {remainingXp} XP to <strong className="text-slate-800 font-bold">{nextTier.name}</strong>
                   </span>
                 ) : (
@@ -679,17 +679,17 @@ export default function RankLeaderboardPage() {
             </div>
 
             {/* Actions */}
-            <div className="flex items-center gap-2.5 shrink-0">
+            <div className="flex items-center gap-2.5 shrink-0 pt-1 lg:pt-0">
               <Button
                 variant="outline"
                 onClick={() => setSelectedStudent(currentStudent)}
-                className="rounded-xl border-slate-200 text-slate-700 font-semibold text-xs h-9 hover:bg-slate-50"
+                className="flex-1 sm:flex-initial rounded-xl border-slate-200 text-slate-700 font-semibold text-xs h-9 hover:bg-slate-50"
               >
                 Breakdown
               </Button>
               <Button
                 onClick={handleCopyShare}
-                className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl font-semibold text-xs h-9 shadow-sm flex items-center gap-1.5"
+                className="flex-1 sm:flex-initial bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl font-semibold text-xs h-9 shadow-sm flex items-center justify-center gap-1.5"
               >
                 {copiedLink ? <Check className="h-3.5 w-3.5" /> : <Share2 className="h-3.5 w-3.5" />}
                 <span>{copiedLink ? 'Copied' : 'Share'}</span>
@@ -706,39 +706,41 @@ export default function RankLeaderboardPage() {
         className="space-y-6"
       >
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-          <TabsList className="bg-white border border-black/5 p-1 rounded-2xl h-auto shadow-sm">
-            <TabsTrigger
-              value="students"
-              className="rounded-xl px-4 py-2 text-xs sm:text-sm font-bold data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all flex items-center gap-2"
-            >
-              <GraduationCap className="h-4 w-4" />
-              <span>Student MVPs</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="clubs"
-              className="rounded-xl px-4 py-2 text-xs sm:text-sm font-bold data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all flex items-center gap-2"
-            >
-              <Building2 className="h-4 w-4" />
-              <span>Top Clubs</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="colleges"
-              className="rounded-xl px-4 py-2 text-xs sm:text-sm font-bold data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all flex items-center gap-2"
-            >
-              <Trophy className="h-4 w-4" />
-              <span>College League</span>
-            </TabsTrigger>
-          </TabsList>
+          <div className="w-full overflow-x-auto no-scrollbar pb-1 -mb-1">
+            <TabsList className="inline-flex w-auto min-w-full sm:min-w-0 bg-white border border-black/5 p-1 rounded-2xl h-auto shadow-sm gap-1">
+              <TabsTrigger
+                value="students"
+                className="rounded-xl px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-bold whitespace-nowrap data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all flex items-center gap-1.5 sm:gap-2 shrink-0"
+              >
+                <GraduationCap className="h-4 w-4" />
+                <span>Student MVPs</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="clubs"
+                className="rounded-xl px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-bold whitespace-nowrap data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all flex items-center gap-1.5 sm:gap-2 shrink-0"
+              >
+                <Building2 className="h-4 w-4" />
+                <span>Top Clubs</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="colleges"
+                className="rounded-xl px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-bold whitespace-nowrap data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all flex items-center gap-1.5 sm:gap-2 shrink-0"
+              >
+                <Trophy className="h-4 w-4" />
+                <span>College League</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           {/* Scope selection for students and clubs */}
           {activeTrack !== 'colleges' && (
-            <div className="flex items-center bg-white rounded-2xl border border-black/5 p-1 shadow-sm shrink-0">
+            <div className="flex items-center w-full sm:w-auto bg-white rounded-2xl border border-black/5 p-1 shadow-sm shrink-0">
               <button
                 onClick={() => {
                   setScope('same');
                   setSelectedCollegeFilter('');
                 }}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                className={`flex-1 sm:flex-initial px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all text-center whitespace-nowrap ${
                   scope === 'same'
                     ? 'bg-slate-900 text-white shadow-sm'
                     : 'text-slate-600 hover:text-slate-900'
@@ -748,7 +750,7 @@ export default function RankLeaderboardPage() {
               </button>
               <button
                 onClick={() => setScope('all')}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                className={`flex-1 sm:flex-initial px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all text-center whitespace-nowrap ${
                   scope === 'all'
                     ? 'bg-slate-900 text-white shadow-sm'
                     : 'text-slate-600 hover:text-slate-900'
