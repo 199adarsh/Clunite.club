@@ -52,7 +52,7 @@ export default function DashboardLayout({
   }
 
   return (
-    <SidebarProvider defaultOpen={false}>
+    <SidebarProvider defaultOpen={true}>
       <div className="flex min-h-screen w-full bg-slate-50">
         <AppSidebar />
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden">

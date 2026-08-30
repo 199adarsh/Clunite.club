@@ -50,8 +50,8 @@ const menuItems = [
 
 export function AppSidebar() {
   const pathname = usePathname();
-  const { state, toggleSidebar } = useSidebar();
-  const isCollapsed = state === 'collapsed';
+  const { state, isMobile, setOpenMobile, toggleSidebar } = useSidebar();
+  const isCollapsed = !isMobile && state === 'collapsed';
 
   const { user: authUser, signOut } = useAuth();
   const [userData, setUserData] = useState<any>(null);
@@ -134,6 +134,7 @@ export function AppSidebar() {
                     >
                       <Link
                         href={item.url}
+                        onClick={() => isMobile && setOpenMobile(false)}
                         className="flex items-center gap-2 relative"
                       >
                         {/* Brand-safe accent bar */}
