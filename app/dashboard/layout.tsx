@@ -23,7 +23,7 @@ export default function DashboardLayout({
       console.log(
         '🔒 Dashboard layout: No authenticated user, redirecting to login'
       );
-      router.push('/login');
+      router.push('/auth/login');
     }
   }, [user, loading, router]);
 

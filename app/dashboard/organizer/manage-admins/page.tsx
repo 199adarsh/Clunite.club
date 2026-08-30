@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation"
 
 export default function ManageAdminsPage() {
   const router = useRouter()
-  const { user: authUser } = useAuth()
+  const { user: authUser, loading: authLoading } = useAuth()
   const [loading, setLoading] = useState(true)
   const [currentClub, setCurrentClub] = useState<any>(null)
   const [admins, setAdmins] = useState<any[]>([])
@@ -25,10 +25,16 @@ export default function ManageAdminsPage() {
   const [adding, setAdding] = useState(false)
 
   useEffect(() => {
-    if (authUser) {
-      loadCurrentClub()
+    if (authLoading) return
+
+    if (!authUser) {
+      router.push('/auth/login')
+      setLoading(false)
+      return
     }
-  }, [authUser])
+
+    loadCurrentClub()
+  }, [authUser, authLoading])
 
   const loadCurrentClub = async () => {
     try {
@@ -37,6 +43,7 @@ export default function ManageAdminsPage() {
       const storedClubId = sessionStorage.getItem('selectedClubId')
       if (!storedClubId) {
         toast.error('No club selected. Please select a club first.')
+        setLoading(false)
         router.push('/dashboard/organizer/host')
         return
       }
@@ -55,6 +62,7 @@ export default function ManageAdminsPage() {
 
       if (membershipError || !membership) {
         toast.error('You are not an admin of this club')
+        setLoading(false)
         router.push('/dashboard/organizer/host')
         return
       }

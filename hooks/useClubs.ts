@@ -38,13 +38,14 @@ export function useClub(clubId: string) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    if (!clubId) return
-
-    fetchClubData()
-  }, [clubId])
-
   const fetchClubData = async () => {
+    if (!clubId) {
+      setClub(null)
+      setEvents([])
+      setLoading(false)
+      return
+    }
+
     try {
       setLoading(true)
       setError(null)
@@ -73,6 +74,17 @@ export function useClub(clubId: string) {
     }
   }
 
+  useEffect(() => {
+    if (!clubId) {
+      setClub(null)
+      setEvents([])
+      setLoading(false)
+      return
+    }
+
+    fetchClubData()
+  }, [clubId])
+
   return { club, events, loading, error, refetch: fetchClubData }
 }
 
@@ -81,13 +93,13 @@ export function useUserClubs(userId: string) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    if (!userId) return
-
-    fetchUserClubs()
-  }, [userId])
-
   const fetchUserClubs = async () => {
+    if (!userId) {
+      setClubs([])
+      setLoading(false)
+      return
+    }
+
     try {
       setLoading(true)
       setError(null)
@@ -109,6 +121,16 @@ export function useUserClubs(userId: string) {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    if (!userId) {
+      setClubs([])
+      setLoading(false)
+      return
+    }
+
+    fetchUserClubs()
+  }, [userId])
 
   return { clubs, loading, error, refetch: fetchUserClubs }
 }

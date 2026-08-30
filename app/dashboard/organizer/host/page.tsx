@@ -58,6 +58,7 @@ export default function HostEventPage() {
 
     if (!clubId || !clubName) {
       // No club selected, redirect to club selection
+      setLoading(false);
       router.push('/dashboard/organizer/select-club');
       return;
     }
@@ -70,8 +71,20 @@ export default function HostEventPage() {
   useEffect(() => {
     if (authUser) {
       loadUserClubs();
+      if (selectedClubId) {
+        // Re-check owner status when authUser becomes available
+        supabase
+          .from('club_memberships')
+          .select('is_owner')
+          .eq('user_id', authUser.id)
+          .eq('club_id', selectedClubId)
+          .maybeSingle()
+          .then(({ data }) => {
+            if (data?.is_owner) setIsOwner(true);
+          });
+      }
     }
-  }, [authUser]);
+  }, [authUser, selectedClubId]);
 
   const loadUserClubs = async () => {
     try {

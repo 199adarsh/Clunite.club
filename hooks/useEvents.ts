@@ -58,6 +58,12 @@ export function useClubEvents(clubId: string) {
   const [error, setError] = useState<string | null>(null)
 
   const fetchClubEvents = async () => {
+    if (!clubId) {
+      setEvents([])
+      setLoading(false)
+      return
+    }
+
     try {
       setLoading(true)
       setError(null)
@@ -84,9 +90,12 @@ export function useClubEvents(clubId: string) {
   }
 
   useEffect(() => {
-    if (clubId) {
-      fetchClubEvents()
+    if (!clubId) {
+      setEvents([])
+      setLoading(false)
+      return
     }
+    fetchClubEvents()
   }, [clubId])
 
   return {
@@ -103,14 +112,15 @@ export function useEventsForClubIds(clubIds: string[]) {
   const [error, setError] = useState<string | null>(null)
 
   const fetchEvents = async () => {
+    if (!clubIds || clubIds.length === 0) {
+      setEvents([])
+      setLoading(false)
+      return
+    }
+
     try {
       setLoading(true)
       setError(null)
-
-      if (!clubIds || clubIds.length === 0) {
-        setEvents([])
-        return
-      }
 
       const { data, error: fetchError } = await supabase
         .from("events")
@@ -134,6 +144,11 @@ export function useEventsForClubIds(clubIds: string[]) {
   }
 
   useEffect(() => {
+    if (!clubIds || clubIds.length === 0) {
+      setEvents([])
+      setLoading(false)
+      return
+    }
     fetchEvents()
     // We want to refetch whenever the set of clubIds changes
     // eslint-disable-next-line react-hooks/exhaustive-deps

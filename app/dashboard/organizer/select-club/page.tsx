@@ -12,16 +12,22 @@ import { toast } from "sonner"
 import Link from "next/link"
 
 export default function SelectClubPage() {
-  const { user: authUser } = useAuth()
+  const { user: authUser, loading: authLoading } = useAuth()
   const router = useRouter()
   const [clubs, setClubs] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (authUser) {
-      loadUserClubs()
+    if (authLoading) return
+
+    if (!authUser) {
+      router.push('/auth/login')
+      setLoading(false)
+      return
     }
-  }, [authUser])
+
+    loadUserClubs()
+  }, [authUser, authLoading])
 
   const loadUserClubs = async () => {
     try {
@@ -56,6 +62,7 @@ export default function SelectClubPage() {
     } catch (err: any) {
       console.error('Error loading clubs:', err)
       toast.error('Failed to load clubs')
+    } finally {
       setLoading(false)
     }
   }

@@ -47,7 +47,7 @@ interface StudentCertificate {
 }
 
 export default function StudentCertificatesPage() {
-  const { user: authUser } = useAuth();
+  const { user: authUser, loading: authLoading } = useAuth();
   const [certificates, setCertificates] = useState<StudentCertificate[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedCert, setSelectedCert] = useState<StudentCertificate | null>(null);
@@ -57,11 +57,17 @@ export default function StudentCertificatesPage() {
   const modalCanvasRef = useRef<CertificateCanvasRef>(null);
 
   useEffect(() => {
-    fetchStudentCertificates();
-  }, [authUser]);
+    if (!authLoading) {
+      fetchStudentCertificates();
+    }
+  }, [authUser, authLoading]);
 
   const fetchStudentCertificates = async () => {
-    if (!authUser) return;
+    if (!authUser) {
+      setCertificates([]);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
 
     try {
