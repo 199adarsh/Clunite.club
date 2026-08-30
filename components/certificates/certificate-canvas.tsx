@@ -283,6 +283,23 @@ export const CertificateCanvas = forwardRef<CertificateCanvasRef, CertificateCan
         offscreen.height = nativeHeight;
         const ctx = offscreen.getContext('2d');
         if (!ctx) return '';
+
+        // If background image is not loaded yet, wait for it
+        if (!bgImageRef.current && templateUrl) {
+          const img = new Image();
+          if (!templateUrl.startsWith('data:')) {
+            img.crossOrigin = 'anonymous';
+          }
+          await new Promise<void>((resolve) => {
+            img.onload = () => {
+              bgImageRef.current = img;
+              resolve();
+            };
+            img.onerror = () => resolve();
+            img.src = templateUrl;
+          });
+        }
+
         drawCanvas(ctx, config.recipientName, config.certCodeText, false);
         return offscreen.toDataURL('image/png', quality);
       },
@@ -292,6 +309,22 @@ export const CertificateCanvas = forwardRef<CertificateCanvasRef, CertificateCan
         offscreen.height = nativeHeight;
         const ctx = offscreen.getContext('2d');
         if (!ctx) return null;
+
+        if (!bgImageRef.current && templateUrl) {
+          const img = new Image();
+          if (!templateUrl.startsWith('data:')) {
+            img.crossOrigin = 'anonymous';
+          }
+          await new Promise<void>((resolve) => {
+            img.onload = () => {
+              bgImageRef.current = img;
+              resolve();
+            };
+            img.onerror = () => resolve();
+            img.src = templateUrl;
+          });
+        }
+
         drawCanvas(ctx, config.recipientName, config.certCodeText, false);
         return new Promise<Blob | null>((resolve) => {
           offscreen.toBlob((blob) => resolve(blob), 'image/png', quality);
@@ -303,6 +336,22 @@ export const CertificateCanvas = forwardRef<CertificateCanvasRef, CertificateCan
         offscreen.height = nativeHeight;
         const ctx = offscreen.getContext('2d');
         if (!ctx) return null;
+
+        if (!bgImageRef.current && templateUrl) {
+          const img = new Image();
+          if (!templateUrl.startsWith('data:')) {
+            img.crossOrigin = 'anonymous';
+          }
+          await new Promise<void>((resolve) => {
+            img.onload = () => {
+              bgImageRef.current = img;
+              resolve();
+            };
+            img.onerror = () => resolve();
+            img.src = templateUrl;
+          });
+        }
+
         drawCanvas(ctx, name, certCode, false);
         return new Promise<Blob | null>((resolve) => {
           offscreen.toBlob((blob) => resolve(blob), 'image/png', 0.95);

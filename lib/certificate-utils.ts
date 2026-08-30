@@ -1,3 +1,5 @@
+import { generateDefaultCertificateSVG } from '@/components/certificates/default-template';
+
 /**
  * Binary magic-byte header checks to validate uploaded template files.
  */
@@ -143,4 +145,111 @@ Vikram Singh,vikram.singh@campus.in,Runner Up`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }
+
+/**
+ * Downloads a certificate file (PNG or SVG) in print-ready 1920x1080 resolution
+ */
+export async function downloadCertificateFile(
+  cert: {
+    certificate_code: string;
+    recipient_name: string;
+    event_title: string;
+    club_name: string;
+    template_url?: string;
+    template_config?: any;
+    issued_at?: string;
+  },
+  studentCollege?: string,
+  format: 'png' | 'svg' = 'png'
+): Promise<void> {
+  const isDefault = cert.template_url === 'default' || !cert.template_url;
+
+  const svgDataUrl = generateDefaultCertificateSVG(
+    cert.club_name,
+    cert.event_title,
+    cert.template_config?.role || 'Participant',
+    {
+      recipientName: cert.recipient_name,
+      studentCollege: cert.template_config?.studentCollege || studentCollege || "DKTE's Textile and Engineering Institute, Ichalkaranji",
+      teamName: cert.template_config?.teamName,
+      isTeam: cert.template_config?.isTeam || !!cert.template_config?.teamName,
+      hostCollege: cert.club_name || "DKTE Society's Textile & Engineering Institute",
+      certCode: cert.certificate_code,
+      issueDate: cert.issued_at
+        ? new Date(cert.issued_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+        : undefined,
+    }
+  );
+
+  const finalTemplateUrl = isDefault ? svgDataUrl : cert.template_url!;
+
+  if (format === 'svg' && finalTemplateUrl.startsWith('data:image/svg+xml')) {
+    const rawSvg = decodeURIComponent(finalTemplateUrl.replace('data:image/svg+xml;charset=utf-8,', ''));
+    const blob = new Blob([rawSvg], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `Certificate_${cert.event_title.replace(/\s+/g, '_')}_${cert.certificate_code}.svg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    return;
+  }
+
+  // Draw to 1920x1080 canvas
+  const canvas = document.createElement('canvas');
+  canvas.width = 1920;
+  canvas.height = 1080;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Canvas 2D context unavailable');
+
+  const img = new Image();
+  if (!finalTemplateUrl.startsWith('data:')) {
+    img.crossOrigin = 'anonymous';
+  }
+
+  await new Promise<void>((resolve, reject) => {
+    img.onload = () => resolve();
+    img.onerror = () => reject(new Error('Failed to load certificate template image'));
+    img.src = finalTemplateUrl;
+  });
+
+  ctx.drawImage(img, 0, 0, 1920, 1080);
+
+  // If custom template, overlay configured custom text
+  if (!isDefault && cert.template_config) {
+    const cfg = cert.template_config;
+    if (cert.recipient_name) {
+      ctx.save();
+      const fontStyle = cfg.italic ? 'italic ' : '';
+      const fontWeight = cfg.bold ? 'bold ' : 'normal ';
+      const fontFam = cfg.fontFamily || "'Cinzel', serif";
+      const pixelSize = Math.round((cfg.fontSize || 48) * 1.6);
+      ctx.font = `${fontStyle}${fontWeight}${pixelSize}px ${fontFam}`;
+      ctx.fillStyle = cfg.color || '#0f172a';
+      ctx.textAlign = cfg.align || 'center';
+      ctx.textBaseline = 'middle';
+      const nameX = ((cfg.xPercent || 50) / 100) * 1920;
+      const nameY = ((cfg.yPercent || 43) / 100) * 1080;
+      const textToDraw = cfg.uppercase !== false ? cert.recipient_name.toUpperCase() : cert.recipient_name;
+      ctx.fillText(textToDraw, nameX, nameY);
+      ctx.restore();
+    }
+  }
+
+  const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/png', 1.0));
+  if (!blob) throw new Error('Failed to create PNG blob');
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `Certificate_${cert.event_title.replace(/\s+/g, '_')}_${cert.certificate_code}.png`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import { supabase } from '@/lib/supabase';
+import { getUserFromDatabase } from '@/lib/sync-user';
 import {
   Card,
   CardContent,
@@ -31,9 +32,13 @@ import {
   Sparkles,
   ShieldCheck,
   Search,
+  Loader2,
+  FileCode,
 } from 'lucide-react';
 import { CertificateCanvas, CertificateCanvasRef } from '@/components/certificates/certificate-canvas';
 import { generateDefaultCertificateSVG } from '@/components/certificates/default-template';
+import { downloadCertificateFile } from '@/lib/certificate-utils';
+import { toast } from 'sonner';
 
 interface StudentCertificate {
   id: string;
@@ -50,6 +55,8 @@ export default function StudentCertificatesPage() {
   const { user: authUser, loading: authLoading } = useAuth();
   const [certificates, setCertificates] = useState<StudentCertificate[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
+  const [studentCollege, setStudentCollege] = useState<string>('');
   const [selectedCert, setSelectedCert] = useState<StudentCertificate | null>(null);
   const [previewOpen, setPreviewOpen] = useState<boolean>(false);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
@@ -71,6 +78,12 @@ export default function StudentCertificatesPage() {
     setLoading(true);
 
     try {
+      // Fetch db user profile for accurate college name
+      const dbUser = await getUserFromDatabase(authUser.id);
+      if (dbUser?.college) {
+        setStudentCollege(dbUser.college);
+      }
+
       const certList: StudentCertificate[] = [];
 
       // 1. Fetch explicitly issued certificates from Supabase table
@@ -109,7 +122,6 @@ export default function StudentCertificatesPage() {
           localList.forEach((c: any) => {
             const matchesEmail = c.recipient_email && c.recipient_email.toLowerCase() === currentEmail;
             const matchesUser = c.user_id && c.user_id === currentUserId;
-            // Also if testing in same browser session
             const matchesAny = matchesEmail || matchesUser;
 
             const alreadyExists = certList.some(
@@ -174,20 +186,26 @@ export default function StudentCertificatesPage() {
   const handleCopyCode = (code: string) => {
     navigator.clipboard.writeText(code);
     setCopiedCode(code);
+    toast.success('Certificate code copied to clipboard');
     setTimeout(() => setCopiedCode(null), 2000);
   };
 
-  const handleDownloadModalPNG = async () => {
-    if (!modalCanvasRef.current || !selectedCert) return;
-    const dataUrl = await modalCanvasRef.current.exportPNG(1.0);
-    if (!dataUrl) return;
-
-    const link = document.createElement('a');
-    link.href = dataUrl;
-    link.download = `Certificate_${selectedCert.event_title.replace(/\s+/g, '_')}.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const handleDownload = async (cert: StudentCertificate, format: 'png' | 'svg' = 'png') => {
+    try {
+      setDownloadingId(cert.id);
+      toast.info(`Generating high-resolution ${format.toUpperCase()} certificate...`);
+      await downloadCertificateFile(
+        cert,
+        (cert as any).template_config?.studentCollege || studentCollege || (authUser as any)?.user_metadata?.college,
+        format
+      );
+      toast.success('Certificate downloaded successfully!');
+    } catch (err: any) {
+      console.error('Error downloading certificate:', err);
+      toast.error(err?.message || 'Failed to download certificate. Please try again.');
+    } finally {
+      setDownloadingId(null);
+    }
   };
 
   const filteredCerts = certificates.filter(
@@ -273,10 +291,12 @@ export default function StudentCertificatesPage() {
                 cert.template_config?.role || 'Participant',
                 {
                   recipientName: cert.recipient_name,
-                  studentCollege: (cert as any).template_config?.studentCollege || (cert as any).student_college || (authUser as any)?.college || "DKTE's Textile and Engineering Institute, Ichalkaranji",
+                  studentCollege: (cert as any).template_config?.studentCollege || (cert as any).student_college || studentCollege || (authUser as any)?.user_metadata?.college || "DKTE's Textile and Engineering Institute, Ichalkaranji",
                   teamName: (cert as any).template_config?.teamName || (cert as any).team_name,
                   isTeam: (cert as any).template_config?.isTeam || !!(cert as any).template_config?.teamName || !!(cert as any).team_name,
                   hostCollege: cert.club_name || "DKTE Society's Textile & Engineering Institute",
+                  certCode: cert.certificate_code,
+                  issueDate: cert.issued_at ? new Date(cert.issued_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : undefined,
                 }
               );
               const bgUrl = cert.template_url === 'default' || !cert.template_url ? defaultSvg : cert.template_url;
@@ -297,7 +317,7 @@ export default function StudentCertificatesPage() {
                     <img src={bgUrl} alt={cert.event_title} className="w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-slate-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
                       <Button size="sm" className="rounded-full bg-white text-slate-900 font-bold shadow-lg text-xs">
-                        View Full Certificate
+                        Inspect Certificate
                       </Button>
                     </div>
 
@@ -350,13 +370,19 @@ export default function StudentCertificatesPage() {
 
                       <Button
                         size="sm"
+                        disabled={downloadingId === cert.id}
                         className="w-1/2 rounded-full bg-slate-950 hover:bg-indigo-600 text-white font-bold text-xs px-4"
-                        onClick={() => {
-                          setSelectedCert(cert);
-                          setPreviewOpen(true);
-                        }}
+                        onClick={() => handleDownload(cert, 'png')}
                       >
-                        <Download className="h-3.5 w-3.5 mr-1.5" /> Download
+                        {downloadingId === cert.id ? (
+                          <>
+                            <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" /> Saving...
+                          </>
+                        ) : (
+                          <>
+                            <Download className="h-3.5 w-3.5 mr-1.5" /> Download
+                          </>
+                        )}
                       </Button>
                     </div>
                   </CardContent>
@@ -396,11 +422,12 @@ export default function StudentCertificatesPage() {
                         selectedCert.template_config?.role || 'Participant',
                         {
                           recipientName: selectedCert.recipient_name,
-                          studentCollege: (selectedCert as any).template_config?.studentCollege || (selectedCert as any).student_college || (user as any)?.college || "DKTE's Textile and Engineering Institute, Ichalkaranji",
+                          studentCollege: (selectedCert as any).template_config?.studentCollege || (selectedCert as any).student_college || studentCollege || (authUser as any)?.user_metadata?.college || "DKTE's Textile and Engineering Institute, Ichalkaranji",
                           teamName: (selectedCert as any).template_config?.teamName || (selectedCert as any).team_name,
                           isTeam: (selectedCert as any).template_config?.isTeam || !!(selectedCert as any).template_config?.teamName || !!(selectedCert as any).team_name,
                           hostCollege: selectedCert.club_name || "DKTE Society's Textile & Engineering Institute",
                           certCode: selectedCert.certificate_code,
+                          issueDate: selectedCert.issued_at ? new Date(selectedCert.issued_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : undefined,
                         }
                       )
                     : selectedCert.template_url
@@ -438,11 +465,11 @@ export default function StudentCertificatesPage() {
                 readOnly={true}
               />
 
-              <div className="flex items-center justify-between pt-2">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
                 <div className="text-xs text-slate-500 font-medium">
                   Verified Clunite Digital Credential • 300 DPI Print Ready
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap justify-end">
                   <Button
                     type="button"
                     variant="outline"
@@ -454,10 +481,28 @@ export default function StudentCertificatesPage() {
                   </Button>
                   <Button
                     type="button"
-                    className="rounded-full bg-slate-950 hover:bg-slate-800 text-white font-bold text-xs px-6 shadow-md"
-                    onClick={handleDownloadModalPNG}
+                    variant="outline"
+                    disabled={downloadingId === selectedCert.id}
+                    className="rounded-full border-slate-200 font-bold text-xs"
+                    onClick={() => handleDownload(selectedCert, 'svg')}
                   >
-                    <Download className="h-3.5 w-3.5 mr-1.5" /> Download PNG
+                    <FileCode className="h-3.5 w-3.5 mr-1.5" /> Vector SVG
+                  </Button>
+                  <Button
+                    type="button"
+                    disabled={downloadingId === selectedCert.id}
+                    className="rounded-full bg-slate-950 hover:bg-slate-800 text-white font-bold text-xs px-6 shadow-md"
+                    onClick={() => handleDownload(selectedCert, 'png')}
+                  >
+                    {downloadingId === selectedCert.id ? (
+                      <>
+                        <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" /> Generating...
+                      </>
+                    ) : (
+                      <>
+                        <Download className="h-3.5 w-3.5 mr-1.5" /> Download PNG
+                      </>
+                    )}
                   </Button>
                 </div>
               </div>
@@ -468,3 +513,4 @@ export default function StudentCertificatesPage() {
     </div>
   );
 }
+

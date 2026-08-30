@@ -174,7 +174,17 @@ export function generateDefaultCertificateSVG(
       </text>
     </g>
 
-    <!-- (Recipient Name is drawn centered at Y ≈ 395px with 50px buffer) -->
+    <!-- Recipient Name -->
+    ${
+      options.recipientName
+        ? `<g transform="translate(960, ${badgeText ? 405 : 385})" text-anchor="middle">
+            <text font-family="'Cinzel', 'Playfair Display', serif" font-size="44" font-weight="800" fill="#0f172a" letter-spacing="2">
+              ${escapeXml(options.recipientName.toUpperCase())}
+            </text>
+            <line x1="-180" y1="18" x2="180" y2="18" stroke="${is2nd ? 'url(#silverGrad)' : is3rd ? 'url(#bronzeGrad)' : 'url(#goldGrad)'}" stroke-width="2" />
+          </g>`
+        : ''
+    }
 
     <!-- ================= DETAILED BODY PHRASING (ENLARGED & READABLE) ================= -->
     <g transform="translate(960, 505)" text-anchor="middle">
