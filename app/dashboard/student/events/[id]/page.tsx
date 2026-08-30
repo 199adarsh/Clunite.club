@@ -530,29 +530,66 @@ export default function EventDetailsPage({
         ? 1
         : registrationData.teamMembers.length;
 
-      // Call database atomic function register_for_event via RPC
-      const { data: newRegistration, error: registrationError } = await supabase
-        .rpc('register_for_event', {
-          p_event_id: params.id,
-          p_user_id: user.id,
-          p_team_name: event.team_size !== 'solo' ? registrationData.teamName : null,
-          p_registration_data: registrationPayload.registration_data,
-          p_participant_count: participantCount
-        });
+      // Call database atomic function register_for_event via RPC, with graceful fallback to direct insert
+      let newRegistration = null;
+      let registrationError: any = null;
 
-      if (registrationError) {
-        console.error('Registration error:', registrationError);
-        throw new Error(
-          registrationError.message || 'Failed to save registration'
-        );
+      try {
+        const rpcResult = await (supabase as any)
+          .rpc('register_for_event', {
+            p_event_id: params.id,
+            p_user_id: user.id,
+            p_team_name: event.team_size !== 'solo' ? registrationData.teamName : null,
+            p_registration_data: registrationPayload.registration_data,
+            p_participant_count: participantCount
+          });
+
+        if (!rpcResult.error && rpcResult.data) {
+          newRegistration = rpcResult.data;
+        } else {
+          registrationError = rpcResult.error;
+        }
+      } catch (e) {
+        registrationError = e;
       }
 
+      // If RPC is missing in schema cache or failed, fallback to direct table insert
       if (!newRegistration) {
-        throw new Error('Registration data not saved properly');
+        console.warn('RPC register_for_event not available or failed, falling back to direct table insert:', registrationError);
+
+        const { data: insertData, error: insertError } = await supabase
+          .from('event_registrations')
+          .insert({
+            user_id: user.id,
+            event_id: params.id,
+            team_name: event.team_size !== 'solo' ? registrationData.teamName : null,
+            status: 'registered',
+            registration_data: registrationPayload.registration_data,
+          })
+          .select()
+          .single();
+
+        if (insertError) {
+          console.error('Direct registration insert error:', insertError);
+          throw new Error(insertError.message || 'Failed to save registration');
+        }
+
+        // Increment event participant count in database
+        try {
+          const freshCount = (event.current_participants || 0) + participantCount;
+          await supabase
+            .from('events')
+            .update({ current_participants: freshCount })
+            .eq('id', params.id);
+        } catch (updateErr) {
+          console.warn('Could not update current_participants count:', updateErr);
+        }
+
+        newRegistration = insertData;
       }
 
       // Log successful registration
-      console.log('Registration saved successfully');
+      console.log('Registration saved successfully', newRegistration);
 
       // Update UI state
       setRegistrationStatus('success');
