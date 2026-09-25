@@ -32,6 +32,9 @@ import {
   Tag,
   Building2,
   GraduationCap,
+  X,
+  Bookmark,
+  IndianRupee,
 } from 'lucide-react';
 import { supabase, type Event, type Club } from '@/lib/supabase';
 import { useAuth } from '@/lib/auth-context';
@@ -305,136 +308,140 @@ export default function BrowseEventsPage() {
 
       {/* ================= FILTER & SEARCH BAR ================= */}
       <div className="space-y-3">
-        {/* Main Controls Card */}
-        <Card className="border border-slate-200 rounded-2xl bg-white overflow-hidden">
-          <CardContent className="p-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-            {/* Search Input */}
-            <div className="relative flex-1 min-w-[220px]">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-              <Input
-                className="pl-10 h-10 rounded-xl border-slate-200 bg-slate-50/50 focus:bg-white text-xs font-medium"
-                placeholder="Search events, clubs, colleges, venues..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-              {search && (
-                <button
-                  onClick={() => setSearch('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 hover:text-slate-600"
-                >
-                  Clear
-                </button>
-              )}
+        <div className="flex flex-col xl:flex-row items-stretch xl:items-center gap-2 w-full xl:w-fit bg-white border border-slate-200 shadow-sm rounded-2xl p-1.5 transition-all">
+          {/* Search Input */}
+          <div className="relative flex-1 w-full xl:min-w-[280px]">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+            <Input
+              className="pl-9 pr-8 h-9 w-full bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-[13px] font-medium shadow-none"
+              placeholder="Search events, clubs, colleges, venues..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            {search && (
+              <button
+                onClick={() => setSearch('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                title="Clear Search"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            )}
+          </div>
+
+          {/* Separator on desktop */}
+          <div className="hidden xl:block h-5 w-px bg-slate-200 shrink-0 mx-0.5" />
+
+          {/* Dropdown Filters Container */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 xl:pb-0 scrollbar-hide px-1">
+            {/* Campus Scope Dropdown */}
+            <Select value={campusFilter} onValueChange={(val: any) => setCampusFilter(val)}>
+              <SelectTrigger className="h-8 w-auto min-w-[110px] bg-slate-50 hover:bg-slate-100 border-none rounded-xl text-[11px] font-semibold shadow-none focus:ring-0 transition-colors px-3">
+                <SelectValue placeholder="All Campuses" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Campuses</SelectItem>
+                <SelectItem value="my_college">My College</SelectItem>
+                <SelectItem value="inter_college">Inter-College</SelectItem>
+              </SelectContent>
+            </Select>
+
+            {/* Status Dropdown */}
+            <Select value={statusFilter} onValueChange={(val: any) => setStatusFilter(val)}>
+              <SelectTrigger className="h-8 w-auto min-w-[100px] bg-slate-50 hover:bg-slate-100 border-none rounded-xl text-[11px] font-semibold shadow-none focus:ring-0 transition-colors px-3">
+                <SelectValue placeholder="All Events" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Events</SelectItem>
+                <SelectItem value="live">Live & Open</SelectItem>
+                <SelectItem value="closed">Closed / Past</SelectItem>
+              </SelectContent>
+            </Select>
+
+            {/* Category Dropdown */}
+            <Select value={category} onValueChange={setCategory}>
+              <SelectTrigger className="h-8 w-auto min-w-[115px] bg-slate-50 hover:bg-slate-100 border-none rounded-xl text-[11px] font-semibold shadow-none focus:ring-0 transition-colors px-3">
+                <SelectValue placeholder="All Categories" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Categories</SelectItem>
+                <SelectItem value="Technology">Technology</SelectItem>
+                <SelectItem value="Cultural">Cultural</SelectItem>
+                <SelectItem value="Sports">Sports</SelectItem>
+              </SelectContent>
+            </Select>
+
+            {/* Mode Dropdown */}
+            <Select value={mode} onValueChange={setMode}>
+              <SelectTrigger className="h-8 w-auto min-w-[95px] bg-slate-50 hover:bg-slate-100 border-none rounded-xl text-[11px] font-semibold shadow-none focus:ring-0 transition-colors px-3">
+                <SelectValue placeholder="All Modes" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Modes</SelectItem>
+                <SelectItem value="online">Online</SelectItem>
+                <SelectItem value="offline">Offline</SelectItem>
+                <SelectItem value="hybrid">Hybrid</SelectItem>
+              </SelectContent>
+            </Select>
+
+            {/* Sort By Dropdown */}
+            <Select value={sortBy} onValueChange={(val: any) => setSortBy(val)}>
+              <SelectTrigger className="h-8 w-auto min-w-[140px] bg-slate-50 hover:bg-slate-100 border-none rounded-xl text-[11px] font-semibold shadow-none focus:ring-0 transition-colors px-3">
+                <span className="flex items-center gap-1.5 truncate">
+
+                  <SelectValue placeholder="Sort: Upcoming Soonest" />
+                </span>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="upcoming">Upcoming Soonest</SelectItem>
+                <SelectItem value="popular">Most Popular</SelectItem>
+                <SelectItem value="prize">Highest Prize Pool</SelectItem>
+                <SelectItem value="fee_asc">Free First</SelectItem>
+              </SelectContent>
+            </Select>
+
+            {/* Reset Filters Button */}
+            {isFiltered && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleResetFilters}
+                className="h-8 px-2.5 text-[11px] font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-xl transition-colors ml-0.5"
+                title="Reset all filters"
+              >
+                <RotateCcw className="h-3 w-3 mr-1" />
+                Reset
+              </Button>
+            )}
+
+            {/* Separator before view toggles */}
+            <div className="hidden lg:block h-5 w-px bg-slate-200 shrink-0 mx-1" />
+
+            {/* Grid / List View Toggle */}
+            <div className="hidden lg:flex items-center bg-slate-100/80 rounded-[10px] p-0.5 border border-slate-200/60 shrink-0">
+              <button
+                onClick={() => setViewMode('grid')}
+                className={cn(
+                  'h-7 w-7 rounded-[8px] flex items-center justify-center transition-all',
+                  viewMode === 'grid' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'
+                )}
+                title="Grid View"
+              >
+                <LayoutGrid className="h-3.5 w-3.5" />
+              </button>
+              <button
+                onClick={() => setViewMode('list')}
+                className={cn(
+                  'h-7 w-7 rounded-[8px] flex items-center justify-center transition-all',
+                  viewMode === 'list' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'
+                )}
+                title="List View"
+              >
+                <List className="h-3.5 w-3.5" />
+              </button>
             </div>
-
-            {/* Dropdown Filters */}
-            <div className="flex items-center gap-2 flex-wrap">
-              {/* Campus Scope Dropdown */}
-              <Select value={campusFilter} onValueChange={(val: any) => setCampusFilter(val)}>
-                <SelectTrigger className="w-[130px] h-10 rounded-xl text-xs font-semibold border-slate-200 bg-white">
-                  <SelectValue placeholder="Campus Scope" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Campuses</SelectItem>
-                  <SelectItem value="my_college">My College</SelectItem>
-                  <SelectItem value="inter_college">Inter-College</SelectItem>
-                </SelectContent>
-              </Select>
-
-              {/* Status (Live vs Closed) Dropdown */}
-              <Select value={statusFilter} onValueChange={(val: any) => setStatusFilter(val)}>
-                <SelectTrigger className="w-[125px] h-10 rounded-xl text-xs font-semibold border-slate-200 bg-white">
-                  <SelectValue placeholder="Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Events</SelectItem>
-                  <SelectItem value="live">Live & Open</SelectItem>
-                  <SelectItem value="closed">Closed / Past</SelectItem>
-                </SelectContent>
-              </Select>
-
-              {/* Category Dropdown */}
-              <Select value={category} onValueChange={setCategory}>
-                <SelectTrigger className="w-[125px] h-10 rounded-xl text-xs font-semibold border-slate-200">
-                  <SelectValue placeholder="Category" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Categories</SelectItem>
-                  <SelectItem value="Technology">Technology</SelectItem>
-                  <SelectItem value="Cultural">Cultural</SelectItem>
-                  <SelectItem value="Sports">Sports</SelectItem>
-                </SelectContent>
-              </Select>
-
-              {/* Mode Dropdown */}
-              <Select value={mode} onValueChange={setMode}>
-                <SelectTrigger className="w-[110px] h-10 rounded-xl text-xs font-semibold border-slate-200">
-                  <SelectValue placeholder="Mode" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Modes</SelectItem>
-                  <SelectItem value="online">Online</SelectItem>
-                  <SelectItem value="offline">Offline</SelectItem>
-                  <SelectItem value="hybrid">Hybrid</SelectItem>
-                </SelectContent>
-              </Select>
-
-              {/* Sort By Dropdown */}
-              <Select value={sortBy} onValueChange={(val: any) => setSortBy(val)}>
-                <SelectTrigger className="w-[150px] h-10 rounded-xl text-xs font-semibold border-slate-200">
-                  <span className="flex items-center gap-1 text-slate-700 truncate">
-                    <ArrowUpDown className="h-3.5 w-3.5 text-slate-400 shrink-0" />
-                    <SelectValue placeholder="Sort" />
-                  </span>
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="upcoming">Upcoming Soonest</SelectItem>
-                  <SelectItem value="popular">Most Popular</SelectItem>
-                  <SelectItem value="prize">Highest Prize Pool</SelectItem>
-                  <SelectItem value="fee_asc">Free First</SelectItem>
-                </SelectContent>
-              </Select>
-
-              {/* Grid / List View Toggle */}
-              <div className="hidden sm:flex items-center bg-slate-100 rounded-xl p-0.5 border border-slate-200">
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={cn(
-                    'h-9 w-9 rounded-lg flex items-center justify-center transition-colors',
-                    viewMode === 'grid' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-900'
-                  )}
-                  title="Grid View"
-                >
-                  <LayoutGrid className="h-4 w-4" />
-                </button>
-                <button
-                  onClick={() => setViewMode('list')}
-                  className={cn(
-                    'h-9 w-9 rounded-lg flex items-center justify-center transition-colors',
-                    viewMode === 'list' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-900'
-                  )}
-                  title="List View"
-                >
-                  <List className="h-4 w-4" />
-                </button>
-              </div>
-
-              {/* Reset Filters Button */}
-              {isFiltered && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleResetFilters}
-                  className="h-10 px-3 text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-xl"
-                  title="Reset all filters"
-                >
-                  <RotateCcw className="h-3.5 w-3.5 mr-1" />
-                  Reset
-                </Button>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       {/* ================= EVENTS CONTENT ================= */}
@@ -468,162 +475,141 @@ export default function BrowseEventsPage() {
             const collegeName = event.college || event.club?.college || 'DKTE Society\'s TEI';
 
             return (
-              <Link key={event.id} href={`/dashboard/student/events/${event.id}`} className="block group">
+              <Link key={event.id} href={`/dashboard/student/events/${event.id}`} className="block group h-full">
                 <Card className={cn(
-                  "h-full rounded-2xl border bg-white transition-all duration-200 overflow-hidden flex flex-col justify-between",
-                  statusInfo.isLive ? "border-slate-200 hover:border-indigo-300" : "border-slate-200 opacity-85 hover:opacity-100"
+                  "h-full rounded-[20px] border bg-white shadow-sm hover:shadow-md transition-all duration-300 flex flex-col group cursor-pointer overflow-hidden",
+                  statusInfo.isLive ? "border-slate-200" : "border-slate-200 opacity-90"
                 )}>
-                  <div>
-                    {/* Event Banner Image Header */}
-                    <div className="relative h-44 w-full overflow-hidden bg-slate-100">
-                      <img
-                        src={event.image_url || '/placeholder.svg'}
-                        alt={event.title}
-                        className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/30" />
-
-                      {/* Top Badges */}
-                      <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
-                        <div className="flex items-center gap-1.5 flex-wrap">
-                          <Badge className="bg-white/95 backdrop-blur text-slate-900 border-none text-[10px] font-bold capitalize shadow-xs">
-                            {event.type || 'Event'}
-                          </Badge>
-
-                          <Badge
-                            className={cn(
-                              'text-[10px] font-bold capitalize shadow-xs border-none',
-                              event.mode === 'online'
-                                ? 'bg-blue-600 text-white'
-                                : event.mode === 'hybrid'
-                                ? 'bg-purple-600 text-white'
-                                : 'bg-indigo-600 text-white'
-                            )}
-                          >
-                            {event.mode || 'offline'}
-                          </Badge>
-                        </div>
-
-                        {/* Live / Days Left Badge */}
-                        <Badge
-                          className={cn(
-                            'text-[10px] font-bold shadow-xs border-none flex items-center gap-1',
-                            !statusInfo.isLive
-                              ? 'bg-slate-900/90 text-slate-300'
-                              : statusInfo.urgency === 'critical'
-                              ? 'bg-rose-600 text-white animate-pulse'
-                              : statusInfo.urgency === 'urgent'
-                              ? 'bg-amber-600 text-white'
-                              : 'bg-emerald-600 text-white'
-                          )}
-                        >
-                          <span className={cn('w-1.5 h-1.5 rounded-full', statusInfo.isLive ? 'bg-white' : 'bg-slate-400')} />
-                          {statusInfo.daysLeftText}
-                        </Badge>
-                      </div>
-
-                      {/* Club Name Overlay */}
-                      {event.club && (
-                        <div className="absolute bottom-3 left-3 right-3 flex items-center gap-2 text-white">
-                          {event.club.logo_url ? (
-                            <img
-                              src={event.club.logo_url}
-                              alt={event.club.name}
-                              className="w-6 h-6 rounded-md object-cover bg-white shrink-0 border border-white/40"
-                            />
-                          ) : (
-                            <div className="w-6 h-6 rounded-md bg-white/20 backdrop-blur text-white flex items-center justify-center font-bold text-[10px] shrink-0 border border-white/40">
-                              {event.club.name.charAt(0)}
-                            </div>
-                          )}
-                          <span className="text-xs font-semibold drop-shadow-sm truncate">{event.club.name}</span>
-                        </div>
-                      )}
+                  {/* IMAGE SECTION */}
+                  <div className="relative h-[160px] w-full bg-slate-100 shrink-0">
+                    <img
+                      src={event.image_url || '/placeholder.svg'}
+                      alt={event.title}
+                      className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    
+                    {/* Time Left Badge */}
+                    <div className={cn(
+                      "absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-bold shadow-sm flex items-center gap-1.5 z-10 backdrop-blur-md",
+                      statusInfo.isLive 
+                        ? "bg-rose-500 text-white" 
+                        : "bg-slate-800/90 text-slate-200"
+                    )}>
+                      <span className={cn(
+                        "w-1.5 h-1.5 rounded-full",
+                        statusInfo.isLive ? "bg-white animate-pulse" : "bg-slate-400"
+                      )} />
+                      {statusInfo.daysLeftText}
                     </div>
 
-                    {/* Card Content */}
-                    <CardContent className="p-4 space-y-3">
-                      <div>
-                        <h3 className="font-bold text-slate-900 text-base leading-snug group-hover:text-indigo-600 transition-colors line-clamp-2">
-                          {event.title}
-                        </h3>
-                      </div>
-
-                      {/* Meta Information: Date, Venue, College */}
-                      <div className="space-y-1.5 text-xs text-slate-500 font-medium">
-                        <div className="flex items-center gap-2">
-                          <Calendar className="h-3.5 w-3.5 text-slate-400 shrink-0" />
-                          <span>{eventDate}</span>
-                        </div>
-                        <div className="flex items-center gap-2 truncate">
-                          <MapPin className="h-3.5 w-3.5 text-slate-400 shrink-0" />
-                          <span className="truncate">{event.venue || (event as any).location || 'Campus Auditorium'}</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-indigo-600 font-semibold truncate pt-0.5">
-                          <GraduationCap className="h-3.5 w-3.5 text-indigo-500 shrink-0" />
-                          <span className="truncate">{collegeName}</span>
-                        </div>
-                      </div>
-
-                      {/* Registered Attendees Stack */}
-                      <div className="pt-2 flex items-center gap-2 border-t border-slate-100">
-                        {attendees.users.length > 0 ? (
-                          <>
-                            <div className="flex -space-x-1 overflow-hidden shrink-0">
-                              {attendees.users.map((student, idx) => (
-                                <div
-                                  key={student.id || idx}
-                                  title={student.name}
-                                  className={cn(
-                                    'inline-flex h-6 w-6 rounded-full ring-2 ring-white items-center justify-center text-[9px] font-bold text-white shadow-2xs select-none shrink-0',
-                                    avatarColors[idx % avatarColors.length]
-                                  )}
-                                >
-                                  {student.initials}
-                                </div>
-                              ))}
-                            </div>
-                            <span className="text-[11px] font-medium text-slate-500">
-                              {attendees.totalCount > attendees.users.length
-                                ? `+${attendees.totalCount} registered`
-                                : `${attendees.totalCount} registered`}
-                            </span>
-                          </>
-                        ) : (
-                          <div className="flex items-center gap-1.5 text-[11px] text-slate-400 font-medium">
-                            <Users className="h-3.5 w-3.5 text-slate-400" />
-                            <span>{statusInfo.isLive ? 'Be the first to register' : 'Event completed'}</span>
-                          </div>
-                        )}
-                      </div>
-                    </CardContent>
+                    {/* Bookmark Button */}
+                    <button className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center rounded-lg bg-black/40 backdrop-blur-md text-white hover:bg-black/60 transition-colors z-10">
+                      <Bookmark className="w-3.5 h-3.5" />
+                    </button>
                   </div>
 
-                  {/* Card Footer with Pixel-Aligned Badges */}
-                  <div className="px-4 py-3.5 flex items-center justify-between gap-2 border-t border-slate-100">
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      {event.entry_fee === 0 ? (
-                        <span className="inline-flex items-center justify-center h-6 px-2.5 rounded-lg text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 leading-none">
-                          Free
-                        </span>
+                  {/* AVATAR OVERLAY */}
+                  <div className="px-3.5 relative h-0">
+                    <div className="absolute -top-8 left-3.5 w-[60px] h-[60px] bg-black border-[3px] border-white rounded-full flex items-center justify-center shadow-sm overflow-hidden z-20">
+                      {event.club?.logo_url ? (
+                        <img src={event.club.logo_url} className="w-full h-full object-cover bg-white" alt="Club logo" />
                       ) : (
-                        <span className="inline-flex items-center justify-center h-6 px-2.5 rounded-lg text-xs font-bold text-slate-800 bg-slate-100 border border-slate-200/80 leading-none">
-                          ₹{event.entry_fee}
-                        </span>
-                      )}
-
-                      {event.prize_pool && Number(event.prize_pool) > 0 && (
-                        <span className="inline-flex items-center justify-center gap-1 h-6 px-2.5 rounded-lg text-xs font-bold text-amber-800 bg-amber-50 border border-amber-200/80 leading-none">
-                          <Trophy className="h-3.5 w-3.5 text-amber-600 shrink-0" />
-                          <span>₹{Number(event.prize_pool).toLocaleString()}</span>
-                        </span>
+                        <span className="text-white font-black text-xl">{event.club?.name?.charAt(0) || 'C'}</span>
                       )}
                     </div>
+                  </div>
 
-                    <span className="inline-flex items-center gap-1 text-xs font-bold text-indigo-600 group-hover:translate-x-0.5 transition-transform leading-none">
-                      {statusInfo.isLive ? 'Register' : 'Details'}
-                      <ChevronRight className="h-3.5 w-3.5" />
-                    </span>
+                  {/* CONTENT SECTION */}
+                  <div className="pt-9 px-3.5 pb-3.5 flex flex-col flex-1">
+                    
+                    {/* Title & Registered Count */}
+                    <div className="flex items-start justify-between gap-2">
+                      <h3 className="font-extrabold text-lg text-slate-900 leading-tight tracking-tight line-clamp-2">
+                        {event.title}
+                      </h3>
+                      <div className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-purple-50 text-purple-700 text-[10px] font-bold mt-0.5">
+                        <Users className="w-3 h-3" />
+                        {attendees.totalCount} Registered
+                      </div>
+                    </div>
+
+                    {/* Subtitle */}
+                    <p className="mt-1 text-[10px] font-bold text-slate-500 uppercase tracking-wider line-clamp-1">
+                      {event.club?.name || 'DKTE'} &bull; {collegeName}
+                    </p>
+
+                    {/* Badges */}
+                    <div className="flex items-center gap-1.5 mt-2.5">
+                      <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-purple-50/80 text-purple-700 text-[10px] font-bold">
+                        <Trophy className="w-3 h-3" />
+                        {event.type || 'Competition'}
+                      </span>
+                      <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-purple-50/80 text-slate-700 text-[10px] font-bold capitalize">
+                        <span className="w-2 h-2 rounded-full bg-purple-600" />
+                        {event.mode || 'Offline'}
+                      </span>
+                    </div>
+
+                    {/* Description */}
+                    <p className="mt-3 text-[11px] text-slate-500 font-medium leading-relaxed line-clamp-2">
+                      {event.description || 'An exciting strategy and problem-solving competition where teams navigate challenges, make smart decisions and uncover the path to victory.'}
+                    </p>
+
+                    <div className="mt-auto pt-4">
+                      {/* Stats Box */}
+                      <div className="border border-slate-100 rounded-[14px] p-2 flex items-center justify-between shadow-xs bg-white">
+                        
+                        {/* Prize Pool */}
+                        <div className="flex items-center gap-1.5 w-1/3">
+                          <div className="w-8 h-8 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center shrink-0">
+                            <Trophy className="w-3.5 h-3.5" />
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-xs font-black text-slate-900 truncate">
+                              {event.prize_pool && Number(event.prize_pool) > 0 ? `₹${Number(event.prize_pool).toLocaleString()}` : '-'}
+                            </p>
+                            <p className="text-[9px] font-semibold text-slate-500">Prize Pool</p>
+                          </div>
+                        </div>
+
+                        <div className="w-px h-6 bg-slate-100 shrink-0" />
+
+                        {/* Date */}
+                        <div className="flex items-center gap-1.5 w-1/3 justify-center">
+                          <div className="w-8 h-8 rounded-full bg-purple-50 text-purple-500 flex items-center justify-center shrink-0">
+                            <Calendar className="w-3.5 h-3.5" />
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-xs font-black text-slate-900 truncate">
+                              {new Date(event.start_date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' })}
+                            </p>
+                            <p className="text-[9px] font-semibold text-slate-500">Date</p>
+                          </div>
+                        </div>
+
+                        <div className="w-px h-6 bg-slate-100 shrink-0" />
+
+                        {/* Entry Fee */}
+                        <div className="flex items-center gap-1.5 w-1/3 justify-end pr-0.5">
+                          <div className="w-8 h-8 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center shrink-0">
+                            <IndianRupee className="w-3.5 h-3.5" />
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-xs font-black text-slate-900 truncate">
+                              {event.entry_fee === 0 ? 'Free' : `₹${event.entry_fee}`}
+                            </p>
+                            <p className="text-[9px] font-semibold text-slate-500">Entry Fee</p>
+                          </div>
+                        </div>
+
+                      </div>
+
+                      {/* Button */}
+                      <div className="mt-2.5 w-full bg-indigo-500 hover:bg-indigo-600 text-white text-xs font-bold py-2.5 rounded-xl transition-colors flex items-center justify-center gap-1.5 shadow-sm">
+                        View details <ChevronRight className="w-3.5 h-3.5" />
+                      </div>
+                    </div>
+
                   </div>
                 </Card>
               </Link>
@@ -669,10 +655,10 @@ export default function BrowseEventsPage() {
                               !statusInfo.isLive
                                 ? 'bg-slate-100 text-slate-600 border-slate-200'
                                 : statusInfo.urgency === 'critical'
-                                ? 'bg-rose-50 text-rose-700 border-rose-200'
-                                : statusInfo.urgency === 'urgent'
-                                ? 'bg-amber-50 text-amber-700 border-amber-200'
-                                : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                  ? 'bg-rose-50 text-rose-700 border-rose-200'
+                                  : statusInfo.urgency === 'urgent'
+                                    ? 'bg-amber-50 text-amber-700 border-amber-200'
+                                    : 'bg-emerald-50 text-emerald-700 border-emerald-200'
                             )}
                           >
                             {statusInfo.daysLeftText}
