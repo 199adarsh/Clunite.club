@@ -457,123 +457,126 @@ export default function RankLeaderboardPage() {
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
-      {/* ================= HERO HEADER ================= */}
-      <div className="relative rounded-2xl bg-white border border-slate-200 p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 overflow-hidden">
+      {/* ================= HERO HEADER & PERSONAL STANDING ================= */}
+      <div className="relative rounded-[2rem] bg-white border border-slate-200 overflow-hidden shadow-none transition-all duration-300">
         {/* Subtle decorative gradient matching browse events */}
         <div className="absolute inset-0 bg-gradient-to-r from-indigo-200/60 via-purple-100/30 to-transparent pointer-events-none" />
 
-        <div className="relative z-10 space-y-2 max-w-xl">
-          <div className="flex items-center gap-2 flex-wrap">
-            <Badge className="bg-indigo-50 text-indigo-700 border-indigo-200 text-xs font-bold uppercase tracking-wider">
-              Live Standings
-            </Badge>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
-            Rankings & Leaderboard
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-500 font-medium">
-            Campus champions, active student clubs, and inter-college rankings
-          </p>
-        </div>
-
-        <div className="relative z-10 flex flex-wrap items-center gap-3 shrink-0">
-          <Button
-            variant="outline"
-            onClick={() => setScoringGuideOpen(true)}
-            className="flex-1 sm:flex-initial rounded-xl border-slate-200 text-xs font-semibold h-9 text-slate-700 hover:bg-slate-50 flex items-center justify-center gap-1.5"
-          >
-            <Info className="h-4 w-4 text-indigo-600" />
-            <span>Scoring Rules</span>
-          </Button>
-          <Link href="/dashboard/student" className="shrink-0">
-            <Button variant="ghost" className="rounded-xl text-xs font-semibold h-9 text-slate-600 hover:bg-slate-100">
-              <ArrowLeft className="h-4 w-4 mr-1.5" /> Back
-            </Button>
-          </Link>
-        </div>
-      </div>
-
-      {/* ================= PERSONAL STANDING BANNER ================= */}
-      {currentStudent && (
-        <Card className="border border-black/5 shadow-sm rounded-3xl bg-white overflow-hidden">
-          <CardContent className="p-5 sm:p-6 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-5 sm:gap-6">
-            {/* User Profile */}
-            <div className="flex items-center gap-3.5 sm:gap-4 min-w-0">
-              <div className="relative shrink-0">
-                <img
-                  src={currentStudent.avatarUrl}
-                  alt={currentStudent.name}
-                  className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl object-cover border border-slate-200 shadow-sm bg-slate-50"
-                />
-                <div className="absolute -bottom-1 -right-1 bg-indigo-600 text-white rounded-md px-1.5 py-0.5 text-[10px] font-bold shadow-sm">
-                  #{myCollegeRankIndex !== -1 ? myCollegeRankIndex + 1 : '—'}
-                </div>
+        <div className="relative z-10 p-6 sm:p-8 flex flex-col gap-6 sm:gap-8">
+          {/* Top Row: Title and Actions */}
+          <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
+            <div className="space-y-2 max-w-xl">
+              <div className="flex items-center gap-2 flex-wrap">
+                <Badge className="bg-indigo-50 text-indigo-700 border-indigo-200 text-xs font-bold uppercase tracking-wider shadow-none">
+                  Live Standings
+                </Badge>
               </div>
-
-              <div className="min-w-0 space-y-0.5 sm:space-y-1">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-extrabold text-slate-900 text-base sm:text-lg truncate">
-                    {currentStudent.name}
-                  </span>
-                  <Badge className={`${currentStudent.tier.badgeStyle} text-xs font-semibold border shadow-none shrink-0`}>
-                    {currentStudent.tier.name}
-                  </Badge>
-                </div>
-                <p className="text-xs text-slate-500 font-medium truncate">
-                  {currentStudent.college} • {currentStudent.displayBranch}
-                </p>
-              </div>
+              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
+                Rankings & Leaderboard
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-500 font-medium">
+                Campus champions, active student clubs, and inter-college rankings
+              </p>
             </div>
 
-            {/* Progress to Next Tier */}
-            <div className="flex-1 max-w-md space-y-2">
-              <div className="flex items-center justify-between text-xs font-bold gap-2">
-                <span className="text-slate-900 flex items-center gap-1.5 shrink-0">
-                  <Zap className="h-3.5 w-3.5 text-indigo-600 fill-indigo-600" />
-                  {currentStudent.totalXp} XP Total
-                </span>
-                {nextTier ? (
-                  <span className="text-slate-500 font-medium text-[11px] truncate text-right">
-                    {remainingXp} XP to <strong className="text-slate-800 font-bold">{nextTier.name}</strong>
-                  </span>
-                ) : (
-                  <span className="text-indigo-600 font-bold text-[11px]">Maximum Tier Reached</span>
-                )}
-              </div>
-
-              <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full transition-all duration-300"
-                  style={{ width: `${progressPercent}%` }}
-                />
-              </div>
-
-              <div className="flex items-center justify-between text-[11px] text-slate-400 font-medium">
-                <span>{currentStudent.scoreBreakdown.attendedCount} events attended</span>
-                <span>{currentStudent.scoreBreakdown.certCount} certificates earned</span>
-              </div>
-            </div>
-
-            {/* Actions */}
-            <div className="flex items-center gap-2.5 shrink-0 pt-1 lg:pt-0">
+            <div className="flex flex-wrap items-center gap-3 shrink-0">
               <Button
                 variant="outline"
-                onClick={() => setSelectedStudent(currentStudent)}
-                className="flex-1 sm:flex-initial rounded-xl border-slate-200 text-slate-700 font-semibold text-xs h-9 hover:bg-slate-50"
+                onClick={() => setScoringGuideOpen(true)}
+                className="flex-1 sm:flex-initial rounded-xl border-slate-100 text-xs font-semibold h-9 text-slate-700 hover:bg-slate-50 flex items-center justify-center gap-1.5 bg-white/60 backdrop-blur-sm shadow-none"
               >
-                Breakdown
+                <Info className="h-4 w-4 text-indigo-600" />
+                <span>Scoring Rules</span>
               </Button>
-              <Button
-                onClick={handleCopyShare}
-                className="flex-1 sm:flex-initial bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl font-semibold text-xs h-9 shadow-sm flex items-center justify-center gap-1.5"
-              >
-                {copiedLink ? <Check className="h-3.5 w-3.5" /> : <Share2 className="h-3.5 w-3.5" />}
-                <span>{copiedLink ? 'Copied' : 'Share'}</span>
-              </Button>
+              <Link href="/dashboard/student" className="shrink-0">
+                <Button variant="ghost" className="rounded-xl text-xs font-semibold h-9 text-slate-600 hover:bg-slate-100 bg-white/60 backdrop-blur-sm shadow-none">
+                  <ArrowLeft className="h-4 w-4 mr-1.5" /> Back
+                </Button>
+              </Link>
             </div>
-          </CardContent>
-        </Card>
-      )}
+          </div>
+
+          {/* Bottom Row: Personal Standing */}
+          {currentStudent && (
+            <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-5 sm:gap-6 bg-white/80 backdrop-blur-sm rounded-2xl p-5 border border-slate-100 shadow-none hover:border-indigo-100 transition-colors">
+              {/* User Profile */}
+              <div className="flex items-center gap-3.5 sm:gap-4 min-w-0">
+                <div className="relative shrink-0">
+                  <img
+                    src={currentStudent.avatarUrl}
+                    alt={currentStudent.name}
+                    className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl object-cover border border-slate-100 shadow-none bg-slate-50"
+                  />
+                  <div className="absolute -bottom-1 -right-1 bg-indigo-600 text-white rounded-md px-1.5 py-0.5 text-[10px] font-bold shadow-none">
+                    #{myCollegeRankIndex !== -1 ? myCollegeRankIndex + 1 : '—'}
+                  </div>
+                </div>
+
+                <div className="min-w-0 space-y-0.5 sm:space-y-1">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-extrabold text-slate-900 text-base sm:text-lg truncate">
+                      {currentStudent.name}
+                    </span>
+                    <Badge className={`${currentStudent.tier.badgeStyle} text-xs font-semibold border shadow-none shrink-0`}>
+                      {currentStudent.tier.name}
+                    </Badge>
+                  </div>
+                  <p className="text-xs text-slate-500 font-medium truncate">
+                    {currentStudent.college} • {currentStudent.displayBranch}
+                  </p>
+                </div>
+              </div>
+
+              {/* Progress to Next Tier */}
+              <div className="flex-1 max-w-md space-y-2">
+                <div className="flex items-center justify-between text-xs font-bold gap-2">
+                  <span className="text-slate-900 flex items-center gap-1.5 shrink-0">
+                    <Zap className="h-3.5 w-3.5 text-indigo-600 fill-indigo-600" />
+                    {currentStudent.totalXp} XP Total
+                  </span>
+                  {nextTier ? (
+                    <span className="text-slate-500 font-medium text-[11px] truncate text-right">
+                      {remainingXp} XP to <strong className="text-slate-800 font-bold">{nextTier.name}</strong>
+                    </span>
+                  ) : (
+                    <span className="text-indigo-600 font-bold text-[11px]">Maximum Tier Reached</span>
+                  )}
+                </div>
+
+                <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden shadow-none border border-slate-200/50">
+                  <div
+                    className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-300"
+                    style={{ width: `${progressPercent}%` }}
+                  />
+                </div>
+
+                <div className="flex items-center justify-between text-[11px] text-slate-500 font-medium">
+                  <span>{currentStudent.scoreBreakdown.attendedCount} events attended</span>
+                  <span>{currentStudent.scoreBreakdown.certCount} certificates earned</span>
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="flex items-center gap-2.5 shrink-0 pt-2 lg:pt-0">
+                <Button
+                  variant="outline"
+                  onClick={() => setSelectedStudent(currentStudent)}
+                  className="flex-1 sm:flex-initial rounded-xl border-slate-100 text-slate-700 font-semibold text-xs h-9 hover:bg-slate-50 bg-white shadow-none"
+                >
+                  Breakdown
+                </Button>
+                <Button
+                  onClick={handleCopyShare}
+                  className="flex-1 sm:flex-initial bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold text-xs h-9 shadow-none flex items-center justify-center gap-1.5 border-0 transition-colors"
+                >
+                  {copiedLink ? <Check className="h-3.5 w-3.5" /> : <Share2 className="h-3.5 w-3.5" />}
+                  <span>{copiedLink ? 'Copied' : 'Share'}</span>
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
 
       {/* ================= TABS & FILTER BAR ================= */}
       <Tabs
@@ -745,119 +748,84 @@ export default function RankLeaderboardPage() {
           ) : (
             <>
               {/* TOP 3 PODIUM */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-end pt-2">
-                {/* 2nd Place */}
+              <div className="flex items-end justify-center gap-1 sm:gap-3 mt-8 pt-10 pb-4 px-2">
+                {/* 2nd Place (Silver) */}
                 {filteredStudents[1] && (
-                  <Card
+                  <div
+                    className="flex flex-col items-center w-[30%] max-w-[140px] cursor-pointer group"
                     onClick={() => setSelectedStudent(filteredStudents[1])}
-                    className="border border-slate-200/90 bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer order-2 md:order-1 md:h-[300px] flex flex-col justify-between p-6 text-center group"
                   >
-                    <div className="space-y-3">
-                      <div className="w-7 h-7 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center mx-auto">
-                        2
-                      </div>
+                    <div className="flex flex-col items-center pb-3 text-center relative transition-transform group-hover:-translate-y-1">
                       <img
                         src={filteredStudents[1].avatarUrl}
-                        className="w-16 h-16 rounded-2xl mx-auto object-cover border-2 border-slate-200 bg-slate-50 shadow-sm"
-                        alt="Silver Student"
+                        alt={filteredStudents[1].name}
+                        className="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover border-4 border-slate-300 shadow-md relative z-10 bg-slate-50"
                       />
-                      <div>
-                        <h3 className="text-sm font-bold text-slate-900 truncate group-hover:text-indigo-600 transition-colors">
-                          {filteredStudents[1].name}
-                        </h3>
-                        <p className="text-[11px] text-slate-500 truncate mt-0.5 font-medium">
-                          {filteredStudents[1].college}
-                        </p>
-                        <p className="text-[10px] text-slate-400 truncate mt-0.5">
-                          {filteredStudents[1].displayBranch}
-                        </p>
+                      <span className="font-bold text-slate-800 text-[10px] sm:text-xs mt-2 truncate w-full px-1">
+                        {filteredStudents[1].name.split(' ')[0]}
+                      </span>
+                      <div className="mt-1 bg-slate-700 text-white rounded-md text-[9px] sm:text-[10px] px-2 py-0.5 shadow-sm font-semibold flex items-center gap-1">
+                        {filteredStudents[1].totalXp} XP ⚡
                       </div>
                     </div>
-                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                      <Badge className={`${filteredStudents[1].tier.badgeStyle} text-[10px] font-semibold border shadow-none`}>
-                        {filteredStudents[1].tier.name}
-                      </Badge>
-                      <span className="font-extrabold text-xs text-slate-900">
-                        {filteredStudents[1].totalXp} XP
-                      </span>
+                    {/* Podium Block 2 */}
+                    <div className="w-full h-32 sm:h-40 bg-gradient-to-b from-slate-300 via-slate-200 to-slate-400 rounded-t-lg sm:rounded-t-xl border-x border-t border-slate-400 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(255,255,255,0.8),0_-4px_20px_rgba(148,163,184,0.15)] relative overflow-hidden">
+                      <span className="text-5xl sm:text-6xl font-black text-slate-500/40">2</span>
                     </div>
-                  </Card>
+                  </div>
                 )}
 
-                {/* 1st Place */}
+                {/* 1st Place (Gold) */}
                 {filteredStudents[0] && (
-                  <Card
+                  <div
+                    className="flex flex-col items-center w-[35%] max-w-[160px] z-10 cursor-pointer group"
                     onClick={() => setSelectedStudent(filteredStudents[0])}
-                    className="border-2 border-amber-300 bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer order-1 md:order-2 md:h-[330px] flex flex-col justify-between p-6 text-center group transform md:-translate-y-2"
                   >
-                    <div className="space-y-3">
-                      <div className="w-8 h-8 rounded-lg bg-amber-400 text-white font-black text-xs flex items-center justify-center mx-auto shadow-sm">
-                        1
-                      </div>
+                    <div className="flex flex-col items-center pb-3 text-center relative transition-transform group-hover:-translate-y-2">
+                      <Trophy className="h-6 w-6 sm:h-8 sm:w-8 text-amber-500 fill-amber-500 absolute -top-8 sm:-top-10 left-1/2 -translate-x-1/2 drop-shadow-sm" />
                       <img
                         src={filteredStudents[0].avatarUrl}
-                        className="w-20 h-20 rounded-2xl mx-auto object-cover border-2 border-amber-300 bg-slate-50 shadow-md"
-                        alt="Gold Student"
+                        alt={filteredStudents[0].name}
+                        className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-4 border-amber-300 shadow-lg relative z-10 bg-slate-50"
                       />
-                      <div>
-                        <h3 className="text-base font-extrabold text-slate-900 truncate group-hover:text-indigo-600 transition-colors">
-                          {filteredStudents[0].name}
-                        </h3>
-                        <p className="text-xs text-slate-500 truncate mt-0.5 font-medium">
-                          {filteredStudents[0].college}
-                        </p>
-                        <p className="text-[11px] text-slate-400 truncate mt-0.5">
-                          {filteredStudents[0].displayBranch}
-                        </p>
+                      <span className="font-extrabold text-slate-900 text-xs sm:text-sm mt-2 truncate w-full px-1">
+                        {filteredStudents[0].name.split(' ')[0]}
+                      </span>
+                      <div className="mt-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-md text-[10px] sm:text-xs px-2.5 py-0.5 shadow-md font-bold flex items-center gap-1">
+                        {filteredStudents[0].totalXp} XP 🔥
                       </div>
                     </div>
-                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                      <Badge className="bg-amber-100 text-amber-800 border-amber-200 text-[10px] font-bold">
-                        {filteredStudents[0].tier.name}
-                      </Badge>
-                      <span className="font-black text-sm text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-lg">
-                        {filteredStudents[0].totalXp} XP
-                      </span>
+                    {/* Podium Block 1 */}
+                    <div className="w-full h-44 sm:h-52 bg-gradient-to-b from-amber-300 via-amber-200 to-amber-400 rounded-t-xl sm:rounded-t-2xl border-x border-t border-amber-400 flex items-start justify-center pt-6 sm:pt-8 shadow-[inset_0_2px_10px_rgba(255,255,255,0.7),0_-4px_20px_rgba(251,191,36,0.2)] relative overflow-hidden">
+                      <span className="text-6xl sm:text-7xl font-black text-amber-600/40 drop-shadow-sm">1</span>
                     </div>
-                  </Card>
+                  </div>
                 )}
 
-                {/* 3rd Place */}
+                {/* 3rd Place (Bronze) */}
                 {filteredStudents[2] && (
-                  <Card
+                  <div
+                    className="flex flex-col items-center w-[30%] max-w-[140px] cursor-pointer group"
                     onClick={() => setSelectedStudent(filteredStudents[2])}
-                    className="border border-slate-200/90 bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer order-3 md:order-3 md:h-[280px] flex flex-col justify-between p-6 text-center group"
                   >
-                    <div className="space-y-3">
-                      <div className="w-7 h-7 rounded-lg bg-amber-100 text-amber-800 font-bold text-xs flex items-center justify-center mx-auto">
-                        3
-                      </div>
+                    <div className="flex flex-col items-center pb-3 text-center relative transition-transform group-hover:-translate-y-1">
                       <img
                         src={filteredStudents[2].avatarUrl}
-                        className="w-14 h-14 rounded-2xl mx-auto object-cover border-2 border-slate-200 bg-slate-50 shadow-sm"
-                        alt="Bronze Student"
+                        alt={filteredStudents[2].name}
+                        className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover border-4 border-orange-300 shadow-md relative z-10 bg-slate-50"
                       />
-                      <div>
-                        <h3 className="text-sm font-bold text-slate-900 truncate group-hover:text-indigo-600 transition-colors">
-                          {filteredStudents[2].name}
-                        </h3>
-                        <p className="text-[11px] text-slate-500 truncate mt-0.5 font-medium">
-                          {filteredStudents[2].college}
-                        </p>
-                        <p className="text-[10px] text-slate-400 truncate mt-0.5">
-                          {filteredStudents[2].displayBranch}
-                        </p>
+                      <span className="font-bold text-slate-800 text-[10px] sm:text-xs mt-2 truncate w-full px-1">
+                        {filteredStudents[2].name.split(' ')[0]}
+                      </span>
+                      <div className="mt-1 bg-orange-700 text-white rounded-md text-[9px] sm:text-[10px] px-2 py-0.5 shadow-sm font-semibold flex items-center gap-1">
+                        {filteredStudents[2].totalXp} XP ✨
                       </div>
                     </div>
-                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                      <Badge className={`${filteredStudents[2].tier.badgeStyle} text-[10px] font-semibold border shadow-none`}>
-                        {filteredStudents[2].tier.name}
-                      </Badge>
-                      <span className="font-extrabold text-xs text-slate-900">
-                        {filteredStudents[2].totalXp} XP
-                      </span>
+                    {/* Podium Block 3 */}
+                    <div className="w-full h-24 sm:h-32 bg-gradient-to-b from-orange-300 via-orange-200 to-orange-400 rounded-t-lg sm:rounded-t-xl border-x border-t border-orange-400 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(255,255,255,0.6),0_-4px_20px_rgba(251,146,60,0.15)] relative overflow-hidden">
+                      <span className="text-5xl sm:text-6xl font-black text-orange-700/40">3</span>
                     </div>
-                  </Card>
+                  </div>
                 )}
               </div>
 
@@ -955,128 +923,102 @@ export default function RankLeaderboardPage() {
           ) : (
             <>
               {/* TOP 3 PODIUM */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-end pt-2">
-                {/* 2nd Place Club */}
+              <div className="flex items-end justify-center gap-1 sm:gap-3 mt-8 pt-10 pb-4 px-2">
+                {/* 2nd Place Club (Silver) */}
                 {filteredClubs[1] && (
-                  <Card
+                  <div
+                    className="flex flex-col items-center w-[30%] max-w-[140px] cursor-pointer group"
                     onClick={() => setSelectedClub(filteredClubs[1])}
-                    className="border border-slate-200/90 bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer order-2 md:order-1 md:h-[300px] flex flex-col justify-between p-6 text-center group"
                   >
-                    <div className="space-y-3">
-                      <div className="w-7 h-7 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center mx-auto">
-                        2
-                      </div>
+                    <div className="flex flex-col items-center pb-3 text-center relative transition-transform group-hover:-translate-y-1">
                       {filteredClubs[1].logo_url ? (
                         <img
                           src={filteredClubs[1].logo_url}
-                          className="w-16 h-16 rounded-2xl mx-auto object-cover border-2 border-slate-200 bg-slate-50 shadow-sm"
-                          alt="Silver Club"
+                          alt={filteredClubs[1].name}
+                          className="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover border-4 border-slate-300 shadow-md relative z-10 bg-slate-50"
                         />
                       ) : (
-                        <div className="w-16 h-16 rounded-2xl mx-auto bg-slate-100 text-slate-700 font-bold text-xl flex items-center justify-center border border-slate-200">
+                        <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-slate-100 text-slate-700 font-bold text-xl sm:text-2xl flex items-center justify-center border-4 border-slate-300 shadow-md relative z-10">
                           {filteredClubs[1].name.charAt(0)}
                         </div>
                       )}
-                      <div>
-                        <h3 className="text-sm font-bold text-slate-900 truncate group-hover:text-indigo-600 transition-colors">
-                          {filteredClubs[1].name}
-                        </h3>
-                        <p className="text-[11px] text-slate-500 truncate mt-0.5 font-medium">
-                          {filteredClubs[1].college}
-                        </p>
+                      <span className="font-bold text-slate-800 text-[10px] sm:text-xs mt-2 truncate w-full px-1">
+                        {filteredClubs[1].name.split(' ')[0]}
+                      </span>
+                      <div className="mt-1 bg-slate-700 text-white rounded-md text-[9px] sm:text-[10px] px-2 py-0.5 shadow-sm font-semibold flex items-center gap-1">
+                        {filteredClubs[1].totalScore} pts ⚡
                       </div>
                     </div>
-                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                      <Badge className="bg-slate-100 text-slate-700 border-slate-200 text-[10px] font-semibold">
-                        {filteredClubs[1].category}
-                      </Badge>
-                      <span className="font-extrabold text-xs text-slate-900">
-                        {filteredClubs[1].totalScore} pts
-                      </span>
+                    {/* Podium Block 2 */}
+                    <div className="w-full h-32 sm:h-40 bg-gradient-to-b from-slate-300 via-slate-200 to-slate-400 rounded-t-lg sm:rounded-t-xl border-x border-t border-slate-400 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(255,255,255,0.8),0_-4px_20px_rgba(148,163,184,0.15)] relative overflow-hidden">
+                      <span className="text-5xl sm:text-6xl font-black text-slate-500/40">2</span>
                     </div>
-                  </Card>
+                  </div>
                 )}
 
-                {/* 1st Place Club */}
+                {/* 1st Place Club (Gold) */}
                 {filteredClubs[0] && (
-                  <Card
+                  <div
+                    className="flex flex-col items-center w-[35%] max-w-[160px] z-10 cursor-pointer group"
                     onClick={() => setSelectedClub(filteredClubs[0])}
-                    className="border-2 border-amber-300 bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer order-1 md:order-2 md:h-[330px] flex flex-col justify-between p-6 text-center group transform md:-translate-y-2"
                   >
-                    <div className="space-y-3">
-                      <div className="w-8 h-8 rounded-lg bg-amber-400 text-white font-black text-xs flex items-center justify-center mx-auto shadow-sm">
-                        1
-                      </div>
+                    <div className="flex flex-col items-center pb-3 text-center relative transition-transform group-hover:-translate-y-2">
+                      <Trophy className="h-6 w-6 sm:h-8 sm:w-8 text-amber-500 fill-amber-500 absolute -top-8 sm:-top-10 left-1/2 -translate-x-1/2 drop-shadow-sm" />
                       {filteredClubs[0].logo_url ? (
                         <img
                           src={filteredClubs[0].logo_url}
-                          className="w-20 h-20 rounded-2xl mx-auto object-cover border-2 border-amber-300 bg-slate-50 shadow-md"
-                          alt="Gold Club"
+                          alt={filteredClubs[0].name}
+                          className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-4 border-amber-300 shadow-lg relative z-10 bg-slate-50"
                         />
                       ) : (
-                        <div className="w-20 h-20 rounded-2xl mx-auto bg-amber-50 text-amber-800 font-extrabold text-2xl flex items-center justify-center border-2 border-amber-300">
+                        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-amber-50 text-amber-800 font-extrabold text-2xl sm:text-3xl flex items-center justify-center border-4 border-amber-300 shadow-lg relative z-10">
                           {filteredClubs[0].name.charAt(0)}
                         </div>
                       )}
-                      <div>
-                        <h3 className="text-base font-extrabold text-slate-900 truncate group-hover:text-indigo-600 transition-colors">
-                          {filteredClubs[0].name}
-                        </h3>
-                        <p className="text-xs text-slate-500 truncate mt-0.5 font-medium">
-                          {filteredClubs[0].college}
-                        </p>
+                      <span className="font-extrabold text-slate-900 text-xs sm:text-sm mt-2 truncate w-full px-1">
+                        {filteredClubs[0].name.split(' ')[0]}
+                      </span>
+                      <div className="mt-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-md text-[10px] sm:text-xs px-2.5 py-0.5 shadow-md font-bold flex items-center gap-1">
+                        {filteredClubs[0].totalScore} pts 🔥
                       </div>
                     </div>
-                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                      <Badge className="bg-amber-100 text-amber-800 border-amber-200 text-[10px] font-bold">
-                        {filteredClubs[0].category}
-                      </Badge>
-                      <span className="font-black text-sm text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-lg">
-                        {filteredClubs[0].totalScore} pts
-                      </span>
+                    {/* Podium Block 1 */}
+                    <div className="w-full h-44 sm:h-52 bg-gradient-to-b from-amber-300 via-amber-200 to-amber-400 rounded-t-xl sm:rounded-t-2xl border-x border-t border-amber-400 flex items-start justify-center pt-6 sm:pt-8 shadow-[inset_0_2px_10px_rgba(255,255,255,0.7),0_-4px_20px_rgba(251,191,36,0.2)] relative overflow-hidden">
+                      <span className="text-6xl sm:text-7xl font-black text-amber-600/40 drop-shadow-sm">1</span>
                     </div>
-                  </Card>
+                  </div>
                 )}
 
-                {/* 3rd Place Club */}
+                {/* 3rd Place Club (Bronze) */}
                 {filteredClubs[2] && (
-                  <Card
+                  <div
+                    className="flex flex-col items-center w-[30%] max-w-[140px] cursor-pointer group"
                     onClick={() => setSelectedClub(filteredClubs[2])}
-                    className="border border-slate-200/90 bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer order-3 md:order-3 md:h-[280px] flex flex-col justify-between p-6 text-center group"
                   >
-                    <div className="space-y-3">
-                      <div className="w-7 h-7 rounded-lg bg-amber-100 text-amber-800 font-bold text-xs flex items-center justify-center mx-auto">
-                        3
-                      </div>
+                    <div className="flex flex-col items-center pb-3 text-center relative transition-transform group-hover:-translate-y-1">
                       {filteredClubs[2].logo_url ? (
                         <img
                           src={filteredClubs[2].logo_url}
-                          className="w-14 h-14 rounded-2xl mx-auto object-cover border-2 border-slate-200 bg-slate-50 shadow-sm"
-                          alt="Bronze Club"
+                          alt={filteredClubs[2].name}
+                          className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover border-4 border-orange-300 shadow-md relative z-10 bg-slate-50"
                         />
                       ) : (
-                        <div className="w-14 h-14 rounded-2xl mx-auto bg-slate-100 text-slate-700 font-bold text-lg flex items-center justify-center border border-slate-200">
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-orange-50 text-orange-800 font-bold text-lg sm:text-xl flex items-center justify-center border-4 border-orange-300 shadow-md relative z-10">
                           {filteredClubs[2].name.charAt(0)}
                         </div>
                       )}
-                      <div>
-                        <h3 className="text-sm font-bold text-slate-900 truncate group-hover:text-indigo-600 transition-colors">
-                          {filteredClubs[2].name}
-                        </h3>
-                        <p className="text-[11px] text-slate-500 truncate mt-0.5 font-medium">
-                          {filteredClubs[2].college}
-                        </p>
+                      <span className="font-bold text-slate-800 text-[10px] sm:text-xs mt-2 truncate w-full px-1">
+                        {filteredClubs[2].name.split(' ')[0]}
+                      </span>
+                      <div className="mt-1 bg-orange-700 text-white rounded-md text-[9px] sm:text-[10px] px-2 py-0.5 shadow-sm font-semibold flex items-center gap-1">
+                        {filteredClubs[2].totalScore} pts ✨
                       </div>
                     </div>
-                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                      <Badge className="bg-slate-100 text-slate-700 border-slate-200 text-[10px] font-semibold">
-                        {filteredClubs[2].category}
-                      </Badge>
-                      <span className="font-extrabold text-xs text-slate-900">
-                        {filteredClubs[2].totalScore} pts
-                      </span>
+                    {/* Podium Block 3 */}
+                    <div className="w-full h-24 sm:h-32 bg-gradient-to-b from-orange-300 via-orange-200 to-orange-400 rounded-t-lg sm:rounded-t-xl border-x border-t border-orange-400 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(255,255,255,0.6),0_-4px_20px_rgba(251,146,60,0.15)] relative overflow-hidden">
+                      <span className="text-5xl sm:text-6xl font-black text-orange-700/40">3</span>
                     </div>
-                  </Card>
+                  </div>
                 )}
               </div>
 
@@ -1245,7 +1187,7 @@ export default function RankLeaderboardPage() {
           MODAL 1: STUDENT BREAKDOWN DIALOG
          ========================================================================= */}
       <Dialog open={!!selectedStudent} onOpenChange={() => setSelectedStudent(null)}>
-        <DialogContent className="max-w-md bg-white rounded-2xl p-6 border border-slate-200 shadow-lg">
+        <DialogContent className="max-w-md bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
           {selectedStudent && (
             <div className="space-y-4">
               <DialogHeader className="text-left space-y-2">
@@ -1318,7 +1260,7 @@ export default function RankLeaderboardPage() {
           MODAL 2: CLUB BREAKDOWN DIALOG
          ========================================================================= */}
       <Dialog open={!!selectedClub} onOpenChange={() => setSelectedClub(null)}>
-        <DialogContent className="max-w-md bg-white rounded-2xl p-6 border border-slate-200 shadow-lg">
+        <DialogContent className="max-w-md bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
           {selectedClub && (
             <div className="space-y-4">
               <DialogHeader className="text-left space-y-2">
@@ -1401,7 +1343,7 @@ export default function RankLeaderboardPage() {
           MODAL 3: SCORING RULES
          ========================================================================= */}
       <Dialog open={scoringGuideOpen} onOpenChange={setScoringGuideOpen}>
-        <DialogContent className="max-w-md bg-white rounded-2xl p-6 border border-slate-200 shadow-lg">
+        <DialogContent className="max-w-md bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
           <DialogHeader className="text-left space-y-1">
             <DialogTitle className="text-lg font-bold text-slate-900">
               Clunite Scoring Rules

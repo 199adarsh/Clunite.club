@@ -265,7 +265,7 @@ export default function HostEventPage() {
           </div>
           {isOwner && (
             <Link href="/dashboard/organizer/manage-admins">
-              <Button size="lg" className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold px-4 sm:px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto">
+              <Button size="lg" className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold px-4 sm:px-6 py-3 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto">
                 <Users className="h-5 w-5 mr-2" />
                 Manage Admins
               </Button>

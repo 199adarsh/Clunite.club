@@ -15,7 +15,7 @@ export default function MyHostedEventsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <Card className="border-0 shadow-lg bg-white max-w-md">
+      <Card className="border-0 shadow-sm bg-white max-w-md">
         <CardContent className="p-12 text-center">
           <Calendar className="h-12 w-12 text-gray-400 mx-auto mb-4" />
           <p className="text-gray-600">Redirecting to dashboard...</p>

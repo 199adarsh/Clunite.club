@@ -215,7 +215,7 @@ export default function StudentCertificatesPage() {
                   >
                     <img src={bgUrl} alt={cert.event_title} className="w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-slate-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
-                      <Button size="sm" className="rounded-full bg-white text-slate-900 font-bold shadow-lg text-xs">
+                      <Button size="sm" className="rounded-full bg-white text-slate-900 font-bold shadow-sm text-xs">
                         Inspect Certificate
                       </Button>
                     </div>
@@ -389,7 +389,7 @@ export default function StudentCertificatesPage() {
                   <Button
                     type="button"
                     disabled={downloadingId === selectedCert.id}
-                    className="rounded-full bg-slate-950 hover:bg-slate-800 text-white font-bold text-xs px-6 shadow-md"
+                    className="rounded-full bg-slate-950 hover:bg-slate-800 text-white font-bold text-xs px-6 shadow-sm"
                     onClick={() => handleDownload(selectedCert, 'png')}
                   >
                     {downloadingId === selectedCert.id ? (

@@ -432,10 +432,10 @@ export default function DiscoverClubsPage() {
                         <img
                           src={club.logo_url}
                           alt={club.name}
-                          className="w-13 h-13 rounded-2xl object-cover border-2 border-white shadow-md bg-white"
+                          className="w-13 h-13 rounded-2xl object-cover border-2 border-white shadow-sm bg-white"
                         />
                       ) : (
-                        <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white font-black text-lg flex items-center justify-center border-2 border-white shadow-md">
+                        <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white font-black text-lg flex items-center justify-center border-2 border-white shadow-sm">
                           {club.name.charAt(0)}
                         </div>
                       )}

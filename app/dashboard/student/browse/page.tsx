@@ -462,8 +462,8 @@ export default function BrowseEventsPage() {
           </Button>
         </Card>
       ) : viewMode === 'grid' ? (
-        /* ================= GRID VIEW ================= */
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        /* ================= WIDER GRID VIEW ================= */
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {filteredEvents.map((event) => {
             const eventDate = new Date(event.start_date).toLocaleDateString('en-US', {
               month: 'short',
@@ -477,136 +477,136 @@ export default function BrowseEventsPage() {
             return (
               <Link key={event.id} href={`/dashboard/student/events/${event.id}`} className="block group h-full">
                 <Card className={cn(
-                  "h-full rounded-[20px] border bg-white shadow-sm hover:shadow-md transition-all duration-300 flex flex-col group cursor-pointer overflow-hidden",
+                  "h-full rounded-3xl border bg-white shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col group cursor-pointer overflow-hidden",
                   statusInfo.isLive ? "border-slate-200" : "border-slate-200 opacity-90"
                 )}>
                   {/* IMAGE SECTION */}
-                  <div className="relative h-[160px] w-full bg-slate-100 shrink-0">
+                  <div className="relative h-[200px] sm:h-[240px] w-full bg-slate-100 shrink-0 overflow-hidden">
                     <img
                       src={event.image_url || '/placeholder.svg'}
                       alt={event.title}
-                      className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                     />
                     
                     {/* Time Left Badge */}
                     <div className={cn(
-                      "absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-bold shadow-sm flex items-center gap-1.5 z-10 backdrop-blur-md",
+                      "absolute top-4 left-4 px-3 py-1.5 rounded-full text-[11px] font-extrabold shadow-sm flex items-center gap-2 z-10 backdrop-blur-md",
                       statusInfo.isLive 
                         ? "bg-rose-500 text-white" 
-                        : "bg-slate-800/90 text-slate-200"
+                        : "bg-slate-900/90 text-slate-100"
                     )}>
                       <span className={cn(
-                        "w-1.5 h-1.5 rounded-full",
+                        "w-2 h-2 rounded-full",
                         statusInfo.isLive ? "bg-white animate-pulse" : "bg-slate-400"
                       )} />
                       {statusInfo.daysLeftText}
                     </div>
 
                     {/* Bookmark Button */}
-                    <button className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center rounded-lg bg-black/40 backdrop-blur-md text-white hover:bg-black/60 transition-colors z-10">
-                      <Bookmark className="w-3.5 h-3.5" />
+                    <button className="absolute top-4 right-4 w-9 h-9 flex items-center justify-center rounded-xl bg-black/40 backdrop-blur-md text-white hover:bg-black/70 transition-colors z-10 hover:scale-105 active:scale-95">
+                      <Bookmark className="w-4 h-4" />
                     </button>
                   </div>
 
                   {/* AVATAR OVERLAY */}
-                  <div className="px-3.5 relative h-0">
-                    <div className="absolute -top-8 left-3.5 w-[60px] h-[60px] bg-black border-[3px] border-white rounded-full flex items-center justify-center shadow-sm overflow-hidden z-20">
+                  <div className="px-6 relative h-0">
+                    <div className="absolute -top-10 left-6 w-[80px] h-[80px] bg-white border-4 border-white rounded-2xl flex items-center justify-center shadow-md overflow-hidden z-20">
                       {event.club?.logo_url ? (
                         <img src={event.club.logo_url} className="w-full h-full object-cover bg-white" alt="Club logo" />
                       ) : (
-                        <span className="text-white font-black text-xl">{event.club?.name?.charAt(0) || 'C'}</span>
+                        <span className="text-slate-800 font-black text-2xl">{event.club?.name?.charAt(0) || 'C'}</span>
                       )}
                     </div>
                   </div>
 
                   {/* CONTENT SECTION */}
-                  <div className="pt-9 px-3.5 pb-3.5 flex flex-col flex-1">
+                  <div className="pt-14 px-6 pb-6 flex flex-col flex-1">
                     
                     {/* Title & Registered Count */}
-                    <div className="flex items-start justify-between gap-2">
-                      <h3 className="font-extrabold text-lg text-slate-900 leading-tight tracking-tight line-clamp-2">
+                    <div className="flex items-start justify-between gap-3">
+                      <h3 className="font-extrabold text-xl text-slate-900 leading-tight tracking-tight line-clamp-2 group-hover:text-indigo-600 transition-colors">
                         {event.title}
                       </h3>
-                      <div className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-purple-50 text-purple-700 text-[10px] font-bold mt-0.5">
-                        <Users className="w-3 h-3" />
-                        {attendees.totalCount} Registered
+                      <div className="shrink-0 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-bold mt-0.5 border border-indigo-100">
+                        <Users className="w-3.5 h-3.5" />
+                        {attendees.totalCount} joined
                       </div>
                     </div>
 
                     {/* Subtitle */}
-                    <p className="mt-1 text-[10px] font-bold text-slate-500 uppercase tracking-wider line-clamp-1">
-                      {event.club?.name || 'DKTE'} &bull; {collegeName}
+                    <p className="mt-2 text-xs font-bold text-slate-500 uppercase tracking-wider line-clamp-1">
+                      {event.club?.name || 'DKTE'} <span className="text-slate-300 mx-1">&bull;</span> {collegeName}
                     </p>
 
                     {/* Badges */}
-                    <div className="flex items-center gap-1.5 mt-2.5">
-                      <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-purple-50/80 text-purple-700 text-[10px] font-bold">
-                        <Trophy className="w-3 h-3" />
+                    <div className="flex items-center gap-2 mt-3.5">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-purple-50 text-purple-700 text-xs font-bold border border-purple-100">
+                        <Trophy className="w-3.5 h-3.5" />
                         {event.type || 'Competition'}
                       </span>
-                      <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-purple-50/80 text-slate-700 text-[10px] font-bold capitalize">
-                        <span className="w-2 h-2 rounded-full bg-purple-600" />
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold capitalize border border-slate-200">
+                        <span className="w-2 h-2 rounded-full bg-slate-500" />
                         {event.mode || 'Offline'}
                       </span>
                     </div>
 
                     {/* Description */}
-                    <p className="mt-3 text-[11px] text-slate-500 font-medium leading-relaxed line-clamp-2">
+                    <p className="mt-4 text-[13px] text-slate-600 font-medium leading-relaxed line-clamp-2">
                       {event.description || 'An exciting strategy and problem-solving competition where teams navigate challenges, make smart decisions and uncover the path to victory.'}
                     </p>
 
-                    <div className="mt-auto pt-4">
+                    <div className="mt-auto pt-6">
                       {/* Stats Box */}
-                      <div className="border border-slate-100 rounded-[14px] p-2 flex items-center justify-between shadow-xs bg-white">
+                      <div className="border border-slate-100 rounded-2xl p-3 flex items-center justify-between shadow-sm bg-slate-50/50">
                         
                         {/* Prize Pool */}
-                        <div className="flex items-center gap-1.5 w-1/3">
-                          <div className="w-8 h-8 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center shrink-0">
-                            <Trophy className="w-3.5 h-3.5" />
+                        <div className="flex items-center gap-2.5 w-1/3">
+                          <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0">
+                            <Trophy className="w-4 h-4" />
                           </div>
                           <div className="min-w-0">
-                            <p className="text-xs font-black text-slate-900 truncate">
+                            <p className="text-sm font-black text-slate-900 truncate">
                               {event.prize_pool && Number(event.prize_pool) > 0 ? `₹${Number(event.prize_pool).toLocaleString()}` : '-'}
                             </p>
-                            <p className="text-[9px] font-semibold text-slate-500">Prize Pool</p>
+                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wide mt-0.5">Prize</p>
                           </div>
                         </div>
 
-                        <div className="w-px h-6 bg-slate-100 shrink-0" />
+                        <div className="w-px h-8 bg-slate-200 shrink-0" />
 
                         {/* Date */}
-                        <div className="flex items-center gap-1.5 w-1/3 justify-center">
-                          <div className="w-8 h-8 rounded-full bg-purple-50 text-purple-500 flex items-center justify-center shrink-0">
-                            <Calendar className="w-3.5 h-3.5" />
+                        <div className="flex items-center gap-2.5 w-1/3 justify-center">
+                          <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center shrink-0">
+                            <Calendar className="w-4 h-4" />
                           </div>
                           <div className="min-w-0">
-                            <p className="text-xs font-black text-slate-900 truncate">
+                            <p className="text-sm font-black text-slate-900 truncate">
                               {new Date(event.start_date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' })}
                             </p>
-                            <p className="text-[9px] font-semibold text-slate-500">Date</p>
+                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wide mt-0.5">Date</p>
                           </div>
                         </div>
 
-                        <div className="w-px h-6 bg-slate-100 shrink-0" />
+                        <div className="w-px h-8 bg-slate-200 shrink-0" />
 
                         {/* Entry Fee */}
-                        <div className="flex items-center gap-1.5 w-1/3 justify-end pr-0.5">
-                          <div className="w-8 h-8 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center shrink-0">
-                            <IndianRupee className="w-3.5 h-3.5" />
+                        <div className="flex items-center gap-2.5 w-1/3 justify-end pr-1">
+                          <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                            <IndianRupee className="w-4 h-4" />
                           </div>
                           <div className="min-w-0">
-                            <p className="text-xs font-black text-slate-900 truncate">
+                            <p className="text-sm font-black text-slate-900 truncate">
                               {event.entry_fee === 0 ? 'Free' : `₹${event.entry_fee}`}
                             </p>
-                            <p className="text-[9px] font-semibold text-slate-500">Entry Fee</p>
+                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wide mt-0.5">Entry</p>
                           </div>
                         </div>
 
                       </div>
 
                       {/* Button */}
-                      <div className="mt-2.5 w-full bg-indigo-500 hover:bg-indigo-600 text-white text-xs font-bold py-2.5 rounded-xl transition-colors flex items-center justify-center gap-1.5 shadow-sm">
-                        View details <ChevronRight className="w-3.5 h-3.5" />
+                      <div className="mt-4 w-full bg-slate-900 hover:bg-indigo-600 text-white text-sm font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-sm hover:shadow-md">
+                        View Details <ChevronRight className="w-4 h-4" />
                       </div>
                     </div>
 
