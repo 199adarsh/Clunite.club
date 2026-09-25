@@ -10,6 +10,7 @@ import { supabase } from '@/lib/supabase';
 import { normalizeCollegeName, formatBranchName, getTier } from '@/lib/tier-utils';
 import { fetchUserCertificates } from '@/lib/certificate-utils';
 import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
 
 import {
   Card,
@@ -20,6 +21,7 @@ import {
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import {
   Calendar,
@@ -40,7 +42,10 @@ import {
   Zap,
   GraduationCap,
   Flame,
-  Check
+  Check,
+  ArrowUpRight,
+  FileText,
+  Star
 } from 'lucide-react';
 
 const avatarColors = [
@@ -371,53 +376,52 @@ export default function StudentDashboard() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* ================= HERO & IDENTITY ================= */}
-      <div className="relative rounded-2xl bg-white border border-slate-200 p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 overflow-hidden">
-        {/* Decorative background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-r from-indigo-200/60 via-purple-100/30 to-transparent pointer-events-none" />
+      <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center gap-6">
+         {/* Avatar */}
+         <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-full border-2 border-slate-100 bg-slate-50 overflow-hidden shrink-0 shadow-sm">
+           <img src={userData?.gender?.toLowerCase() === 'female' ? '/girl.png' : '/boy.png'} alt="Student Avatar" className="w-full h-full object-cover" />
+         </div>
 
-        <div className="relative z-10 space-y-2 max-w-xl">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xs font-bold uppercase tracking-wider text-indigo-700">Student Portal</span>
-            <span className="text-slate-300">•</span>
-            <span className="text-xs text-slate-500 font-semibold truncate">{normalizedCollege}</span>
-          </div>
+         {/* Profile Info Area */}
+         <div className="space-y-1.5 flex-1">
+           {/* Tags & Name */}
+           <div className="flex flex-wrap items-center gap-2">
+             <span className="bg-indigo-50 text-indigo-700 font-bold text-[10px] px-2.5 py-1 rounded-full uppercase tracking-wide">
+               STUDENT PORTAL
+             </span>
+             <span className="text-slate-300">•</span>
+             <span className="text-slate-500 font-medium text-xs sm:text-sm truncate max-w-[200px] sm:max-w-md">
+               {normalizedCollege}
+             </span>
+           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
-            Welcome back, {userData?.full_name?.split(' ')[0] || 'Student'}
-          </h1>
+           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 pt-1">
+             Welcome back, {userData?.full_name?.split(' ')[0] || 'Student'}
+           </h1>
+           <p className="text-sm text-slate-500 font-medium">
+             {displayBranch} • Real-time event schedule, recommendations, and verified credentials.
+           </p>
 
-          <p className="text-xs sm:text-sm text-slate-500 font-medium">
-            {displayBranch} • Real-time event schedule, recommendations, and verified credentials.
-          </p>
-
-          <div className="pt-2 flex flex-wrap items-center gap-2">
+           {/* Badges */}
+           <div className="pt-3 flex flex-wrap items-center gap-2">
             <Link href="/dashboard/student/rank">
-              <Badge className="bg-indigo-50 text-indigo-700 border border-indigo-200/80 font-bold text-xs hover:bg-indigo-100 cursor-pointer transition-colors flex items-center gap-1">
-                <Zap className="h-3 w-3 text-indigo-600 fill-indigo-600" />
+              <Badge className="bg-indigo-50 text-indigo-700 border-none font-bold text-[11px] sm:text-xs hover:bg-indigo-100 px-3 py-1.5 transition-colors flex items-center gap-1.5 rounded-xl shadow-none">
+                <Zap className="h-3.5 w-3.5 text-indigo-600 fill-indigo-600" />
                 <span>{stats.totalXp} XP • {userTier.name}</span>
               </Badge>
             </Link>
 
-            <Badge className="bg-slate-100 text-slate-700 border border-slate-200 font-semibold text-xs">
-              <Calendar className="h-3 w-3 mr-1 text-slate-500" />
+            <Badge className="bg-slate-50 text-slate-700 border-none font-semibold text-[11px] sm:text-xs px-3 py-1.5 rounded-xl shadow-none">
+              <Calendar className="h-3.5 w-3.5 mr-1.5 text-slate-500" />
               {stats.registeredEvents} Registered
             </Badge>
 
-            <Badge className="bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold text-xs">
-              <Award className="h-3 w-3 mr-1 text-emerald-600" />
+            <Badge className="bg-emerald-50 text-emerald-700 border-none font-semibold text-[11px] sm:text-xs px-3 py-1.5 rounded-xl shadow-none">
+              <Award className="h-3.5 w-3.5 mr-1.5 text-emerald-600" />
               {stats.certificates} Credentials
             </Badge>
-          </div>
-        </div>
-
-        {/* Character Illustration */}
-        <div className="hidden lg:block relative z-10 shrink-0">
-          <img
-            src={userData?.gender?.toLowerCase() === 'female' ? '/girl.png' : '/boy.png'}
-            alt="Student Avatar"
-            className="h-40 w-auto object-contain drop-shadow-sm select-none pointer-events-none"
-          />
-        </div>
+           </div>
+         </div>
       </div>
 
       {/* ================= ACTIVE EVENT PASS (IF REGISTERED) ================= */}
@@ -471,121 +475,134 @@ export default function StudentDashboard() {
       )}
 
       {/* ================= PRACTICAL STATS GRID ================= */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="border border-slate-200 rounded-2xl bg-white h-full">
-          <CardContent className="p-5 flex items-center justify-between h-full">
-            <div className="space-y-1">
-              <p className="text-xs font-semibold text-slate-500">Registered Events</p>
-              <p className="text-2xl font-black text-slate-900">{stats.registeredEvents}</p>
-              <span className="text-[11px] text-indigo-600 font-medium">Active Schedule</span>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <Link href="#schedule" onClick={() => setFeedTab('registrations')}>
+          <motion.div
+            whileHover={{ scale: 1.025, transition: { duration: 0.2 } }}
+            className="flex items-center gap-3 w-full h-full p-4 bg-white rounded-2xl border border-slate-100 shadow-xs transition-shadow hover:shadow-md cursor-pointer"
+          >
+            <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+              <Calendar className="h-4 w-4 sm:h-5 sm:w-5" />
             </div>
-            <div className="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
-              <Calendar className="h-5 w-5" />
+            <div className="flex-1 min-w-0">
+              <p className="font-bold text-lg sm:text-xl text-slate-900 leading-none">{stats.registeredEvents}</p>
+              <p className="text-[10px] sm:text-xs text-slate-500 truncate mt-1">Registered Events</p>
             </div>
-          </CardContent>
-        </Card>
+            <div className="shrink-0 h-6 w-6 rounded-full bg-slate-50 flex items-center justify-center text-slate-400">
+              <ArrowRight className="h-3 w-3" />
+            </div>
+          </motion.div>
+        </Link>
 
-        <Card className="border border-slate-200 rounded-2xl bg-white h-full">
-          <CardContent className="p-5 flex items-center justify-between h-full">
-            <div className="space-y-1">
-              <p className="text-xs font-semibold text-slate-500">Attended Check-ins</p>
-              <p className="text-2xl font-black text-slate-900">{stats.attendedEvents}</p>
-              <span className="text-[11px] text-emerald-600 font-medium">Verified Presence</span>
+        <Link href="/dashboard/student/certificates">
+          <motion.div
+            whileHover={{ scale: 1.025, transition: { duration: 0.2 } }}
+            className="flex items-center gap-3 w-full h-full p-4 bg-white rounded-2xl border border-slate-100 shadow-xs transition-shadow hover:shadow-md cursor-pointer"
+          >
+            <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+              <FileText className="h-4 w-4 sm:h-5 sm:w-5" />
             </div>
-            <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-              <CheckCircle2 className="h-5 w-5" />
+            <div className="flex-1 min-w-0">
+              <p className="font-bold text-lg sm:text-xl text-slate-900 leading-none">{stats.attendedEvents}</p>
+              <p className="text-[10px] sm:text-xs text-slate-500 truncate mt-1">Attended Check-ins</p>
             </div>
-          </CardContent>
-        </Card>
+            <div className="shrink-0 h-6 w-6 rounded-full bg-slate-50 flex items-center justify-center text-slate-400">
+              <ArrowRight className="h-3 w-3" />
+            </div>
+          </motion.div>
+        </Link>
 
-        <Card className="border border-slate-200 rounded-2xl bg-white h-full">
-          <CardContent className="p-5 flex items-center justify-between h-full">
-            <div className="space-y-1">
-              <p className="text-xs font-semibold text-slate-500">Digital Credentials</p>
-              <p className="text-2xl font-black text-slate-900">{stats.certificates}</p>
-              <span className="text-[11px] text-amber-600 font-medium">Verified Certificates</span>
+        <Link href="/dashboard/student/certificates">
+          <motion.div
+            whileHover={{ scale: 1.025, transition: { duration: 0.2 } }}
+            className="flex items-center gap-3 w-full h-full p-4 bg-white rounded-2xl border border-slate-100 shadow-xs transition-shadow hover:shadow-md cursor-pointer"
+          >
+            <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center shrink-0">
+              <Star className="h-4 w-4 sm:h-5 sm:w-5" />
             </div>
-            <div className="w-11 h-11 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center shrink-0">
-              <Award className="h-5 w-5" />
+            <div className="flex-1 min-w-0">
+              <p className="font-bold text-lg sm:text-xl text-slate-900 leading-none">{stats.certificates}</p>
+              <p className="text-[10px] sm:text-xs text-slate-500 truncate mt-1">Digital Credentials</p>
             </div>
-          </CardContent>
-        </Card>
+            <div className="shrink-0 h-6 w-6 rounded-full bg-slate-50 flex items-center justify-center text-slate-400">
+              <ArrowRight className="h-3 w-3" />
+            </div>
+          </motion.div>
+        </Link>
 
-        <Card className="border border-slate-200 rounded-2xl bg-white h-full">
-          <CardContent className="p-5 flex items-center justify-between h-full">
-            <div className="space-y-1">
-              <p className="text-xs font-semibold text-slate-500">Club Memberships</p>
-              <p className="text-2xl font-black text-slate-900">{stats.joinedClubs}</p>
-              <span className="text-[11px] text-purple-600 font-medium">Joined Societies</span>
+        <Link href="/dashboard/student/my-clubs">
+          <motion.div
+            whileHover={{ scale: 1.025, transition: { duration: 0.2 } }}
+            className="flex items-center gap-3 w-full h-full p-4 bg-white rounded-2xl border border-slate-100 shadow-xs transition-shadow hover:shadow-md cursor-pointer"
+          >
+            <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+              <Users className="h-4 w-4 sm:h-5 sm:w-5" />
             </div>
-            <div className="w-11 h-11 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
-              <Users className="h-5 w-5" />
+            <div className="flex-1 min-w-0">
+              <p className="font-bold text-lg sm:text-xl text-slate-900 leading-none">{stats.joinedClubs}</p>
+              <p className="text-[10px] sm:text-xs text-slate-500 truncate mt-1">Club Memberships</p>
             </div>
-          </CardContent>
-        </Card>
+            <div className="shrink-0 h-6 w-6 rounded-full bg-slate-50 flex items-center justify-center text-slate-400">
+              <ArrowRight className="h-3 w-3" />
+            </div>
+          </motion.div>
+        </Link>
       </div>
 
       {/* ================= MAIN 2-COLUMN LAYOUT ================= */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
         {/* LEFT COLUMN (2/3 width) - LIVE EVENT SCHEDULE & RECOMMENDATION ENGINE */}
-        <div className="lg:col-span-2 space-y-4">
-          {/* Feed Switcher Header */}
-          <div className="flex items-center justify-between flex-wrap gap-3 pb-1">
-            <div className="flex items-center bg-slate-100/90 rounded-xl p-1 border border-slate-200/70 shadow-xs">
-              <button
-                onClick={() => setFeedTab('recommended')}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 ${
-                  feedTab === 'recommended'
-                    ? 'bg-white text-slate-900 shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <span>Recommended For You</span>
-                <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-extrabold ${
-                  feedTab === 'recommended' ? 'bg-indigo-50 text-indigo-700' : 'bg-slate-200 text-slate-600'
-                }`}>
-                  {recommendedList.length}
-                </span>
-              </button>
-              
-              <button
-                onClick={() => setFeedTab('registrations')}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 ${
-                  feedTab === 'registrations'
-                    ? 'bg-white text-slate-900 shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <span>My Schedule</span>
-                <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-extrabold ${
-                  feedTab === 'registrations' ? 'bg-indigo-50 text-indigo-700' : 'bg-slate-200 text-slate-600'
-                }`}>
-                  {userRegistrations.length}
-                </span>
-              </button>
+        <div className="lg:col-span-2">
+          <Tabs 
+            defaultValue="recommended" 
+            value={feedTab} 
+            onValueChange={(val) => setFeedTab(val as 'recommended' | 'registrations')}
+            className="w-full space-y-4"
+          >
+            {/* Feed Switcher Header */}
+            <div className="flex items-center justify-between flex-wrap gap-3 pb-1">
+              <TabsList className="bg-slate-100/90 rounded-xl p-1 border border-slate-200/70 shadow-xs h-auto">
+                <TabsTrigger 
+                  value="recommended" 
+                  className="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-xs text-slate-600 hover:text-slate-900"
+                >
+                  <span>Recommended For You</span>
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-extrabold ${feedTab === 'recommended' ? 'bg-indigo-50 text-indigo-700' : 'bg-slate-200 text-slate-600'}`}>
+                    {recommendedList.length}
+                  </span>
+                </TabsTrigger>
+                
+                <TabsTrigger 
+                  value="registrations" 
+                  className="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-xs text-slate-600 hover:text-slate-900"
+                >
+                  <span>My Schedule</span>
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-extrabold ${feedTab === 'registrations' ? 'bg-indigo-50 text-indigo-700' : 'bg-slate-200 text-slate-600'}`}>
+                    {userRegistrations.length}
+                  </span>
+                </TabsTrigger>
+              </TabsList>
+
+              <Link href="/dashboard/student/browse">
+                <Button variant="ghost" size="sm" className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50/70 rounded-lg">
+                  <span>Browse All</span>
+                  <ChevronRight className="h-3.5 w-3.5 ml-0.5" />
+                </Button>
+              </Link>
             </div>
 
-            <Link href="/dashboard/student/browse">
-              <Button variant="ghost" size="sm" className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50/70 rounded-lg">
-                <span>Browse All</span>
-                <ChevronRight className="h-3.5 w-3.5 ml-0.5" />
-              </Button>
-            </Link>
-          </div>
-
-          {/* TAB 1: RECOMMENDATIONS */}
-          {feedTab === 'recommended' && (
-            <div className="space-y-3.5">
+            {/* TAB 1: RECOMMENDATIONS */}
+            <TabsContent value="recommended" className="space-y-3.5 mt-0 outline-none">
               {recommendedList.length === 0 ? (
-                <Card className="rounded-2xl border border-slate-200/80 bg-white p-10 text-center space-y-3 shadow-xs">
-                  <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto">
+                <Card className="rounded-2xl border border-slate-200/80 bg-white p-10 text-center shadow-xs">
+                  <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto mb-3">
                     <Calendar className="h-6 w-6" />
                   </div>
-                  <h3 className="text-base font-bold text-slate-900">No Live Events Currently Open</h3>
-                  <p className="text-xs text-slate-500 max-w-sm mx-auto">
+                  <h3 className="text-base font-bold text-slate-900 mb-2">No Live Events Currently Open</h3>
+                  <p className="text-xs text-slate-500 max-w-sm mx-auto mb-0">
                     All current events for your campus have closed registration or passed. Check back soon for newly published hackathons and workshops.
                   </p>
-                  <Link href="/dashboard/student/browse">
+                  <Link href="/dashboard/student/browse" className="inline-block mt-4">
                     <Button className="bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold">
                       Browse Full Event Directory
                     </Button>
@@ -703,27 +720,27 @@ export default function StudentDashboard() {
                   );
                 })
               )}
-            </div>
-          )}
+            </TabsContent>
 
-          {/* TAB 2: MY SCHEDULE / REGISTERED */}
-          {feedTab === 'registrations' && (
-            <div className="space-y-3.5">
+            {/* TAB 2: MY SCHEDULE / REGISTERED */}
+            <TabsContent value="registrations" className="space-y-3.5 mt-0 outline-none">
               {userRegistrations.length === 0 ? (
-                <Card className="rounded-2xl border border-slate-200/80 bg-white p-10 text-center space-y-3 shadow-xs">
-                  <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto">
+                <Card className="rounded-2xl border border-slate-200/80 bg-white p-10 text-center shadow-xs">
+                  <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto mb-3">
                     <Calendar className="h-6 w-6" />
                   </div>
-                  <h3 className="text-base font-bold text-slate-900">No Active Registrations</h3>
-                  <p className="text-xs text-slate-500 max-w-sm mx-auto">
+                  <h3 className="text-base font-bold text-slate-900 mb-2">No Active Registrations</h3>
+                  <p className="text-xs text-slate-500 max-w-sm mx-auto mb-0">
                     You have not registered for any events yet. Check the "Recommended For You" tab to register.
                   </p>
-                  <Button
-                    onClick={() => setFeedTab('recommended')}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold"
-                  >
-                    View Recommended Events
-                  </Button>
+                  <div className="mt-4">
+                    <Button
+                      onClick={() => setFeedTab('recommended')}
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold"
+                    >
+                      View Recommended Events
+                    </Button>
+                  </div>
                 </Card>
               ) : (
                 userRegistrations.map((reg) => {
@@ -745,11 +762,10 @@ export default function StudentDashboard() {
                         <div className="space-y-2 min-w-0 flex-1">
                           <div className="flex items-center gap-2 flex-wrap">
                             <Badge
-                              className={`text-[10px] font-bold ${
-                                isAttended
-                                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                                  : 'bg-blue-50 text-blue-700 border-blue-200'
-                              }`}
+                              className={`text-[10px] font-bold ${isAttended
+                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                : 'bg-blue-50 text-blue-700 border-blue-200'
+                                }`}
                             >
                               {isAttended ? 'Attended & Verified' : 'Registered'}
                             </Badge>
@@ -819,77 +835,15 @@ export default function StudentDashboard() {
                   );
                 })
               )}
-            </div>
-          )}
+            </TabsContent>
+          </Tabs>
         </div>
 
         {/* RIGHT COLUMN (1/3 width) - PRACTICAL UTILITIES */}
-        <div className="space-y-6">
-          {/* Quick Shortcuts */}
-          <Card className="border border-black/5 shadow-sm rounded-2xl bg-white overflow-hidden">
-            <CardHeader className="pb-3 border-b border-slate-100">
-              <CardTitle className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-indigo-600" />
-                Quick Navigation
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-4 space-y-2">
-              <Link href="/dashboard/student/qr" className="block">
-                <Button
-                  variant="outline"
-                  className="w-full justify-between rounded-xl border-slate-200 text-xs font-semibold h-10 hover:bg-indigo-50/50 hover:text-indigo-700"
-                >
-                  <span className="flex items-center gap-2">
-                    <QrCode className="h-4 w-4 text-indigo-600" />
-                    Scan Event Check-in Pass
-                  </span>
-                  <ChevronRight className="h-4 w-4 text-slate-400" />
-                </Button>
-              </Link>
-
-              <Link href="/dashboard/student/certificates" className="block">
-                <Button
-                  variant="outline"
-                  className="w-full justify-between rounded-xl border-slate-200 text-xs font-semibold h-10 hover:bg-emerald-50/50 hover:text-emerald-700"
-                >
-                  <span className="flex items-center gap-2">
-                    <Award className="h-4 w-4 text-emerald-600" />
-                    Digital Credentials ({stats.certificates})
-                  </span>
-                  <ChevronRight className="h-4 w-4 text-slate-400" />
-                </Button>
-              </Link>
-
-              <Link href="/dashboard/student/my-clubs" className="block">
-                <Button
-                  variant="outline"
-                  className="w-full justify-between rounded-xl border-slate-200 text-xs font-semibold h-10 hover:bg-purple-50/50 hover:text-purple-700"
-                >
-                  <span className="flex items-center gap-2">
-                    <Building2 className="h-4 w-4 text-purple-600" />
-                    My Clubs & Societies ({stats.joinedClubs})
-                  </span>
-                  <ChevronRight className="h-4 w-4 text-slate-400" />
-                </Button>
-              </Link>
-
-              <Link href="/dashboard/student/rank" className="block">
-                <Button
-                  variant="outline"
-                  className="w-full justify-between rounded-xl border-slate-200 text-xs font-semibold h-10 hover:bg-amber-50/50 hover:text-amber-700"
-                >
-                  <span className="flex items-center gap-2">
-                    <Trophy className="h-4 w-4 text-amber-600" />
-                    Campus Leaderboard
-                  </span>
-                  <ChevronRight className="h-4 w-4 text-slate-400" />
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
+        <div className="space-y-6 lg:mt-[62px]">
 
           {/* Joined Clubs Snapshot */}
-          <Card className="border border-black/5 shadow-sm rounded-2xl bg-white overflow-hidden">
+          <Card className="border border-slate-200 rounded-2xl bg-white overflow-hidden">
             <CardHeader className="pb-3 border-b border-slate-100 flex flex-row items-center justify-between">
               <CardTitle className="text-sm font-bold text-slate-900 flex items-center gap-2">
                 <Users className="h-4 w-4 text-purple-600" />
@@ -901,9 +855,9 @@ export default function StudentDashboard() {
             </CardHeader>
             <CardContent className="p-4 space-y-2.5">
               {userClubsList.length === 0 ? (
-                <div className="text-center py-4 space-y-2">
-                  <p className="text-xs text-slate-500">You haven't joined any campus clubs.</p>
-                  <Link href="/dashboard/student/my-clubs">
+                <div className="text-center py-4">
+                  <p className="text-xs text-slate-500 mb-0">You haven't joined any campus clubs.</p>
+                  <Link href="/dashboard/student/my-clubs" className="inline-block mt-3">
                     <Button size="sm" variant="outline" className="rounded-xl text-xs h-8">
                       Explore Clubs
                     </Button>
