@@ -503,7 +503,7 @@ export default function ModernAnalyticsPage() {
         {/* KPI Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-4 md:gap-6">
           {/* Total Events */}
-          <Card className="border-none shadow-md bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-2xl overflow-hidden">
+          <Card className="border-none shadow-sm bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-2xl overflow-hidden">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-5 pb-1 sm:pb-2">
               <CardTitle className="text-xs sm:text-sm font-semibold text-white truncate">
                 Total Events
@@ -520,7 +520,7 @@ export default function ModernAnalyticsPage() {
           </Card>
 
           {/* Total Participants */}
-          <Card className="border-none shadow-md bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl overflow-hidden">
+          <Card className="border-none shadow-sm bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl overflow-hidden">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-5 pb-1 sm:pb-2">
               <CardTitle className="text-xs sm:text-sm font-semibold text-white truncate">
                 Participants
@@ -539,7 +539,7 @@ export default function ModernAnalyticsPage() {
           </Card>
 
           {/* Average Satisfaction */}
-          <Card className="border-none shadow-md bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-2xl overflow-hidden">
+          <Card className="border-none shadow-sm bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-2xl overflow-hidden">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-5 pb-1 sm:pb-2">
               <CardTitle className="text-xs sm:text-sm font-semibold text-white truncate">
                 Avg Satisfaction
@@ -555,7 +555,7 @@ export default function ModernAnalyticsPage() {
           </Card>
 
           {/* Total Revenue */}
-          <Card className="border-none shadow-md bg-gradient-to-br from-green-500 to-green-600 text-white rounded-2xl overflow-hidden">
+          <Card className="border-none shadow-sm bg-gradient-to-br from-green-500 to-green-600 text-white rounded-2xl overflow-hidden">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-5 pb-1 sm:pb-2">
               <CardTitle className="text-xs sm:text-sm font-semibold text-white truncate">
                 Total Revenue
@@ -571,7 +571,7 @@ export default function ModernAnalyticsPage() {
           </Card>
 
           {/* Engagement Rate */}
-          <Card className="border-none shadow-md bg-gradient-to-br from-pink-500 to-pink-600 text-white rounded-2xl overflow-hidden">
+          <Card className="border-none shadow-sm bg-gradient-to-br from-pink-500 to-pink-600 text-white rounded-2xl overflow-hidden">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-5 pb-1 sm:pb-2">
               <CardTitle className="text-xs sm:text-sm font-semibold text-white truncate">
                 Engagement
@@ -587,7 +587,7 @@ export default function ModernAnalyticsPage() {
           </Card>
 
           {/* Growth Rate */}
-          <Card className="border-none shadow-md bg-gradient-to-br from-teal-500 to-teal-600 text-white rounded-2xl overflow-hidden">
+          <Card className="border-none shadow-sm bg-gradient-to-br from-teal-500 to-teal-600 text-white rounded-2xl overflow-hidden">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 sm:p-5 pb-1 sm:pb-2">
               <CardTitle className="text-xs sm:text-sm font-semibold text-white truncate">
                 Growth Rate

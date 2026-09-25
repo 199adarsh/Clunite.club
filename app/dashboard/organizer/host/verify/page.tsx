@@ -213,9 +213,9 @@ export default function HostVerificationPage() {
           Back to Dashboard
         </Link>
 
-        <Card className="border-2 shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <Card className="border-2 shadow-sm hover:shadow-xl transition-shadow duration-300">
           <CardHeader className="space-y-1 pb-4">
-            <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center mb-3 mx-auto shadow-lg">
+            <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center mb-3 mx-auto shadow-sm">
               <Lock className="h-8 w-8 text-white" />
             </div>
             <CardTitle className="text-2xl text-center">Host Event Access</CardTitle>
@@ -324,7 +324,7 @@ export default function HostVerificationPage() {
 
               <Button
                 type="submit"
-                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-lg py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
+                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-lg py-6 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
                 disabled={isSubmitting || !userEmail || otp.length !== 6}
               >
                 {isSubmitting ? (

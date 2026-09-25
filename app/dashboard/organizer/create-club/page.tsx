@@ -279,7 +279,7 @@ export default function CreateClubPage() {
       <div className="container max-w-5xl mx-auto">
         {/* Header Section */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-3xl mb-4 shadow-lg">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-3xl mb-4 shadow-sm">
             <Building2 className="h-10 w-10 text-white" />
           </div>
           <h1 className="text-4xl font-bold text-gray-900 mb-3">
@@ -544,7 +544,7 @@ export default function CreateClubPage() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full h-14 bg-orange-500 hover:bg-orange-600 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                className="w-full h-14 bg-orange-500 hover:bg-orange-600 text-lg font-semibold shadow-sm hover:shadow-xl transition-all duration-300"
               >
                 {loading ? (
                   <>

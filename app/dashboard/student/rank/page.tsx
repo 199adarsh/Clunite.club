@@ -788,7 +788,7 @@ export default function RankLeaderboardPage() {
                 {filteredStudents[0] && (
                   <Card
                     onClick={() => setSelectedStudent(filteredStudents[0])}
-                    className="border-2 border-amber-300 bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer order-1 md:order-2 md:h-[330px] flex flex-col justify-between p-6 text-center group transform md:-translate-y-2"
+                    className="border-2 border-amber-300 bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-200 cursor-pointer order-1 md:order-2 md:h-[330px] flex flex-col justify-between p-6 text-center group transform md:-translate-y-2"
                   >
                     <div className="space-y-3">
                       <div className="w-8 h-8 rounded-lg bg-amber-400 text-white font-black text-xs flex items-center justify-center mx-auto shadow-sm">
@@ -796,7 +796,7 @@ export default function RankLeaderboardPage() {
                       </div>
                       <img
                         src={filteredStudents[0].avatarUrl}
-                        className="w-20 h-20 rounded-2xl mx-auto object-cover border-2 border-amber-300 bg-slate-50 shadow-md"
+                        className="w-20 h-20 rounded-2xl mx-auto object-cover border-2 border-amber-300 bg-slate-50 shadow-sm"
                         alt="Gold Student"
                       />
                       <div>
@@ -1001,7 +1001,7 @@ export default function RankLeaderboardPage() {
                 {filteredClubs[0] && (
                   <Card
                     onClick={() => setSelectedClub(filteredClubs[0])}
-                    className="border-2 border-amber-300 bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer order-1 md:order-2 md:h-[330px] flex flex-col justify-between p-6 text-center group transform md:-translate-y-2"
+                    className="border-2 border-amber-300 bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-200 cursor-pointer order-1 md:order-2 md:h-[330px] flex flex-col justify-between p-6 text-center group transform md:-translate-y-2"
                   >
                     <div className="space-y-3">
                       <div className="w-8 h-8 rounded-lg bg-amber-400 text-white font-black text-xs flex items-center justify-center mx-auto shadow-sm">
@@ -1010,7 +1010,7 @@ export default function RankLeaderboardPage() {
                       {filteredClubs[0].logo_url ? (
                         <img
                           src={filteredClubs[0].logo_url}
-                          className="w-20 h-20 rounded-2xl mx-auto object-cover border-2 border-amber-300 bg-slate-50 shadow-md"
+                          className="w-20 h-20 rounded-2xl mx-auto object-cover border-2 border-amber-300 bg-slate-50 shadow-sm"
                           alt="Gold Club"
                         />
                       ) : (
@@ -1245,7 +1245,7 @@ export default function RankLeaderboardPage() {
           MODAL 1: STUDENT BREAKDOWN DIALOG
          ========================================================================= */}
       <Dialog open={!!selectedStudent} onOpenChange={() => setSelectedStudent(null)}>
-        <DialogContent className="max-w-md bg-white rounded-2xl p-6 border border-slate-200 shadow-lg">
+        <DialogContent className="max-w-md bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
           {selectedStudent && (
             <div className="space-y-4">
               <DialogHeader className="text-left space-y-2">
@@ -1318,7 +1318,7 @@ export default function RankLeaderboardPage() {
           MODAL 2: CLUB BREAKDOWN DIALOG
          ========================================================================= */}
       <Dialog open={!!selectedClub} onOpenChange={() => setSelectedClub(null)}>
-        <DialogContent className="max-w-md bg-white rounded-2xl p-6 border border-slate-200 shadow-lg">
+        <DialogContent className="max-w-md bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
           {selectedClub && (
             <div className="space-y-4">
               <DialogHeader className="text-left space-y-2">
@@ -1401,7 +1401,7 @@ export default function RankLeaderboardPage() {
           MODAL 3: SCORING RULES
          ========================================================================= */}
       <Dialog open={scoringGuideOpen} onOpenChange={setScoringGuideOpen}>
-        <DialogContent className="max-w-md bg-white rounded-2xl p-6 border border-slate-200 shadow-lg">
+        <DialogContent className="max-w-md bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
           <DialogHeader className="text-left space-y-1">
             <DialogTitle className="text-lg font-bold text-slate-900">
               Clunite Scoring Rules

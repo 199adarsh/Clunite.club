@@ -1019,7 +1019,7 @@ export default function CertificateStudioPage() {
                             type="button"
                             onClick={() => setConfig((prev) => ({ ...prev, color: preset.hex }))}
                             className={`w-7 h-7 rounded-full border-2 transition-transform ${
-                              config.color === preset.hex ? 'scale-125 border-indigo-600 shadow-md' : 'border-white hover:scale-110'
+                              config.color === preset.hex ? 'scale-125 border-indigo-600 shadow-sm' : 'border-white hover:scale-110'
                             }`}
                             style={{ backgroundColor: preset.hex }}
                             title={preset.name}
@@ -1143,7 +1143,7 @@ export default function CertificateStudioPage() {
                         type="button"
                         onClick={handleIssueCertificates}
                         disabled={isIssuing || recipients.length === 0}
-                        className="w-full rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold text-xs py-5 shadow-md"
+                        className="w-full rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold text-xs py-5 shadow-sm"
                       >
                         {isIssuing ? (
                           'Issuing to Participants...'

@@ -376,9 +376,9 @@ export default function StudentDashboard() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* ================= HERO & IDENTITY ================= */}
-      <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center gap-6">
+      <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center gap-6">
          {/* Avatar */}
-         <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-full border-2 border-slate-100 bg-slate-50 overflow-hidden shrink-0 shadow-sm">
+         <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-full border border-slate-200 bg-slate-50 overflow-hidden shrink-0">
            <img src={userData?.gender?.toLowerCase() === 'female' ? '/girl.png' : '/boy.png'} alt="Student Avatar" className="w-full h-full object-cover" />
          </div>
 
@@ -429,7 +429,7 @@ export default function StudentDashboard() {
         <Card className="border border-indigo-200/80 bg-gradient-to-r from-indigo-50/90 via-purple-50/50 to-white shadow-sm rounded-2xl overflow-hidden">
           <CardContent className="p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-md shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-sm shrink-0">
                 <Ticket className="h-6 w-6" />
               </div>
               <div className="space-y-1 min-w-0">
@@ -477,10 +477,7 @@ export default function StudentDashboard() {
       {/* ================= PRACTICAL STATS GRID ================= */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <Link href="#schedule" onClick={() => setFeedTab('registrations')}>
-          <motion.div
-            whileHover={{ scale: 1.025, transition: { duration: 0.2 } }}
-            className="flex items-center gap-3 w-full h-full p-4 bg-white rounded-2xl border border-slate-100 shadow-xs transition-shadow hover:shadow-md cursor-pointer"
-          >
+          <div className="group flex items-center gap-3 w-full h-full p-4 bg-white rounded-2xl border border-slate-200 shadow-xs transition-all hover:shadow-md hover:border-slate-300 cursor-pointer">
             <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
               <Calendar className="h-4 w-4 sm:h-5 sm:w-5" />
             </div>
@@ -488,17 +485,14 @@ export default function StudentDashboard() {
               <p className="font-bold text-lg sm:text-xl text-slate-900 leading-none">{stats.registeredEvents}</p>
               <p className="text-[10px] sm:text-xs text-slate-500 truncate mt-1">Registered Events</p>
             </div>
-            <div className="shrink-0 h-6 w-6 rounded-full bg-slate-50 flex items-center justify-center text-slate-400">
+            <div className="shrink-0 h-6 w-6 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 transition-transform group-hover:translate-x-1">
               <ArrowRight className="h-3 w-3" />
             </div>
-          </motion.div>
+          </div>
         </Link>
 
         <Link href="/dashboard/student/certificates">
-          <motion.div
-            whileHover={{ scale: 1.025, transition: { duration: 0.2 } }}
-            className="flex items-center gap-3 w-full h-full p-4 bg-white rounded-2xl border border-slate-100 shadow-xs transition-shadow hover:shadow-md cursor-pointer"
-          >
+          <div className="group flex items-center gap-3 w-full h-full p-4 bg-white rounded-2xl border border-slate-200 shadow-xs transition-all hover:shadow-md hover:border-slate-300 cursor-pointer">
             <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
               <FileText className="h-4 w-4 sm:h-5 sm:w-5" />
             </div>
@@ -506,17 +500,14 @@ export default function StudentDashboard() {
               <p className="font-bold text-lg sm:text-xl text-slate-900 leading-none">{stats.attendedEvents}</p>
               <p className="text-[10px] sm:text-xs text-slate-500 truncate mt-1">Attended Check-ins</p>
             </div>
-            <div className="shrink-0 h-6 w-6 rounded-full bg-slate-50 flex items-center justify-center text-slate-400">
+            <div className="shrink-0 h-6 w-6 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 transition-transform group-hover:translate-x-1">
               <ArrowRight className="h-3 w-3" />
             </div>
-          </motion.div>
+          </div>
         </Link>
 
         <Link href="/dashboard/student/certificates">
-          <motion.div
-            whileHover={{ scale: 1.025, transition: { duration: 0.2 } }}
-            className="flex items-center gap-3 w-full h-full p-4 bg-white rounded-2xl border border-slate-100 shadow-xs transition-shadow hover:shadow-md cursor-pointer"
-          >
+          <div className="group flex items-center gap-3 w-full h-full p-4 bg-white rounded-2xl border border-slate-200 shadow-xs transition-all hover:shadow-md hover:border-slate-300 cursor-pointer">
             <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center shrink-0">
               <Star className="h-4 w-4 sm:h-5 sm:w-5" />
             </div>
@@ -524,17 +515,14 @@ export default function StudentDashboard() {
               <p className="font-bold text-lg sm:text-xl text-slate-900 leading-none">{stats.certificates}</p>
               <p className="text-[10px] sm:text-xs text-slate-500 truncate mt-1">Digital Credentials</p>
             </div>
-            <div className="shrink-0 h-6 w-6 rounded-full bg-slate-50 flex items-center justify-center text-slate-400">
+            <div className="shrink-0 h-6 w-6 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 transition-transform group-hover:translate-x-1">
               <ArrowRight className="h-3 w-3" />
             </div>
-          </motion.div>
+          </div>
         </Link>
 
         <Link href="/dashboard/student/my-clubs">
-          <motion.div
-            whileHover={{ scale: 1.025, transition: { duration: 0.2 } }}
-            className="flex items-center gap-3 w-full h-full p-4 bg-white rounded-2xl border border-slate-100 shadow-xs transition-shadow hover:shadow-md cursor-pointer"
-          >
+          <div className="group flex items-center gap-3 w-full h-full p-4 bg-white rounded-2xl border border-slate-200 shadow-xs transition-all hover:shadow-md hover:border-slate-300 cursor-pointer">
             <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
               <Users className="h-4 w-4 sm:h-5 sm:w-5" />
             </div>
@@ -542,10 +530,10 @@ export default function StudentDashboard() {
               <p className="font-bold text-lg sm:text-xl text-slate-900 leading-none">{stats.joinedClubs}</p>
               <p className="text-[10px] sm:text-xs text-slate-500 truncate mt-1">Club Memberships</p>
             </div>
-            <div className="shrink-0 h-6 w-6 rounded-full bg-slate-50 flex items-center justify-center text-slate-400">
+            <div className="shrink-0 h-6 w-6 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 transition-transform group-hover:translate-x-1">
               <ArrowRight className="h-3 w-3" />
             </div>
-          </motion.div>
+          </div>
         </Link>
       </div>
 

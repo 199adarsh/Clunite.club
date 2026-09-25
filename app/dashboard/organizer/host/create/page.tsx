@@ -464,7 +464,7 @@ export default function CreateEventPage() {
                         type="button"
                         variant="destructive"
                         size="sm"
-                        className="absolute top-3 right-3 rounded-xl shadow-md"
+                        className="absolute top-3 right-3 rounded-xl shadow-sm"
                         onClick={removeBanner}
                       >
                         <X className="h-4 w-4" />
@@ -1121,7 +1121,7 @@ export default function CreateEventPage() {
             </Button>
             <Button
               type="submit"
-              className="px-10 py-3.5 bg-slate-950 hover:bg-slate-800 text-white font-bold rounded-full shadow-md hover:shadow-lg transition-all duration-300 flex items-center gap-2"
+              className="px-10 py-3.5 bg-slate-950 hover:bg-slate-800 text-white font-bold rounded-full shadow-sm hover:shadow-lg transition-all duration-300 flex items-center gap-2"
               disabled={isSubmitting}
             >
               <Save className="h-4 w-4" />

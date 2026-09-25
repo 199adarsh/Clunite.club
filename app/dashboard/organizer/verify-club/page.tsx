@@ -203,7 +203,7 @@ export default function VerifyClubPage() {
         <Card className="max-w-md w-full border-2 border-green-200 shadow-2xl">
           <CardContent className="p-8">
             <div className="text-center space-y-6">
-              <div className="mx-auto w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center shadow-lg">
+              <div className="mx-auto w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center shadow-sm">
                 <CheckCircle2 className="h-10 w-10 text-white" />
               </div>
               <div className="space-y-3">
@@ -232,7 +232,7 @@ export default function VerifyClubPage() {
       <div className="w-full max-w-lg">
         <Card className="border-2 border-indigo-100 shadow-2xl">
           <CardHeader className="text-center space-y-4 pb-6">
-            <div className="mx-auto w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+            <div className="mx-auto w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-sm">
               <Shield className="h-10 w-10 text-white" />
             </div>
             <div>
@@ -322,7 +322,7 @@ export default function VerifyClubPage() {
                   clubName.toLowerCase() !==
                     pendingClubData?.club_data?.name?.toLowerCase()
                 }
-                className="w-full h-14 text-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all"
+                className="w-full h-14 text-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-sm hover:shadow-xl transition-all"
               >
                 {loading ? (
                   <>

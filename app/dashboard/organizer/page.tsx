@@ -126,7 +126,7 @@ export default function OrganizerDashboardPage() {
             <p className="text-gray-600 font-medium text-sm sm:text-base">View and manage participants for all events</p>
           </div>
           <Link href="/dashboard/organizer/host">
-            <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold px-4 sm:px-6 py-2 sm:py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto">
+            <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold px-4 sm:px-6 py-2 sm:py-3 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto">
               <Plus className="h-5 w-5 mr-2" />
               Event Management Hub
             </Button>

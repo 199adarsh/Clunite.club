@@ -161,7 +161,7 @@ export default function StudentQrPage() {
                         onClick={() => setSelectedTicket(ticket)}
                         className={`p-5 rounded-xl border transition-all cursor-pointer bg-white text-left ${
                           selectedTicket?.id === ticket.id
-                            ? 'border-blue-500 ring-2 ring-blue-500/20 shadow-md'
+                            ? 'border-blue-500 ring-2 ring-blue-500/20 shadow-sm'
                             : 'border-black/5 hover:border-black/10 hover:shadow-sm'
                         }`}
                       >
@@ -196,7 +196,7 @@ export default function StudentQrPage() {
               {/* TICKET DETAIL / QR CONTAINER */}
               <div className="lg:col-span-1">
                 {selectedTicket ? (
-                  <Card className="rounded-2xl border border-black/10 bg-white overflow-hidden shadow-md sticky top-6">
+                  <Card className="rounded-2xl border border-black/10 bg-white overflow-hidden shadow-sm sticky top-6">
                     <CardHeader className={`text-white p-6 ${selectedTicket.status === 'attended' ? 'bg-gradient-to-br from-emerald-600 to-teal-600' : 'bg-gradient-to-br from-blue-600 to-indigo-600'}`}>
                        <CardTitle className="text-lg font-bold line-clamp-1">{selectedTicket.events?.title}</CardTitle>
                        <CardDescription className="text-white/80 text-xs">
@@ -276,7 +276,7 @@ export default function StudentQrPage() {
                 <div className="absolute -top-6 -right-6 h-28 w-28 rounded-full bg-white/5 pointer-events-none" />
                 <div className="absolute -bottom-10 -left-10 h-40 w-40 rounded-full bg-white/5 pointer-events-none" />
                 <div className="relative z-10 flex items-center gap-4">
-                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-2xl font-black shadow-lg border-2 border-white/20 shrink-0">
+                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-2xl font-black shadow-sm border-2 border-white/20 shrink-0">
                     {userDisplayName.slice(0, 2).toUpperCase()}
                   </div>
                   <div className="min-w-0">

@@ -313,7 +313,7 @@ export default function ManageAdminsPage() {
               </p>
             </div>
             <Link href="/dashboard/organizer/host" className="block">
-              <Button className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold py-3.5 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl">
+              <Button className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold py-3.5 rounded-xl transition-all duration-300 shadow-sm hover:shadow-xl">
                 Back to Hub
               </Button>
             </Link>
@@ -380,7 +380,7 @@ export default function ManageAdminsPage() {
               <Button
                 onClick={handleAddAdmin}
                 disabled={adding || !newAdminEmail || admins.length >= 5}
-                className="w-full h-11 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition"
+                className="w-full h-11 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl shadow-sm hover:shadow-lg transition"
               >
                 {adding ? (
                   <>
