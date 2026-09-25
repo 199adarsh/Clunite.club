@@ -749,7 +749,7 @@ export default function RankLeaderboardPage() {
             <>
               {/* TOP 3 PODIUM */}
               <div className="flex items-end justify-center gap-1 sm:gap-3 mt-8 pt-10 pb-4 px-2">
-                {/* 2nd Place */}
+                {/* 2nd Place (Silver) */}
                 {filteredStudents[1] && (
                   <div
                     className="flex flex-col items-center w-[30%] max-w-[140px] cursor-pointer group"
@@ -759,23 +759,23 @@ export default function RankLeaderboardPage() {
                       <img
                         src={filteredStudents[1].avatarUrl}
                         alt={filteredStudents[1].name}
-                        className="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover border-4 border-slate-100 shadow-md relative z-10 bg-slate-50"
+                        className="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover border-4 border-slate-300 shadow-md relative z-10 bg-slate-50"
                       />
                       <span className="font-bold text-slate-800 text-[10px] sm:text-xs mt-2 truncate w-full px-1">
                         {filteredStudents[1].name.split(' ')[0]}
                       </span>
-                      <div className="mt-1 bg-slate-800 text-white rounded-md text-[9px] sm:text-[10px] px-2 py-0.5 shadow-sm font-semibold flex items-center gap-1">
+                      <div className="mt-1 bg-slate-700 text-white rounded-md text-[9px] sm:text-[10px] px-2 py-0.5 shadow-sm font-semibold flex items-center gap-1">
                         {filteredStudents[1].totalXp} XP ⚡
                       </div>
                     </div>
                     {/* Podium Block 2 */}
-                    <div className="w-full h-32 sm:h-40 bg-gradient-to-b from-slate-200 via-slate-200 to-slate-300 rounded-t-lg sm:rounded-t-xl border-x border-t border-slate-300/50 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(255,255,255,0.6)] relative overflow-hidden">
-                      <span className="text-5xl sm:text-6xl font-black text-slate-400/40">2</span>
+                    <div className="w-full h-32 sm:h-40 bg-gradient-to-b from-slate-300 via-slate-200 to-slate-400 rounded-t-lg sm:rounded-t-xl border-x border-t border-slate-400 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(255,255,255,0.8),0_-4px_20px_rgba(148,163,184,0.15)] relative overflow-hidden">
+                      <span className="text-5xl sm:text-6xl font-black text-slate-500/40">2</span>
                     </div>
                   </div>
                 )}
 
-                {/* 1st Place */}
+                {/* 1st Place (Gold) */}
                 {filteredStudents[0] && (
                   <div
                     className="flex flex-col items-center w-[35%] max-w-[160px] z-10 cursor-pointer group"
@@ -786,7 +786,7 @@ export default function RankLeaderboardPage() {
                       <img
                         src={filteredStudents[0].avatarUrl}
                         alt={filteredStudents[0].name}
-                        className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-4 border-amber-200 shadow-lg relative z-10 bg-slate-50"
+                        className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-4 border-amber-300 shadow-lg relative z-10 bg-slate-50"
                       />
                       <span className="font-extrabold text-slate-900 text-xs sm:text-sm mt-2 truncate w-full px-1">
                         {filteredStudents[0].name.split(' ')[0]}
@@ -796,13 +796,13 @@ export default function RankLeaderboardPage() {
                       </div>
                     </div>
                     {/* Podium Block 1 */}
-                    <div className="w-full h-44 sm:h-52 bg-gradient-to-b from-white via-slate-100 to-slate-200 rounded-t-xl sm:rounded-t-2xl border-x border-t border-white flex items-start justify-center pt-6 sm:pt-8 shadow-[0_-4px_20px_rgba(0,0,0,0.05),inset_0_2px_10px_rgba(255,255,255,1)] relative overflow-hidden">
-                      <span className="text-6xl sm:text-7xl font-black text-slate-300/60 drop-shadow-sm">1</span>
+                    <div className="w-full h-44 sm:h-52 bg-gradient-to-b from-amber-300 via-amber-200 to-amber-400 rounded-t-xl sm:rounded-t-2xl border-x border-t border-amber-400 flex items-start justify-center pt-6 sm:pt-8 shadow-[inset_0_2px_10px_rgba(255,255,255,0.7),0_-4px_20px_rgba(251,191,36,0.2)] relative overflow-hidden">
+                      <span className="text-6xl sm:text-7xl font-black text-amber-600/40 drop-shadow-sm">1</span>
                     </div>
                   </div>
                 )}
 
-                {/* 3rd Place */}
+                {/* 3rd Place (Bronze) */}
                 {filteredStudents[2] && (
                   <div
                     className="flex flex-col items-center w-[30%] max-w-[140px] cursor-pointer group"
@@ -812,18 +812,18 @@ export default function RankLeaderboardPage() {
                       <img
                         src={filteredStudents[2].avatarUrl}
                         alt={filteredStudents[2].name}
-                        className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover border-4 border-slate-100 shadow-md relative z-10 bg-slate-50"
+                        className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover border-4 border-orange-300 shadow-md relative z-10 bg-slate-50"
                       />
                       <span className="font-bold text-slate-800 text-[10px] sm:text-xs mt-2 truncate w-full px-1">
                         {filteredStudents[2].name.split(' ')[0]}
                       </span>
-                      <div className="mt-1 bg-slate-700 text-white rounded-md text-[9px] sm:text-[10px] px-2 py-0.5 shadow-sm font-semibold flex items-center gap-1">
+                      <div className="mt-1 bg-orange-700 text-white rounded-md text-[9px] sm:text-[10px] px-2 py-0.5 shadow-sm font-semibold flex items-center gap-1">
                         {filteredStudents[2].totalXp} XP ✨
                       </div>
                     </div>
                     {/* Podium Block 3 */}
-                    <div className="w-full h-24 sm:h-32 bg-gradient-to-b from-slate-200 via-slate-300 to-slate-400 rounded-t-lg sm:rounded-t-xl border-x border-t border-slate-300/50 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(255,255,255,0.4)] relative overflow-hidden">
-                      <span className="text-5xl sm:text-6xl font-black text-slate-500/40">3</span>
+                    <div className="w-full h-24 sm:h-32 bg-gradient-to-b from-orange-300 via-orange-200 to-orange-400 rounded-t-lg sm:rounded-t-xl border-x border-t border-orange-400 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(255,255,255,0.6),0_-4px_20px_rgba(251,146,60,0.15)] relative overflow-hidden">
+                      <span className="text-5xl sm:text-6xl font-black text-orange-700/40">3</span>
                     </div>
                   </div>
                 )}
@@ -924,7 +924,7 @@ export default function RankLeaderboardPage() {
             <>
               {/* TOP 3 PODIUM */}
               <div className="flex items-end justify-center gap-1 sm:gap-3 mt-8 pt-10 pb-4 px-2">
-                {/* 2nd Place Club */}
+                {/* 2nd Place Club (Silver) */}
                 {filteredClubs[1] && (
                   <div
                     className="flex flex-col items-center w-[30%] max-w-[140px] cursor-pointer group"
@@ -935,28 +935,28 @@ export default function RankLeaderboardPage() {
                         <img
                           src={filteredClubs[1].logo_url}
                           alt={filteredClubs[1].name}
-                          className="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover border-4 border-slate-100 shadow-md relative z-10 bg-slate-50"
+                          className="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover border-4 border-slate-300 shadow-md relative z-10 bg-slate-50"
                         />
                       ) : (
-                        <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-slate-100 text-slate-700 font-bold text-xl sm:text-2xl flex items-center justify-center border-4 border-slate-200 shadow-md relative z-10">
+                        <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-slate-100 text-slate-700 font-bold text-xl sm:text-2xl flex items-center justify-center border-4 border-slate-300 shadow-md relative z-10">
                           {filteredClubs[1].name.charAt(0)}
                         </div>
                       )}
                       <span className="font-bold text-slate-800 text-[10px] sm:text-xs mt-2 truncate w-full px-1">
                         {filteredClubs[1].name.split(' ')[0]}
                       </span>
-                      <div className="mt-1 bg-slate-800 text-white rounded-md text-[9px] sm:text-[10px] px-2 py-0.5 shadow-sm font-semibold flex items-center gap-1">
+                      <div className="mt-1 bg-slate-700 text-white rounded-md text-[9px] sm:text-[10px] px-2 py-0.5 shadow-sm font-semibold flex items-center gap-1">
                         {filteredClubs[1].totalScore} pts ⚡
                       </div>
                     </div>
                     {/* Podium Block 2 */}
-                    <div className="w-full h-32 sm:h-40 bg-gradient-to-b from-slate-200 via-slate-200 to-slate-300 rounded-t-lg sm:rounded-t-xl border-x border-t border-slate-300/50 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(255,255,255,0.6)] relative overflow-hidden">
-                      <span className="text-5xl sm:text-6xl font-black text-slate-400/40">2</span>
+                    <div className="w-full h-32 sm:h-40 bg-gradient-to-b from-slate-300 via-slate-200 to-slate-400 rounded-t-lg sm:rounded-t-xl border-x border-t border-slate-400 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(255,255,255,0.8),0_-4px_20px_rgba(148,163,184,0.15)] relative overflow-hidden">
+                      <span className="text-5xl sm:text-6xl font-black text-slate-500/40">2</span>
                     </div>
                   </div>
                 )}
 
-                {/* 1st Place Club */}
+                {/* 1st Place Club (Gold) */}
                 {filteredClubs[0] && (
                   <div
                     className="flex flex-col items-center w-[35%] max-w-[160px] z-10 cursor-pointer group"
@@ -968,7 +968,7 @@ export default function RankLeaderboardPage() {
                         <img
                           src={filteredClubs[0].logo_url}
                           alt={filteredClubs[0].name}
-                          className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-4 border-amber-200 shadow-lg relative z-10 bg-slate-50"
+                          className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-4 border-amber-300 shadow-lg relative z-10 bg-slate-50"
                         />
                       ) : (
                         <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-amber-50 text-amber-800 font-extrabold text-2xl sm:text-3xl flex items-center justify-center border-4 border-amber-300 shadow-lg relative z-10">
@@ -983,13 +983,13 @@ export default function RankLeaderboardPage() {
                       </div>
                     </div>
                     {/* Podium Block 1 */}
-                    <div className="w-full h-44 sm:h-52 bg-gradient-to-b from-white via-slate-100 to-slate-200 rounded-t-xl sm:rounded-t-2xl border-x border-t border-white flex items-start justify-center pt-6 sm:pt-8 shadow-[0_-4px_20px_rgba(0,0,0,0.05),inset_0_2px_10px_rgba(255,255,255,1)] relative overflow-hidden">
-                      <span className="text-6xl sm:text-7xl font-black text-slate-300/60 drop-shadow-sm">1</span>
+                    <div className="w-full h-44 sm:h-52 bg-gradient-to-b from-amber-300 via-amber-200 to-amber-400 rounded-t-xl sm:rounded-t-2xl border-x border-t border-amber-400 flex items-start justify-center pt-6 sm:pt-8 shadow-[inset_0_2px_10px_rgba(255,255,255,0.7),0_-4px_20px_rgba(251,191,36,0.2)] relative overflow-hidden">
+                      <span className="text-6xl sm:text-7xl font-black text-amber-600/40 drop-shadow-sm">1</span>
                     </div>
                   </div>
                 )}
 
-                {/* 3rd Place Club */}
+                {/* 3rd Place Club (Bronze) */}
                 {filteredClubs[2] && (
                   <div
                     className="flex flex-col items-center w-[30%] max-w-[140px] cursor-pointer group"
@@ -1000,23 +1000,23 @@ export default function RankLeaderboardPage() {
                         <img
                           src={filteredClubs[2].logo_url}
                           alt={filteredClubs[2].name}
-                          className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover border-4 border-slate-100 shadow-md relative z-10 bg-slate-50"
+                          className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover border-4 border-orange-300 shadow-md relative z-10 bg-slate-50"
                         />
                       ) : (
-                        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-slate-100 text-slate-700 font-bold text-lg sm:text-xl flex items-center justify-center border-4 border-slate-200 shadow-md relative z-10">
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-orange-50 text-orange-800 font-bold text-lg sm:text-xl flex items-center justify-center border-4 border-orange-300 shadow-md relative z-10">
                           {filteredClubs[2].name.charAt(0)}
                         </div>
                       )}
                       <span className="font-bold text-slate-800 text-[10px] sm:text-xs mt-2 truncate w-full px-1">
                         {filteredClubs[2].name.split(' ')[0]}
                       </span>
-                      <div className="mt-1 bg-slate-700 text-white rounded-md text-[9px] sm:text-[10px] px-2 py-0.5 shadow-sm font-semibold flex items-center gap-1">
+                      <div className="mt-1 bg-orange-700 text-white rounded-md text-[9px] sm:text-[10px] px-2 py-0.5 shadow-sm font-semibold flex items-center gap-1">
                         {filteredClubs[2].totalScore} pts ✨
                       </div>
                     </div>
                     {/* Podium Block 3 */}
-                    <div className="w-full h-24 sm:h-32 bg-gradient-to-b from-slate-200 via-slate-300 to-slate-400 rounded-t-lg sm:rounded-t-xl border-x border-t border-slate-300/50 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(255,255,255,0.4)] relative overflow-hidden">
-                      <span className="text-5xl sm:text-6xl font-black text-slate-500/40">3</span>
+                    <div className="w-full h-24 sm:h-32 bg-gradient-to-b from-orange-300 via-orange-200 to-orange-400 rounded-t-lg sm:rounded-t-xl border-x border-t border-orange-400 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(255,255,255,0.6),0_-4px_20px_rgba(251,146,60,0.15)] relative overflow-hidden">
+                      <span className="text-5xl sm:text-6xl font-black text-orange-700/40">3</span>
                     </div>
                   </div>
                 )}
