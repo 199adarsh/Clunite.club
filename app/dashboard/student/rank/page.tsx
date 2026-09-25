@@ -458,7 +458,7 @@ export default function RankLeaderboardPage() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* ================= HERO HEADER & PERSONAL STANDING ================= */}
-      <div className="relative rounded-[2rem] bg-white border border-slate-100 overflow-hidden shadow-none transition-all duration-300">
+      <div className="relative rounded-[2rem] bg-white border border-slate-200 overflow-hidden shadow-none transition-all duration-300">
         {/* Subtle decorative gradient matching browse events */}
         <div className="absolute inset-0 bg-gradient-to-r from-indigo-200/60 via-purple-100/30 to-transparent pointer-events-none" />
 
