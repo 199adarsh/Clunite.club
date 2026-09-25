@@ -498,7 +498,7 @@ export default function RankLeaderboardPage() {
 
           {/* Bottom Row: Personal Standing */}
           {currentStudent && (
-            <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-5 sm:gap-6 bg-white/50 backdrop-blur-md rounded-2xl p-5 border border-white/60 shadow-sm">
+            <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-5 sm:gap-6 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
               {/* User Profile */}
               <div className="flex items-center gap-3.5 sm:gap-4 min-w-0">
                 <div className="relative shrink-0">
