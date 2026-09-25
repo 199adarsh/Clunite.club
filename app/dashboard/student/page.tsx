@@ -369,9 +369,9 @@ export default function StudentDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f5f5f7] px-4 sm:px-8 py-6 space-y-6 sm:space-y-8 antialiased">
+    <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* ================= HERO & IDENTITY ================= */}
-      <div className="relative rounded-2xl bg-white border border-black/5 p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-sm overflow-hidden">
+      <div className="relative rounded-2xl bg-white border border-slate-200 p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 overflow-hidden">
         {/* Decorative background gradient */}
         <div className="absolute inset-0 bg-gradient-to-r from-indigo-200/60 via-purple-100/30 to-transparent pointer-events-none" />
 
@@ -472,53 +472,53 @@ export default function StudentDashboard() {
 
       {/* ================= PRACTICAL STATS GRID ================= */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="border border-black/5 shadow-sm rounded-2xl bg-white">
-          <CardContent className="p-5 flex items-center justify-between">
+        <Card className="border border-slate-200 rounded-2xl bg-white h-full">
+          <CardContent className="p-5 flex items-center justify-between h-full">
             <div className="space-y-1">
               <p className="text-xs font-semibold text-slate-500">Registered Events</p>
               <p className="text-2xl font-black text-slate-900">{stats.registeredEvents}</p>
               <span className="text-[11px] text-indigo-600 font-medium">Active Schedule</span>
             </div>
-            <div className="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+            <div className="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
               <Calendar className="h-5 w-5" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border border-black/5 shadow-sm rounded-2xl bg-white">
-          <CardContent className="p-5 flex items-center justify-between">
+        <Card className="border border-slate-200 rounded-2xl bg-white h-full">
+          <CardContent className="p-5 flex items-center justify-between h-full">
             <div className="space-y-1">
               <p className="text-xs font-semibold text-slate-500">Attended Check-ins</p>
               <p className="text-2xl font-black text-slate-900">{stats.attendedEvents}</p>
               <span className="text-[11px] text-emerald-600 font-medium">Verified Presence</span>
             </div>
-            <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+            <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
               <CheckCircle2 className="h-5 w-5" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border border-black/5 shadow-sm rounded-2xl bg-white">
-          <CardContent className="p-5 flex items-center justify-between">
+        <Card className="border border-slate-200 rounded-2xl bg-white h-full">
+          <CardContent className="p-5 flex items-center justify-between h-full">
             <div className="space-y-1">
               <p className="text-xs font-semibold text-slate-500">Digital Credentials</p>
               <p className="text-2xl font-black text-slate-900">{stats.certificates}</p>
               <span className="text-[11px] text-amber-600 font-medium">Verified Certificates</span>
             </div>
-            <div className="w-11 h-11 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center">
+            <div className="w-11 h-11 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center shrink-0">
               <Award className="h-5 w-5" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border border-black/5 shadow-sm rounded-2xl bg-white">
-          <CardContent className="p-5 flex items-center justify-between">
+        <Card className="border border-slate-200 rounded-2xl bg-white h-full">
+          <CardContent className="p-5 flex items-center justify-between h-full">
             <div className="space-y-1">
               <p className="text-xs font-semibold text-slate-500">Club Memberships</p>
               <p className="text-2xl font-black text-slate-900">{stats.joinedClubs}</p>
               <span className="text-[11px] text-purple-600 font-medium">Joined Societies</span>
             </div>
-            <div className="w-11 h-11 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+            <div className="w-11 h-11 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
               <Users className="h-5 w-5" />
             </div>
           </CardContent>

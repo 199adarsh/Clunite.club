@@ -278,24 +278,24 @@ export default function BrowseEventsPage() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* ================= HERO HEADER ================= */}
-      <div className="relative rounded-2xl bg-white border border-slate-200/80 p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-indigo-50/80 via-purple-50/40 to-transparent pointer-events-none" />
+      <div className="relative rounded-2xl bg-white border border-slate-200 p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-indigo-200/60 via-purple-100/30 to-transparent pointer-events-none" />
 
-        <div className="relative z-10 space-y-1">
-          <div className="flex items-center gap-2">
-            <Badge className="bg-indigo-50 text-indigo-700 border-indigo-200 text-[10px] font-bold">
-              Campus Event Directory
+        <div className="relative z-10 space-y-2 max-w-xl">
+          <div className="flex items-center gap-2 flex-wrap">
+            <Badge className="bg-indigo-50 text-indigo-700 border-indigo-200 text-xs font-bold uppercase tracking-wider">
+              Directory
             </Badge>
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
-            Discover Campus Events
+            Campus Events
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 font-medium">
             Explore hackathons, workshops, cultural fests, and club competitions across campuses.
           </p>
         </div>
 
-        <div className="relative z-10 flex items-center gap-3">
+        <div className="relative z-10 flex flex-wrap items-center gap-3 shrink-0">
           <div className="bg-white/90 backdrop-blur rounded-xl border border-slate-200 px-4 py-2 text-center shadow-xs">
             <p className="text-xs font-semibold text-slate-500">Available Events</p>
             <p className="text-xl font-extrabold text-slate-900">{filteredEvents.length}</p>
@@ -306,7 +306,7 @@ export default function BrowseEventsPage() {
       {/* ================= FILTER & SEARCH BAR ================= */}
       <div className="space-y-3">
         {/* Main Controls Card */}
-        <Card className="border border-slate-200/80 shadow-xs rounded-2xl bg-white overflow-hidden">
+        <Card className="border border-slate-200 rounded-2xl bg-white overflow-hidden">
           <CardContent className="p-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
             {/* Search Input */}
             <div className="relative flex-1 min-w-[220px]">
@@ -439,7 +439,7 @@ export default function BrowseEventsPage() {
 
       {/* ================= EVENTS CONTENT ================= */}
       {filteredEvents.length === 0 ? (
-        <Card className="rounded-2xl border border-slate-200/80 bg-white p-12 text-center space-y-3 shadow-xs">
+        <Card className="rounded-2xl border border-slate-200 bg-white p-12 text-center space-y-3">
           <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto">
             <Search className="h-6 w-6" />
           </div>
@@ -470,8 +470,8 @@ export default function BrowseEventsPage() {
             return (
               <Link key={event.id} href={`/dashboard/student/events/${event.id}`} className="block group">
                 <Card className={cn(
-                  "h-full rounded-2xl border bg-white shadow-xs hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col justify-between",
-                  statusInfo.isLive ? "border-slate-200/80 hover:border-indigo-200" : "border-slate-200/50 opacity-85 hover:opacity-100"
+                  "h-full rounded-2xl border bg-white transition-all duration-200 overflow-hidden flex flex-col justify-between",
+                  statusInfo.isLive ? "border-slate-200 hover:border-indigo-300" : "border-slate-200 opacity-85 hover:opacity-100"
                 )}>
                   <div>
                     {/* Event Banner Image Header */}
@@ -646,8 +646,8 @@ export default function BrowseEventsPage() {
             return (
               <Link key={event.id} href={`/dashboard/student/events/${event.id}`} className="block group">
                 <Card className={cn(
-                  "rounded-2xl border bg-white shadow-xs hover:shadow-md transition-all duration-200 p-4 sm:p-5",
-                  statusInfo.isLive ? "border-slate-200/80 hover:border-indigo-200" : "border-slate-200/50 opacity-85"
+                  "rounded-2xl border bg-white transition-all duration-200 p-4 sm:p-5",
+                  statusInfo.isLive ? "border-slate-200 hover:border-indigo-300" : "border-slate-200 opacity-85"
                 )}>
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="flex items-start gap-4 min-w-0 flex-1">
