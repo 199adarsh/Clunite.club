@@ -233,27 +233,30 @@ export default function MyClubsPage() {
   if (!authUser) return null;
 
   return (
-    <div className="min-h-screen bg-[#f5f5f7] px-4 sm:px-8 py-6 space-y-6 sm:space-y-8 antialiased">
+    <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* ================= HERO HEADER ================= */}
-      <div className="relative rounded-2xl bg-white border border-black/5 p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm overflow-hidden">
+      <div className="relative rounded-2xl bg-white border border-slate-200 p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 overflow-hidden">
         {/* Subtle decorative gradient */}
         <div className="absolute inset-0 bg-gradient-to-r from-indigo-200/60 via-purple-100/30 to-transparent pointer-events-none" />
 
-        <div className="relative z-10 space-y-1.5 min-w-0">
-          <div className="flex items-center gap-2.5 flex-wrap">
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
-              Campus Clubs & Communities
-            </h1>
-            <Badge className="bg-indigo-50 text-indigo-700 border border-indigo-200/80 font-bold text-xs shrink-0">
+        <div className="relative z-10 space-y-2 max-w-xl">
+          <div className="flex items-center gap-2 flex-wrap">
+            <Badge className="bg-indigo-50 text-indigo-700 border-indigo-200 text-xs font-bold uppercase tracking-wider">
+              Directory
+            </Badge>
+            <Badge className="bg-slate-100 text-slate-700 border-slate-200 font-semibold text-xs">
               {userClubs.length} Joined
             </Badge>
           </div>
-          <p className="text-xs sm:text-sm text-slate-500 font-medium max-w-xl">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
+            Campus Clubs & Communities
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-500 font-medium">
             Explore clubs by college, discover upcoming student events, and manage your memberships.
           </p>
         </div>
 
-        <div className="relative z-10 flex items-center gap-2.5 shrink-0 pt-2 sm:pt-0">
+        <div className="relative z-10 flex flex-wrap items-center gap-3 shrink-0">
           <Link href="/dashboard/student/my-clubs/discover" className="flex-1 sm:flex-initial">
             <Button className="w-full sm:w-auto bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-xs font-semibold h-9 shadow-sm flex items-center justify-center gap-1.5">
               <Compass className="h-4 w-4" />

@@ -86,19 +86,28 @@ export default function StudentQrPage() {
   const profileQrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(profileQrData)}`;
 
   return (
-    <div className="min-h-screen bg-[#f5f5f7] px-4 sm:px-8 py-6 space-y-6 sm:space-y-10">
+    <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* HEADER */}
-      <div className="bg-white rounded-2xl p-6 sm:p-8 border border-black/5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-3 flex-wrap">
-            <h1 className="text-2xl sm:text-4xl font-bold text-gray-900 tracking-tight">QR Center</h1>
-            <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100 font-semibold border-blue-200">
-              <QrCode className="h-4 w-4 mr-1" /> Scan & Go
+      <div className="relative rounded-2xl bg-white p-6 sm:p-8 border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-indigo-200/60 via-purple-100/30 to-transparent pointer-events-none" />
+        <div className="relative z-10 space-y-2 max-w-xl">
+          <div className="flex items-center gap-2 flex-wrap">
+            <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-xs font-bold uppercase tracking-wider flex items-center gap-1">
+              <QrCode className="h-3 w-3" /> Identity Pass
             </Badge>
           </div>
-          <p className="text-gray-600 mt-2 font-medium text-xs sm:text-sm">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            QR Center
+          </h1>
+          <p className="text-slate-500 font-medium text-xs sm:text-sm">
             Access your event entry tickets and personal verification profile badge.
           </p>
+        </div>
+        
+        <div className="relative z-10 flex flex-wrap items-center gap-3 shrink-0">
+          <Badge className="bg-blue-100 text-blue-700 border-blue-200 font-bold px-4 py-2 rounded-xl text-xs sm:text-sm flex items-center gap-2">
+            <QrCode className="h-4 w-4" /> Scan & Go
+          </Badge>
         </div>
       </div>
 

@@ -456,27 +456,27 @@ export default function RankLeaderboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f5f5f7] px-4 sm:px-8 py-6 space-y-6 sm:space-y-8 antialiased">
+    <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* ================= HERO HEADER ================= */}
-      <div className="relative rounded-3xl bg-white border border-black/5 p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm overflow-hidden">
+      <div className="relative rounded-2xl bg-white border border-slate-200 p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 overflow-hidden">
         {/* Subtle decorative gradient matching browse events */}
         <div className="absolute inset-0 bg-gradient-to-r from-indigo-200/60 via-purple-100/30 to-transparent pointer-events-none" />
 
-        <div className="relative z-10 space-y-1.5 min-w-0">
-          <div className="flex items-center gap-2.5 flex-wrap">
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
-              Rankings & Leaderboard
-            </h1>
-            <Badge className="bg-indigo-50 text-indigo-700 border border-indigo-200/80 font-bold text-xs shrink-0">
+        <div className="relative z-10 space-y-2 max-w-xl">
+          <div className="flex items-center gap-2 flex-wrap">
+            <Badge className="bg-indigo-50 text-indigo-700 border-indigo-200 text-xs font-bold uppercase tracking-wider">
               Live Standings
             </Badge>
           </div>
-          <p className="text-xs sm:text-sm text-slate-500 font-medium max-w-xl">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
+            Rankings & Leaderboard
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-500 font-medium">
             Campus champions, active student clubs, and inter-college rankings
           </p>
         </div>
 
-        <div className="relative z-10 flex items-center gap-2.5 shrink-0 pt-2 sm:pt-0">
+        <div className="relative z-10 flex flex-wrap items-center gap-3 shrink-0">
           <Button
             variant="outline"
             onClick={() => setScoringGuideOpen(true)}
