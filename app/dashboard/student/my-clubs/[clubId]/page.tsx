@@ -184,14 +184,14 @@ export default function ClubProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#f5f5f7] px-4 sm:px-8 py-6 space-y-6">
+      <div className="space-y-6 max-w-7xl mx-auto pb-12">
         <Skeleton className="h-10 w-36 rounded-xl" />
-        <Skeleton className="h-64 w-full rounded-2xl" />
+        <Skeleton className="h-64 w-full rounded-xl" />
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Skeleton className="h-24 rounded-2xl" />
-          <Skeleton className="h-24 rounded-2xl" />
-          <Skeleton className="h-24 rounded-2xl" />
-          <Skeleton className="h-24 rounded-2xl" />
+          <Skeleton className="h-24 rounded-xl" />
+          <Skeleton className="h-24 rounded-xl" />
+          <Skeleton className="h-24 rounded-xl" />
+          <Skeleton className="h-24 rounded-xl" />
         </div>
       </div>
     );
@@ -199,8 +199,8 @@ export default function ClubProfilePage() {
 
   if (error || !club) {
     return (
-      <div className="min-h-screen bg-[#f5f5f7] px-4 sm:px-8 py-16 flex items-center justify-center">
-        <div className="bg-white p-8 rounded-2xl border border-black/5 text-center space-y-3 max-w-md shadow-sm">
+      <div className="flex flex-col items-center justify-center min-h-[50vh] py-16 max-w-7xl mx-auto pb-12">
+        <div className="bg-white p-8 rounded-xl border border-black/5 text-center space-y-3 max-w-md shadow-sm">
           <div className="w-12 h-12 rounded-xl bg-red-50 text-red-600 flex items-center justify-center mx-auto font-bold text-lg">
             !
           </div>
@@ -217,7 +217,7 @@ export default function ClubProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f5f5f7] px-4 sm:px-8 py-6 space-y-6 sm:space-y-8 antialiased">
+    <div className="space-y-6 sm:space-y-8 antialiased max-w-7xl mx-auto pb-12">
       {/* Back Button */}
       <div className="flex items-center justify-between">
         <Link href="/dashboard/student/my-clubs">
@@ -239,72 +239,73 @@ export default function ClubProfilePage() {
       </div>
 
       {/* ================= HERO CLUB BANNER ================= */}
-      <div className="relative rounded-2xl bg-white border border-black/5 shadow-sm overflow-hidden">
-        {/* Cover Background */}
-        <div className="h-36 sm:h-48 w-full bg-gradient-to-r from-indigo-200/70 via-purple-100/50 to-slate-100 relative overflow-hidden">
+      <div className="relative rounded-xl bg-white border border-zinc-200/80 shadow-sm overflow-hidden">
+        {/* Cover Background - Apple/Vercel Minimalist */}
+        <div className="h-48 sm:h-64 w-full bg-zinc-100 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-zinc-200/50 to-zinc-50/20 backdrop-blur-3xl" />
           {club.banner_url && (
             <img
               src={club.banner_url}
               alt={club.name}
-              className="w-full h-full object-cover opacity-60"
+              className="w-full h-full object-cover opacity-70 mix-blend-multiply transition-transform duration-1000 hover:scale-105"
             />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent" />
         </div>
 
         {/* Content */}
-        <div className="p-6 sm:p-8 pt-0 relative">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 -mt-12 sm:-mt-16 mb-4">
+        <div className="p-8 pt-0 relative">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 -mt-16 sm:-mt-20 mb-2">
             {/* Avatar & Title */}
-            <div className="flex items-end gap-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-end gap-6">
               <div className="relative shrink-0">
                 {club.logo_url ? (
                   <img
                     src={club.logo_url}
                     alt={club.name}
-                    className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl object-cover border-4 border-white shadow-md bg-white"
+                    className="w-28 h-28 sm:w-32 sm:h-32 rounded-xl object-cover border border-zinc-200/80 shadow-sm bg-white"
                   />
                 ) : (
-                  <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white font-black text-3xl sm:text-4xl flex items-center justify-center border-4 border-white shadow-md">
+                  <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-xl bg-zinc-100 text-zinc-900 font-semibold text-4xl flex items-center justify-center border border-zinc-200/80 shadow-sm">
                     {club.name.charAt(0)}
                   </div>
                 )}
                 {club.is_verified && (
-                  <div className="absolute -bottom-1 -right-1 bg-indigo-600 text-white rounded-lg p-1 shadow-sm">
+                  <div className="absolute -bottom-1 -right-1 bg-blue-500 text-white rounded-lg p-1.5 shadow-sm border-2 border-white" title="Verified Club">
                     <ShieldCheck className="h-4 w-4" />
                   </div>
                 )}
               </div>
 
-              <div className="space-y-1">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+              <div className="space-y-2 mt-2 sm:mt-0 pb-1">
+                <div className="flex items-center gap-3 flex-wrap">
+                  <h1 className="text-2xl sm:text-3xl font-semibold text-zinc-900 tracking-tight">
                     {club.name}
                   </h1>
-                  <Badge className="bg-indigo-50 text-indigo-700 border border-indigo-200/80 text-xs font-semibold capitalize">
+                  <Badge className="bg-zinc-100 text-zinc-600 border border-zinc-200 text-xs font-medium capitalize px-3 py-1 rounded-lg shadow-none">
                     {club.category}
                   </Badge>
                 </div>
-                <p className="text-xs sm:text-sm text-slate-500 font-medium flex items-center gap-1.5">
-                  <Building2 className="h-3.5 w-3.5 text-slate-400" />
+                <p className="text-sm text-zinc-500 font-medium flex items-center gap-1.5">
+                  <Building2 className="h-4 w-4 text-zinc-400" />
                   <span>{club.college}</span>
                 </p>
               </div>
             </div>
 
             {/* Membership Action Button */}
-            <div className="flex items-center gap-2 shrink-0">
+            <div className="flex items-center gap-3 shrink-0 mt-4 md:mt-0 pb-1">
               {isMember ? (
-                <div className="flex items-center gap-2">
-                  <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 text-xs font-bold px-3 py-1.5 rounded-xl flex items-center gap-1.5 shadow-none">
+                <div className="flex items-center gap-2 bg-zinc-50/80 p-1.5 rounded-lg border border-zinc-200/60 shadow-sm">
+                  <Badge className="bg-white text-zinc-700 border-zinc-200 text-xs font-medium px-4 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm">
                     <Check className="h-3.5 w-3.5" />
-                    <span>Active Member</span>
+                    <span>Member</span>
                   </Badge>
                   <Button
-                    variant="outline"
+                    variant="ghost"
                     size="sm"
                     onClick={() => setLeaveModalOpen(true)}
-                    className="rounded-xl border-slate-200 text-xs font-semibold text-slate-600 hover:text-red-600 hover:bg-red-50"
+                    className="rounded-lg text-xs font-medium text-zinc-500 hover:text-red-600 hover:bg-red-50 h-8 px-4 transition-colors"
                   >
                     Leave
                   </Button>
@@ -313,9 +314,9 @@ export default function ClubProfilePage() {
                 <Button
                   onClick={handleJoin}
                   disabled={joining}
-                  className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold rounded-xl text-xs px-5 h-9 shadow-sm"
+                  className="bg-zinc-900 hover:bg-zinc-800 text-white font-medium rounded-lg text-sm px-8 h-11 shadow-sm transition-all duration-300"
                 >
-                  <Plus className="h-4 w-4 mr-1" />
+                  <Plus className="h-4 w-4 mr-2" />
                   {joining ? 'Joining...' : 'Join Club'}
                 </Button>
               )}
@@ -324,40 +325,49 @@ export default function ClubProfilePage() {
 
           {/* Tagline / Description */}
           {club.tagline && (
-            <p className="text-sm font-semibold text-slate-700 mt-2">{club.tagline}</p>
+            <div className="mt-6">
+              <p className="text-[15px] font-medium text-zinc-600 leading-relaxed max-w-3xl">
+                {club.tagline}
+              </p>
+            </div>
           )}
         </div>
       </div>
 
       {/* ================= STATS ROW ================= */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="border border-black/5 shadow-sm rounded-2xl bg-white">
-          <CardContent className="p-4 text-center">
-            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">Members</span>
-            <p className="text-xl font-extrabold text-slate-900 mt-0.5">{club.members_count || membersList.length || 1}</p>
-          </CardContent>
-        </Card>
-
-        <Card className="border border-black/5 shadow-sm rounded-2xl bg-white">
-          <CardContent className="p-4 text-center">
-            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">Events Hosted</span>
-            <p className="text-xl font-extrabold text-slate-900 mt-0.5">{events.length || club.events_hosted_count || 0}</p>
-          </CardContent>
-        </Card>
-
-        <Card className="border border-black/5 shadow-sm rounded-2xl bg-white">
-          <CardContent className="p-4 text-center">
-            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">Credibility Score</span>
-            <p className="text-xl font-extrabold text-indigo-700 mt-0.5">
-              {club.credibility_score ? Number(club.credibility_score).toFixed(1) : '9.4'}/10
+        <Card className="border border-zinc-200/80 shadow-sm rounded-xl bg-white hover:border-zinc-300 transition-colors duration-300 cursor-default">
+          <CardContent className="p-6 text-left">
+            <span className="text-[11px] font-semibold text-zinc-500 uppercase tracking-widest block mb-2">Members</span>
+            <p className="text-3xl font-medium text-zinc-900 tracking-tight">
+              {club.members_count || membersList.length || 1}
             </p>
           </CardContent>
         </Card>
 
-        <Card className="border border-black/5 shadow-sm rounded-2xl bg-white">
-          <CardContent className="p-4 text-center">
-            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">Category</span>
-            <p className="text-base font-bold text-slate-800 mt-0.5 capitalize truncate">
+        <Card className="border border-zinc-200/80 shadow-sm rounded-xl bg-white hover:border-zinc-300 transition-colors duration-300 cursor-default">
+          <CardContent className="p-6 text-left">
+            <span className="text-[11px] font-semibold text-zinc-500 uppercase tracking-widest block mb-2">Events Hosted</span>
+            <p className="text-3xl font-medium text-zinc-900 tracking-tight">
+              {events.length || club.events_hosted_count || 0}
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="border border-zinc-200/80 shadow-sm rounded-xl bg-white hover:border-zinc-300 transition-colors duration-300 cursor-default">
+          <CardContent className="p-6 text-left">
+            <span className="text-[11px] font-semibold text-zinc-500 uppercase tracking-widest block mb-2">Credibility</span>
+            <p className="text-3xl font-medium text-zinc-900 tracking-tight flex items-baseline gap-1">
+              {club.credibility_score ? Number(club.credibility_score).toFixed(1) : '9.4'}
+              <span className="text-sm font-medium text-zinc-400">/10</span>
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="border border-zinc-200/80 shadow-sm rounded-xl bg-white hover:border-zinc-300 transition-colors duration-300 cursor-default">
+          <CardContent className="p-6 text-left">
+            <span className="text-[11px] font-semibold text-zinc-500 uppercase tracking-widest block mb-2">Category</span>
+            <p className="text-lg font-medium text-zinc-800 capitalize truncate mt-2">
               {club.category || 'Technical'}
             </p>
           </CardContent>
@@ -365,38 +375,38 @@ export default function ClubProfilePage() {
       </div>
 
       {/* ================= TABS SECTION ================= */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
         <div className="w-full overflow-x-auto no-scrollbar pb-1 -mb-1">
-          <TabsList className="inline-flex w-auto min-w-full sm:min-w-0 bg-white border border-black/5 p-1 rounded-2xl h-auto shadow-sm gap-1">
+          <TabsList className="inline-flex w-auto min-w-full sm:min-w-0 bg-zinc-100/80 p-1 rounded-lg h-auto gap-1">
             <TabsTrigger
               value="overview"
-              className="rounded-xl px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-bold whitespace-nowrap data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all shrink-0"
+              className="rounded-lg px-5 py-2 text-sm font-medium whitespace-nowrap data-[state=active]:bg-white data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm text-zinc-500 transition-all duration-300 shrink-0"
             >
-              Overview & Notices
+              Overview
             </TabsTrigger>
             <TabsTrigger
               value="events"
-              className="rounded-xl px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-bold whitespace-nowrap data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all flex items-center gap-1.5 shrink-0"
+              className="rounded-lg px-5 py-2 text-sm font-medium whitespace-nowrap data-[state=active]:bg-white data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm text-zinc-500 transition-all duration-300 flex items-center gap-2 shrink-0"
             >
               <span>Events</span>
-              <Badge className="bg-slate-100 text-slate-700 text-[10px] px-1.5 py-0 h-4 border-0">
+              <Badge className="bg-zinc-200/50 text-zinc-600 data-[state=active]:bg-zinc-100 data-[state=active]:text-zinc-900 text-[10px] px-1.5 py-0 h-4 border-0 rounded-lg">
                 {events.length}
               </Badge>
             </TabsTrigger>
             <TabsTrigger
               value="team"
-              className="rounded-xl px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-bold whitespace-nowrap data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all flex items-center gap-1.5 shrink-0"
+              className="rounded-lg px-5 py-2 text-sm font-medium whitespace-nowrap data-[state=active]:bg-white data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm text-zinc-500 transition-all duration-300 flex items-center gap-2 shrink-0"
             >
-              <span>Team & Members</span>
-              <Badge className="bg-slate-100 text-slate-700 text-[10px] px-1.5 py-0 h-4 border-0">
+              <span>Team</span>
+              <Badge className="bg-zinc-200/50 text-zinc-600 data-[state=active]:bg-zinc-100 data-[state=active]:text-zinc-900 text-[10px] px-1.5 py-0 h-4 border-0 rounded-lg">
                 {membersList.length}
               </Badge>
             </TabsTrigger>
             <TabsTrigger
               value="resources"
-              className="rounded-xl px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-bold whitespace-nowrap data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all shrink-0"
+              className="rounded-lg px-5 py-2 text-sm font-medium whitespace-nowrap data-[state=active]:bg-white data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm text-zinc-500 transition-all duration-300 shrink-0"
             >
-              Community & Links
+              Community
             </TabsTrigger>
           </TabsList>
         </div>
@@ -408,7 +418,7 @@ export default function ClubProfilePage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Left: About & Vision */}
             <div className="lg:col-span-2 space-y-6">
-              <Card className="border border-black/5 shadow-sm rounded-2xl bg-white">
+              <Card className="border border-black/5 shadow-sm rounded-xl bg-white">
                 <CardHeader className="pb-3 border-b border-slate-100">
                   <CardTitle className="text-base font-bold text-slate-900 flex items-center gap-2">
                     <Sparkles className="h-4 w-4 text-indigo-600" />
@@ -430,7 +440,7 @@ export default function ClubProfilePage() {
               </Card>
 
               {/* Pinned Notices / Announcements */}
-              <Card className="border border-black/5 shadow-sm rounded-2xl bg-white">
+              <Card className="border border-black/5 shadow-sm rounded-xl bg-white">
                 <CardHeader className="pb-3 border-b border-slate-100">
                   <CardTitle className="text-base font-bold text-slate-900 flex items-center gap-2">
                     <FileText className="h-4 w-4 text-indigo-600" />
@@ -463,7 +473,7 @@ export default function ClubProfilePage() {
 
             {/* Right: Leadership & Info */}
             <div className="space-y-6">
-              <Card className="border border-black/5 shadow-sm rounded-2xl bg-white">
+              <Card className="border border-black/5 shadow-sm rounded-xl bg-white">
                 <CardHeader className="pb-3 border-b border-slate-100">
                   <CardTitle className="text-base font-bold text-slate-900 flex items-center gap-2">
                     <Users className="h-4 w-4 text-indigo-600" />
@@ -500,7 +510,7 @@ export default function ClubProfilePage() {
            ========================================================================= */}
         <TabsContent value="events" className="space-y-6">
           {events.length === 0 ? (
-            <div className="bg-white rounded-2xl p-12 border border-black/5 text-center space-y-3 shadow-sm">
+            <div className="bg-white rounded-xl p-12 border border-black/5 text-center space-y-3 shadow-sm">
               <Calendar className="h-8 w-8 text-indigo-600 mx-auto" />
               <h3 className="text-base font-bold text-slate-900">No Events Scheduled</h3>
               <p className="text-xs text-slate-500 max-w-sm mx-auto">
@@ -512,48 +522,52 @@ export default function ClubProfilePage() {
               {events.map((event) => (
                 <Card
                   key={event.id}
-                  className="border border-black/5 shadow-sm rounded-2xl bg-white hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col justify-between"
+                  className="group border border-slate-200/60 shadow-sm hover:shadow-xl rounded-xl bg-white transition-all duration-500 hover:-translate-y-1 overflow-hidden flex flex-col justify-between cursor-pointer"
                 >
-                  <div className="p-5 space-y-3">
+                  <div className="p-6 space-y-4">
                     <div className="flex items-center justify-between gap-2">
-                      <Badge className="bg-indigo-50 text-indigo-700 border-indigo-200 text-[10px] font-semibold capitalize">
+                      <Badge className="bg-indigo-50 text-indigo-700 border border-indigo-200/50 text-[10px] font-bold tracking-wide uppercase px-2.5 py-1">
                         {event.mode || 'offline'}
                       </Badge>
                       {event.entry_fee === 0 ? (
-                        <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">
+                        <span className="text-[10px] font-black uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-100/50">
                           Free Entry
                         </span>
                       ) : (
-                        <span className="text-xs font-bold text-slate-900 bg-slate-50 px-2 py-0.5 rounded-md border border-slate-200">
+                        <span className="text-[10px] font-black uppercase tracking-wider text-slate-900 bg-slate-50 px-2.5 py-1 rounded-md border border-slate-200/60">
                           ₹{event.entry_fee}
                         </span>
                       )}
                     </div>
 
-                    <h3 className="font-bold text-slate-900 text-base line-clamp-1">{event.title}</h3>
-                    <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
+                    <h3 className="font-extrabold text-slate-900 text-lg line-clamp-1 group-hover:text-indigo-600 transition-colors duration-300">{event.title}</h3>
+                    <p className="text-sm text-slate-500 line-clamp-2 leading-relaxed font-medium">
                       {event.description || 'Join this exciting campus event hosted by the club.'}
                     </p>
 
-                    <div className="space-y-1 pt-2 border-t border-slate-100 text-xs text-slate-500">
-                      <div className="flex items-center gap-1.5">
-                        <Calendar className="h-3.5 w-3.5 text-slate-400" />
+                    <div className="space-y-2.5 pt-4 border-t border-slate-100/60 text-xs text-slate-500 font-medium">
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-md bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                          <Calendar className="h-3.5 w-3.5" />
+                        </div>
                         <span>{new Date(event.start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                       </div>
-                      <div className="flex items-center gap-1.5">
-                        <Users className="h-3.5 w-3.5 text-slate-400" />
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-md bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+                          <Users className="h-3.5 w-3.5" />
+                        </div>
                         <span>{event.current_participants || 0} registered</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="p-4 bg-slate-50/60 border-t border-slate-100 flex items-center justify-between">
+                  <div className="p-1.5 m-4 mt-0">
                     <Link
                       href={`/dashboard/student/events/${event.id}`}
-                      className="w-full"
+                      className="block w-full"
                     >
-                      <Button size="sm" className="w-full bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold">
-                        View Event Details
+                      <Button size="sm" className="w-full bg-slate-50 hover:bg-indigo-600 text-slate-700 hover:text-white rounded-xl text-xs font-bold transition-all duration-300 group-hover:shadow-md">
+                        View Event Details <ChevronRight className="h-3.5 w-3.5 ml-1.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" />
                       </Button>
                     </Link>
                   </div>
@@ -568,24 +582,18 @@ export default function ClubProfilePage() {
            ========================================================================= */}
         <TabsContent value="team" className="space-y-6">
           {membersLoading ? (
-            <div className="flex h-48 items-center justify-center bg-white rounded-2xl border border-black/5">
+            <div className="flex h-48 items-center justify-center bg-white rounded-xl border border-black/5">
               <Skeleton className="h-6 w-32" />
             </div>
           ) : membersList.length === 0 ? (
-            <div className="bg-white rounded-2xl p-12 border border-black/5 text-center space-y-3 shadow-sm">
+            <div className="bg-white rounded-xl p-12 border border-black/5 text-center space-y-3 shadow-sm">
               <Users className="h-8 w-8 text-indigo-600 mx-auto" />
               <h3 className="text-base font-bold text-slate-900">No Members Listed</h3>
               <p className="text-xs text-slate-500">Be the first to join this organization!</p>
             </div>
           ) : (
-            <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-5 space-y-3">
-              <div className="text-xs font-bold text-slate-400 uppercase tracking-wider px-3 pb-2 border-b border-slate-100 flex items-center justify-between">
-                <span>Member Profile</span>
-                <span className="hidden sm:inline">Branch</span>
-                <span>Role</span>
-              </div>
-
-              <div className="space-y-2">
+            <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm p-6 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {membersList.map((m) => {
                   let avatarUrl = m.user.avatar_url;
                   if (!avatarUrl) {
@@ -595,34 +603,30 @@ export default function ClubProfilePage() {
                   return (
                     <div
                       key={m.id}
-                      className="flex items-center justify-between p-3 rounded-xl bg-slate-50/50 hover:bg-slate-100/70 transition-colors border border-slate-100"
+                      className="flex items-center justify-between p-4 rounded-xl bg-slate-50/50 border border-slate-200/40 hover:bg-white hover:border-indigo-200 hover:shadow-lg transition-all duration-300 group cursor-default"
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         <img
                           src={avatarUrl}
                           alt={m.user.full_name}
-                          className="w-9 h-9 rounded-xl object-cover border border-slate-200 bg-white shrink-0"
+                          className="w-12 h-12 rounded-xl object-cover border border-slate-200/60 bg-white shrink-0 group-hover:scale-105 transition-transform duration-300 shadow-sm"
                         />
                         <div className="min-w-0">
-                          <span className="font-bold text-slate-900 text-xs sm:text-sm truncate block">
+                          <span className="font-bold text-slate-900 text-sm truncate block group-hover:text-indigo-600 transition-colors duration-300">
                             {m.user.full_name || 'Student Member'}
                           </span>
-                          <span className="text-[10px] text-slate-400 truncate block sm:hidden">
+                          <span className="text-[11px] text-slate-500 font-medium truncate block">
                             {formatBranchName(m.user.branch)}
                           </span>
                         </div>
                       </div>
 
-                      <div className="hidden sm:block text-xs font-medium text-slate-600 truncate max-w-xs px-2">
-                        {formatBranchName(m.user.branch)}
-                      </div>
-
-                      <div className="shrink-0">
+                      <div className="shrink-0 pl-2">
                         <Badge
-                          className={`text-[10px] font-bold capitalize ${
+                          className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-lg shadow-sm ${
                             m.role.toLowerCase().includes('lead') || m.role.toLowerCase().includes('admin')
-                              ? 'bg-purple-50 text-purple-700 border-purple-200'
-                              : 'bg-slate-100 text-slate-700 border-slate-200'
+                              ? 'bg-gradient-to-r from-indigo-100 to-purple-100 text-indigo-800 border-none'
+                              : 'bg-white text-slate-600 border border-slate-200'
                           }`}
                         >
                           {m.role || 'Member'}
@@ -641,7 +645,7 @@ export default function ClubProfilePage() {
            ========================================================================= */}
         <TabsContent value="resources" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <Card className="border border-black/5 shadow-sm rounded-2xl bg-white">
+            <Card className="border border-black/5 shadow-sm rounded-xl bg-white">
               <CardHeader className="pb-3 border-b border-slate-100">
                 <CardTitle className="text-base font-bold text-slate-900 flex items-center gap-2">
                   <Globe className="h-4 w-4 text-indigo-600" />
@@ -692,7 +696,7 @@ export default function ClubProfilePage() {
               </CardContent>
             </Card>
 
-            <Card className="border border-black/5 shadow-sm rounded-2xl bg-white">
+            <Card className="border border-black/5 shadow-sm rounded-xl bg-white">
               <CardHeader className="pb-3 border-b border-slate-100">
                 <CardTitle className="text-base font-bold text-slate-900 flex items-center gap-2">
                   <FileText className="h-4 w-4 text-indigo-600" />
@@ -730,7 +734,7 @@ export default function ClubProfilePage() {
 
       {/* ================= LEAVE CONFIRMATION MODAL ================= */}
       <Dialog open={leaveModalOpen} onOpenChange={setLeaveModalOpen}>
-        <DialogContent className="max-w-sm bg-white rounded-2xl p-6 border border-slate-200 shadow-xl">
+        <DialogContent className="max-w-sm bg-white rounded-xl p-6 border border-slate-200 shadow-xl">
           <DialogHeader className="text-left space-y-2">
             <DialogTitle className="text-base font-bold text-slate-900">
               Leave {club.name}?

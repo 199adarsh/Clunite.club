@@ -147,6 +147,58 @@ function computeEventRecommendations(
     .sort((a, b) => b.matchScore - a.matchScore);
 }
 
+function getEventStatusInfo(event: Event) {
+  const now = new Date();
+  const deadlineStr = event.registration_deadline || event.start_date;
+
+  if (!deadlineStr) {
+    return {
+      isLive: true,
+      statusLabel: 'Live • Open',
+      daysLeftText: 'Open for registration',
+      urgency: 'normal' as const,
+    };
+  }
+
+  const deadline = new Date(deadlineStr);
+  const diffMs = deadline.getTime() - now.getTime();
+
+  if (diffMs <= 0 || event.status === 'completed' || event.status === 'cancelled') {
+    return {
+      isLive: false,
+      statusLabel: 'Registration Closed',
+      daysLeftText: 'Closed',
+      urgency: 'closed' as const,
+    };
+  }
+
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffDays === 0) {
+    return {
+      isLive: true,
+      statusLabel: 'Live Now',
+      daysLeftText: diffHours <= 1 ? 'Ends in < 1 hr' : `Ends in ${diffHours}h`,
+      urgency: 'critical' as const,
+    };
+  } else if (diffDays <= 3) {
+    return {
+      isLive: true,
+      statusLabel: 'Live Now',
+      daysLeftText: `${diffDays} ${diffDays === 1 ? 'day' : 'days'} left`,
+      urgency: 'urgent' as const,
+    };
+  } else {
+    return {
+      isLive: true,
+      statusLabel: 'Live Now',
+      daysLeftText: `${diffDays} days left`,
+      urgency: 'normal' as const,
+    };
+  }
+}
+
 export default function StudentDashboard() {
   const router = useRouter();
   const { user: authUser, loading: authLoading } = useAuth();
@@ -376,48 +428,48 @@ export default function StudentDashboard() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* ================= HERO & IDENTITY ================= */}
-      <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center gap-6">
+      <div className="bg-white rounded-xl border border-zinc-200/80 p-8 flex flex-col sm:flex-row sm:items-center gap-8 shadow-sm">
          {/* Avatar */}
-         <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-full border border-slate-200 bg-slate-50 overflow-hidden shrink-0">
+         <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-lg border border-zinc-200 bg-zinc-50 overflow-hidden shrink-0 shadow-sm">
            <img src={userData?.gender?.toLowerCase() === 'female' ? '/girl.png' : '/boy.png'} alt="Student Avatar" className="w-full h-full object-cover" />
          </div>
 
          {/* Profile Info Area */}
-         <div className="space-y-1.5 flex-1">
+         <div className="space-y-2 flex-1">
            {/* Tags & Name */}
            <div className="flex flex-wrap items-center gap-2">
-             <span className="bg-indigo-50 text-indigo-700 font-bold text-[10px] px-2.5 py-1 rounded-full uppercase tracking-wide">
-               STUDENT PORTAL
+             <span className="bg-zinc-100 text-zinc-600 font-medium text-[10px] px-3 py-1 rounded-lg uppercase tracking-widest border border-zinc-200">
+               Student Portal
              </span>
-             <span className="text-slate-300">•</span>
-             <span className="text-slate-500 font-medium text-xs sm:text-sm truncate max-w-[200px] sm:max-w-md">
+             <span className="text-zinc-300">•</span>
+             <span className="text-zinc-500 font-medium text-xs sm:text-sm truncate max-w-[200px] sm:max-w-md">
                {normalizedCollege}
              </span>
            </div>
 
-           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 pt-1">
+           <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-zinc-900 pt-1">
              Welcome back, {userData?.full_name?.split(' ')[0] || 'Student'}
            </h1>
-           <p className="text-sm text-slate-500 font-medium">
+           <p className="text-[15px] text-zinc-500 font-medium">
              {displayBranch} • Real-time event schedule, recommendations, and verified credentials.
            </p>
 
            {/* Badges */}
-           <div className="pt-3 flex flex-wrap items-center gap-2">
+           <div className="pt-4 flex flex-wrap items-center gap-3">
             <Link href="/dashboard/student/rank">
-              <Badge className="bg-indigo-50 text-indigo-700 border-none font-bold text-[11px] sm:text-xs hover:bg-indigo-100 px-3 py-1.5 transition-colors flex items-center gap-1.5 rounded-xl shadow-none">
-                <Zap className="h-3.5 w-3.5 text-indigo-600 fill-indigo-600" />
+              <Badge className="bg-white text-zinc-700 border border-zinc-200 font-medium text-[11px] sm:text-xs hover:bg-zinc-50 px-4 py-1.5 transition-colors flex items-center gap-1.5 rounded-lg shadow-sm">
+                <Zap className="h-3.5 w-3.5 text-zinc-400 fill-zinc-400" />
                 <span>{stats.totalXp} XP • {userTier.name}</span>
               </Badge>
             </Link>
 
-            <Badge className="bg-slate-50 text-slate-700 border-none font-semibold text-[11px] sm:text-xs px-3 py-1.5 rounded-xl shadow-none">
-              <Calendar className="h-3.5 w-3.5 mr-1.5 text-slate-500" />
+            <Badge className="bg-white text-zinc-700 border border-zinc-200 font-medium text-[11px] sm:text-xs px-4 py-1.5 rounded-lg shadow-sm">
+              <Calendar className="h-3.5 w-3.5 mr-1.5 text-zinc-400" />
               {stats.registeredEvents} Registered
             </Badge>
 
-            <Badge className="bg-emerald-50 text-emerald-700 border-none font-semibold text-[11px] sm:text-xs px-3 py-1.5 rounded-xl shadow-none">
-              <Award className="h-3.5 w-3.5 mr-1.5 text-emerald-600" />
+            <Badge className="bg-white text-zinc-700 border border-zinc-200 font-medium text-[11px] sm:text-xs px-4 py-1.5 rounded-lg shadow-sm">
+              <Award className="h-3.5 w-3.5 mr-1.5 text-zinc-400" />
               {stats.certificates} Credentials
             </Badge>
            </div>
@@ -426,18 +478,18 @@ export default function StudentDashboard() {
 
       {/* ================= ACTIVE EVENT PASS (IF REGISTERED) ================= */}
       {nextUpcomingEvent && (
-        <Card className="border border-indigo-200/80 bg-gradient-to-r from-indigo-50/90 via-purple-50/50 to-white shadow-sm rounded-2xl overflow-hidden">
-          <CardContent className="p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-sm shrink-0">
+        <Card className="border border-zinc-200/80 bg-zinc-50 shadow-sm rounded-xl overflow-hidden">
+          <CardContent className="p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+            <div className="flex items-center gap-5">
+              <div className="w-14 h-14 rounded-lg bg-zinc-900 text-white flex items-center justify-center shadow-sm shrink-0">
                 <Ticket className="h-6 w-6" />
               </div>
-              <div className="space-y-1 min-w-0">
+              <div className="space-y-1.5 min-w-0">
                 <div className="flex items-center gap-2">
-                  <Badge className="bg-indigo-600 text-white text-[10px] font-bold px-2 py-0.5">
-                    UPCOMING ENTRY PASS
+                  <Badge className="bg-zinc-200 text-zinc-700 text-[10px] font-medium px-3 py-1 rounded-lg uppercase tracking-widest border-none">
+                    Upcoming Entry Pass
                   </Badge>
-                  <span className="text-xs text-slate-500 font-medium">
+                  <span className="text-xs text-zinc-500 font-medium">
                     {new Date(nextUpcomingEvent.event.start_date).toLocaleDateString('en-US', {
                       weekday: 'short',
                       month: 'short',
@@ -445,27 +497,27 @@ export default function StudentDashboard() {
                     })}
                   </span>
                 </div>
-                <h3 className="font-extrabold text-slate-900 text-base sm:text-lg truncate">
+                <h3 className="font-semibold text-zinc-900 text-base sm:text-xl tracking-tight truncate">
                   {nextUpcomingEvent.event.title}
                 </h3>
-                <p className="text-xs text-slate-500 font-medium flex items-center gap-1.5 truncate">
-                  <MapPin className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                <p className="text-[13px] text-zinc-500 font-medium flex items-center gap-1.5 truncate">
+                  <MapPin className="h-4 w-4 text-zinc-400 shrink-0" />
                   <span>{nextUpcomingEvent.event.venue || nextUpcomingEvent.event.location || 'Campus Venue'}</span>
-                  <span>•</span>
+                  <span className="text-zinc-300">•</span>
                   <span>{nextUpcomingEvent.event.club?.name || 'Club'}</span>
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-2.5 shrink-0 pt-2 sm:pt-0">
+            <div className="flex items-center gap-3 shrink-0 pt-3 sm:pt-0">
               <Link href="/dashboard/student/qr">
-                <Button className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs h-9 shadow-sm flex items-center gap-1.5">
+                <Button className="bg-zinc-900 hover:bg-zinc-800 text-white font-medium rounded-lg text-xs h-10 px-5 shadow-sm flex items-center gap-2 transition-all">
                   <QrCode className="h-4 w-4" />
                   <span>Open Check-in Pass</span>
                 </Button>
               </Link>
               <Link href={`/dashboard/student/events/${nextUpcomingEvent.event.id}`}>
-                <Button variant="outline" className="rounded-xl border-slate-200 text-xs font-semibold h-9">
+                <Button variant="outline" className="rounded-lg border-zinc-200 text-xs font-medium h-10 px-5 hover:bg-white transition-all">
                   Details
                 </Button>
               </Link>
@@ -475,63 +527,39 @@ export default function StudentDashboard() {
       )}
 
       {/* ================= PRACTICAL STATS GRID ================= */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <Link href="#schedule" onClick={() => setFeedTab('registrations')}>
-          <div className="group flex items-center gap-3 w-full h-full p-4 bg-white rounded-2xl border border-slate-200 shadow-xs transition-all hover:shadow-md hover:border-slate-300 cursor-pointer">
-            <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
-              <Calendar className="h-4 w-4 sm:h-5 sm:w-5" />
-            </div>
+          <div className="group flex items-center gap-4 w-full h-full p-6 bg-white rounded-xl border border-zinc-200/80 shadow-sm transition-all hover:border-zinc-300 cursor-pointer">
             <div className="flex-1 min-w-0">
-              <p className="font-bold text-lg sm:text-xl text-slate-900 leading-none">{stats.registeredEvents}</p>
-              <p className="text-[10px] sm:text-xs text-slate-500 truncate mt-1">Registered Events</p>
-            </div>
-            <div className="shrink-0 h-6 w-6 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 transition-transform group-hover:translate-x-1">
-              <ArrowRight className="h-3 w-3" />
+              <span className="text-[11px] font-semibold text-zinc-500 uppercase tracking-widest block mb-2">Registered</span>
+              <p className="text-3xl font-medium text-zinc-900 tracking-tight">{stats.registeredEvents}</p>
             </div>
           </div>
         </Link>
 
         <Link href="/dashboard/student/certificates">
-          <div className="group flex items-center gap-3 w-full h-full p-4 bg-white rounded-2xl border border-slate-200 shadow-xs transition-all hover:shadow-md hover:border-slate-300 cursor-pointer">
-            <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-              <FileText className="h-4 w-4 sm:h-5 sm:w-5" />
-            </div>
+          <div className="group flex items-center gap-4 w-full h-full p-6 bg-white rounded-xl border border-zinc-200/80 shadow-sm transition-all hover:border-zinc-300 cursor-pointer">
             <div className="flex-1 min-w-0">
-              <p className="font-bold text-lg sm:text-xl text-slate-900 leading-none">{stats.attendedEvents}</p>
-              <p className="text-[10px] sm:text-xs text-slate-500 truncate mt-1">Attended Check-ins</p>
-            </div>
-            <div className="shrink-0 h-6 w-6 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 transition-transform group-hover:translate-x-1">
-              <ArrowRight className="h-3 w-3" />
+              <span className="text-[11px] font-semibold text-zinc-500 uppercase tracking-widest block mb-2">Attended</span>
+              <p className="text-3xl font-medium text-zinc-900 tracking-tight">{stats.attendedEvents}</p>
             </div>
           </div>
         </Link>
 
         <Link href="/dashboard/student/certificates">
-          <div className="group flex items-center gap-3 w-full h-full p-4 bg-white rounded-2xl border border-slate-200 shadow-xs transition-all hover:shadow-md hover:border-slate-300 cursor-pointer">
-            <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center shrink-0">
-              <Star className="h-4 w-4 sm:h-5 sm:w-5" />
-            </div>
+          <div className="group flex items-center gap-4 w-full h-full p-6 bg-white rounded-xl border border-zinc-200/80 shadow-sm transition-all hover:border-zinc-300 cursor-pointer">
             <div className="flex-1 min-w-0">
-              <p className="font-bold text-lg sm:text-xl text-slate-900 leading-none">{stats.certificates}</p>
-              <p className="text-[10px] sm:text-xs text-slate-500 truncate mt-1">Digital Credentials</p>
-            </div>
-            <div className="shrink-0 h-6 w-6 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 transition-transform group-hover:translate-x-1">
-              <ArrowRight className="h-3 w-3" />
+              <span className="text-[11px] font-semibold text-zinc-500 uppercase tracking-widest block mb-2">Credentials</span>
+              <p className="text-3xl font-medium text-zinc-900 tracking-tight">{stats.certificates}</p>
             </div>
           </div>
         </Link>
 
         <Link href="/dashboard/student/my-clubs">
-          <div className="group flex items-center gap-3 w-full h-full p-4 bg-white rounded-2xl border border-slate-200 shadow-xs transition-all hover:shadow-md hover:border-slate-300 cursor-pointer">
-            <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
-              <Users className="h-4 w-4 sm:h-5 sm:w-5" />
-            </div>
+          <div className="group flex items-center gap-4 w-full h-full p-6 bg-white rounded-xl border border-zinc-200/80 shadow-sm transition-all hover:border-zinc-300 cursor-pointer">
             <div className="flex-1 min-w-0">
-              <p className="font-bold text-lg sm:text-xl text-slate-900 leading-none">{stats.joinedClubs}</p>
-              <p className="text-[10px] sm:text-xs text-slate-500 truncate mt-1">Club Memberships</p>
-            </div>
-            <div className="shrink-0 h-6 w-6 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 transition-transform group-hover:translate-x-1">
-              <ArrowRight className="h-3 w-3" />
+              <span className="text-[11px] font-semibold text-zinc-500 uppercase tracking-widest block mb-2">Memberships</span>
+              <p className="text-3xl font-medium text-zinc-900 tracking-tight">{stats.joinedClubs}</p>
             </div>
           </div>
         </Link>
@@ -548,42 +576,42 @@ export default function StudentDashboard() {
             className="w-full space-y-4"
           >
             {/* Feed Switcher Header */}
-            <div className="flex items-center justify-between flex-wrap gap-3 pb-1">
-              <TabsList className="bg-slate-100/90 rounded-xl p-1 border border-slate-200/70 shadow-xs h-auto">
+            <div className="flex items-center justify-between flex-wrap gap-4 pb-2">
+              <TabsList className="bg-zinc-100/80 p-1 rounded-lg border border-zinc-200/50 h-auto">
                 <TabsTrigger 
                   value="recommended" 
-                  className="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-xs text-slate-600 hover:text-slate-900"
+                  className="px-5 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm text-zinc-500"
                 >
-                  <span>Recommended For You</span>
-                  <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-extrabold ${feedTab === 'recommended' ? 'bg-indigo-50 text-indigo-700' : 'bg-slate-200 text-slate-600'}`}>
+                  <span>Recommended</span>
+                  <span className={`text-[10px] px-2 py-0.5 rounded-lg font-medium ${feedTab === 'recommended' ? 'bg-zinc-100 text-zinc-900' : 'bg-zinc-200/50 text-zinc-600'}`}>
                     {recommendedList.length}
                   </span>
                 </TabsTrigger>
                 
                 <TabsTrigger 
                   value="registrations" 
-                  className="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-xs text-slate-600 hover:text-slate-900"
+                  className="px-5 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm text-zinc-500"
                 >
                   <span>My Schedule</span>
-                  <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-extrabold ${feedTab === 'registrations' ? 'bg-indigo-50 text-indigo-700' : 'bg-slate-200 text-slate-600'}`}>
+                  <span className={`text-[10px] px-2 py-0.5 rounded-lg font-medium ${feedTab === 'registrations' ? 'bg-zinc-100 text-zinc-900' : 'bg-zinc-200/50 text-zinc-600'}`}>
                     {userRegistrations.length}
                   </span>
                 </TabsTrigger>
               </TabsList>
 
               <Link href="/dashboard/student/browse">
-                <Button variant="ghost" size="sm" className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50/70 rounded-lg">
+                <Button variant="ghost" size="sm" className="text-sm font-medium text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 rounded-lg px-4">
                   <span>Browse All</span>
-                  <ChevronRight className="h-3.5 w-3.5 ml-0.5" />
+                  <ChevronRight className="h-4 w-4 ml-1" />
                 </Button>
               </Link>
             </div>
 
             {/* TAB 1: RECOMMENDATIONS */}
-            <TabsContent value="recommended" className="space-y-3.5 mt-0 outline-none">
+            <TabsContent value="recommended" className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-0 outline-none">
               {recommendedList.length === 0 ? (
-                <Card className="rounded-2xl border border-slate-200/80 bg-white p-10 text-center shadow-xs">
-                  <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto mb-3">
+                <Card className="col-span-full rounded-xl border border-slate-200/80 bg-white p-10 text-center shadow-xs">
+                  <div className="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto mb-3">
                     <Calendar className="h-6 w-6" />
                   </div>
                   <h3 className="text-base font-bold text-slate-900 mb-2">No Live Events Currently Open</h3>
@@ -598,123 +626,156 @@ export default function StudentDashboard() {
                 </Card>
               ) : (
                 recommendedList.map(({ event, matchScore, matchReason }) => {
-                  const eventDate = new Date(event.start_date).toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric',
-                  });
-
+                  const statusInfo = getEventStatusInfo(event);
                   const attendees = eventAttendees[event.id] || { users: [], totalCount: 0 };
+                  const collegeName = event.college || event.club?.college || 'Campus';
 
                   return (
-                    <Card
-                      key={event.id}
-                      className="border border-slate-200/80 shadow-xs hover:shadow-md hover:border-indigo-200/90 rounded-2xl bg-white transition-all duration-200 overflow-hidden group"
-                    >
-                      <CardContent className="p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                        <div className="space-y-2 min-w-0 flex-1">
-                          {/* Badges Row */}
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-[10px] font-extrabold text-indigo-700 bg-indigo-50 border border-indigo-200/80 px-2 py-0.5 rounded-md">
-                              {matchScore}% Match
-                            </span>
-
-                            <Badge className="bg-slate-100 text-slate-700 border-slate-200 text-[10px] font-semibold capitalize">
-                              {event.mode || 'offline'}
-                            </Badge>
-
-                            {event.entry_fee === 0 ? (
-                              <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
-                                Free
-                              </span>
-                            ) : (
-                              <span className="text-xs font-bold text-slate-900 bg-slate-50 px-2 py-0.5 rounded-md border border-slate-200">
-                                ₹{event.entry_fee}
-                              </span>
-                            )}
-
-                            {event.club?.name && (
-                              <span className="text-[11px] text-slate-500 font-medium truncate">
-                                • {event.club.name}
-                              </span>
-                            )}
+                    <Link key={event.id} href={`/dashboard/student/events/${event.id}`} className="block group h-full">
+                      <Card className={cn(
+                        "h-full rounded-xl border bg-white shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col group cursor-pointer overflow-hidden",
+                        statusInfo.isLive ? "border-slate-200" : "border-slate-200 opacity-90"
+                      )}>
+                        {/* IMAGE SECTION */}
+                        <div className="relative h-[200px] w-full bg-slate-100 shrink-0 overflow-hidden">
+                          <img
+                            src={event.image_url || '/placeholder.svg'}
+                            alt={event.title}
+                            className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                          />
+                          
+                          {/* Time Left Badge */}
+                          <div className={cn(
+                            "absolute top-4 left-4 px-3 py-1.5 rounded-lg text-[11px] font-extrabold shadow-sm flex items-center gap-2 z-10 backdrop-blur-md",
+                            statusInfo.isLive 
+                              ? "bg-rose-500 text-white" 
+                              : "bg-slate-900/90 text-slate-100"
+                          )}>
+                            <span className={cn(
+                              "w-2 h-2 rounded-lg",
+                              statusInfo.isLive ? "bg-white animate-pulse" : "bg-slate-400"
+                            )} />
+                            {statusInfo.daysLeftText}
                           </div>
 
-                          {/* Event Title */}
-                          <h3 className="font-bold text-slate-900 text-base sm:text-lg tracking-tight group-hover:text-indigo-600 transition-colors truncate">
-                            {event.title}
-                          </h3>
+                          <div className="absolute top-4 right-4 px-3 py-1.5 rounded-lg text-[11px] font-extrabold shadow-sm bg-indigo-600 text-white z-10 backdrop-blur-md">
+                            {matchScore}% Match
+                          </div>
+                        </div>
 
-                          {/* Reason */}
-                          <p className="text-xs text-indigo-600 font-semibold truncate">
+                        {/* AVATAR OVERLAY */}
+                        <div className="px-6 relative h-0">
+                          <div className="absolute -top-10 left-6 w-[80px] h-[80px] bg-white border-4 border-white rounded-lg flex items-center justify-center shadow-md overflow-hidden z-20">
+                            {event.club?.logo_url ? (
+                              <img src={event.club.logo_url} className="w-full h-full object-cover bg-white" alt="Club logo" />
+                            ) : (
+                              <span className="text-slate-800 font-black text-2xl">{event.club?.name?.charAt(0) || 'C'}</span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* CONTENT SECTION */}
+                        <div className="pt-14 px-6 pb-6 flex flex-col flex-1">
+                          
+                          {/* Title & Registered Count */}
+                          <div className="flex items-start justify-between gap-3">
+                            <h3 className="font-extrabold text-xl text-slate-900 leading-tight tracking-tight line-clamp-2 group-hover:text-indigo-600 transition-colors">
+                              {event.title}
+                            </h3>
+                            <div className="shrink-0 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-bold mt-0.5 border border-indigo-100">
+                              <Users className="w-3.5 h-3.5" />
+                              {attendees.totalCount} joined
+                            </div>
+                          </div>
+
+                          {/* Subtitle */}
+                          <p className="mt-2 text-xs font-bold text-slate-500 uppercase tracking-wider line-clamp-1">
+                            {event.club?.name || 'DKTE'} <span className="text-slate-300 mx-1">&bull;</span> {collegeName}
+                          </p>
+
+                          <p className="mt-1 text-xs text-indigo-600 font-semibold truncate">
                             {matchReason}
                           </p>
 
-                          {/* Date & Location */}
-                          <div className="flex items-center gap-4 text-xs text-slate-500 font-medium">
-                            <span className="flex items-center gap-1.5">
-                              <Calendar className="h-3.5 w-3.5 text-slate-400" />
-                              {eventDate}
+                          {/* Badges */}
+                          <div className="flex items-center gap-2 mt-3.5">
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-purple-50 text-purple-700 text-xs font-bold border border-purple-100">
+                              <Trophy className="w-3.5 h-3.5" />
+                              {event.type || 'Competition'}
                             </span>
-                            <span className="flex items-center gap-1.5 truncate">
-                              <MapPin className="h-3.5 w-3.5 text-slate-400 shrink-0" />
-                              {event.venue || event.location || 'Campus Auditorium'}
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold capitalize border border-slate-200">
+                              <span className="w-2 h-2 rounded-lg bg-slate-500" />
+                              {event.mode || 'Offline'}
                             </span>
                           </div>
 
-                          {/* Attendees Stack (Logos / Avatars of recently registered students) */}
-                          <div className="pt-1 flex items-center gap-2">
-                            {attendees.users.length > 0 ? (
-                              <>
-                                <div className="flex -space-x-1 overflow-hidden shrink-0">
-                                  {attendees.users.map((student, idx) => (
-                                    <div
-                                      key={student.id || idx}
-                                      title={student.name}
-                                      className={cn(
-                                        "inline-flex h-6 w-6 rounded-full ring-2 ring-white items-center justify-center text-[9px] font-bold text-white shadow-xs select-none shrink-0",
-                                        avatarColors[idx % avatarColors.length]
-                                      )}
-                                    >
-                                      {student.initials}
-                                    </div>
-                                  ))}
+                          {/* Description */}
+                          <p className="mt-4 text-[13px] text-slate-600 font-medium leading-relaxed line-clamp-2">
+                            {event.description || 'An exciting event coming up.'}
+                          </p>
+
+                          <div className="mt-auto pt-6">
+                            {/* Stats Box */}
+                            <div className="border border-slate-100 rounded-xl p-3 flex items-center justify-between shadow-sm bg-slate-50/50">
+                              <div className="flex items-center gap-2.5 w-1/3">
+                                <div className="w-10 h-10 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center shrink-0">
+                                  <Trophy className="w-4 h-4" />
                                 </div>
-                                <span className="text-[11px] font-medium text-slate-500">
-                                  {attendees.totalCount > attendees.users.length
-                                    ? `+${attendees.totalCount} students registered`
-                                    : `${attendees.totalCount} ${attendees.totalCount === 1 ? 'student' : 'students'} registered`}
-                                </span>
-                              </>
-                            ) : (
-                              <div className="flex items-center gap-1.5 text-[11px] text-slate-400 font-medium">
-                                <Users className="h-3.5 w-3.5 text-slate-400" />
-                                <span>Be the first to register</span>
+                                <div className="min-w-0">
+                                  <p className="text-sm font-black text-slate-900 truncate">
+                                    {event.prize_pool && Number(event.prize_pool) > 0 ? `₹${Number(event.prize_pool).toLocaleString()}` : '-'}
+                                  </p>
+                                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wide mt-0.5">Prize</p>
+                                </div>
                               </div>
-                            )}
+
+                              <div className="w-px h-8 bg-slate-200 shrink-0" />
+
+                              <div className="flex items-center gap-2.5 w-1/3 justify-center">
+                                <div className="w-10 h-10 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center shrink-0">
+                                  <Calendar className="w-4 h-4" />
+                                </div>
+                                <div className="min-w-0">
+                                  <p className="text-sm font-black text-slate-900 truncate">
+                                    {new Date(event.start_date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' })}
+                                  </p>
+                                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wide mt-0.5">Date</p>
+                                </div>
+                              </div>
+
+                              <div className="w-px h-8 bg-slate-200 shrink-0" />
+
+                              <div className="flex items-center gap-2.5 w-1/3 justify-end pr-1">
+                                <div className="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                                  <IndianRupee className="w-4 h-4" />
+                                </div>
+                                <div className="min-w-0">
+                                  <p className="text-sm font-black text-slate-900 truncate">
+                                    {event.entry_fee === 0 ? 'Free' : `₹${event.entry_fee}`}
+                                  </p>
+                                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wide mt-0.5">Entry</p>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <div className="mt-4 w-full bg-slate-900 hover:bg-indigo-600 text-white text-sm font-bold py-3.5 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 shadow-sm hover:shadow-md">
+                              View Details <ChevronRight className="w-4 h-4" />
+                            </div>
                           </div>
                         </div>
-
-                        {/* Action Button */}
-                        <div className="shrink-0 w-full sm:w-auto text-right pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
-                          <Link href={`/dashboard/student/events/${event.id}`}>
-                            <Button className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs h-9 px-4 shadow-sm hover:shadow transition-all">
-                              Register Now
-                            </Button>
-                          </Link>
-                        </div>
-                      </CardContent>
-                    </Card>
+                      </Card>
+                    </Link>
                   );
                 })
               )}
+ )}
             </TabsContent>
 
             {/* TAB 2: MY SCHEDULE / REGISTERED */}
-            <TabsContent value="registrations" className="space-y-3.5 mt-0 outline-none">
+            <TabsContent value="registrations" className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-0 outline-none">
               {userRegistrations.length === 0 ? (
-                <Card className="rounded-2xl border border-slate-200/80 bg-white p-10 text-center shadow-xs">
-                  <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto mb-3">
+                <Card className="col-span-full rounded-xl border border-slate-200/80 bg-white p-10 text-center shadow-xs">
+                  <div className="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto mb-3">
                     <Calendar className="h-6 w-6" />
                   </div>
                   <h3 className="text-base font-bold text-slate-900 mb-2">No Active Registrations</h3>
@@ -733,96 +794,147 @@ export default function StudentDashboard() {
               ) : (
                 userRegistrations.map((reg) => {
                   const event = reg.event;
-                  const eventDate = new Date(event.start_date).toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric',
-                  });
+                  const statusInfo = getEventStatusInfo(event);
                   const isAttended = reg.status === 'attended';
                   const attendees = eventAttendees[event.id] || { users: [], totalCount: 0 };
+                  const collegeName = event.college || event.club?.college || 'Campus';
 
                   return (
-                    <Card
-                      key={reg.id}
-                      className="border border-slate-200/80 shadow-xs hover:shadow-md hover:border-indigo-200/90 rounded-2xl bg-white transition-all duration-200 overflow-hidden group"
-                    >
-                      <CardContent className="p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                        <div className="space-y-2 min-w-0 flex-1">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <Badge
-                              className={`text-[10px] font-bold ${isAttended
-                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                                : 'bg-blue-50 text-blue-700 border-blue-200'
-                                }`}
-                            >
-                              {isAttended ? 'Attended & Verified' : 'Registered'}
-                            </Badge>
-                            <span className="text-[11px] text-slate-500 font-semibold capitalize">
-                              {event.mode || 'offline'}
-                            </span>
-                            {event.club?.name && (
-                              <span className="text-[11px] text-slate-500 font-medium">• {event.club.name}</span>
+                    <Link key={reg.id} href={`/dashboard/student/events/${event.id}`} className="block group h-full">
+                      <Card className={cn(
+                        "h-full rounded-xl border bg-white shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col group cursor-pointer overflow-hidden",
+                        statusInfo.isLive ? "border-slate-200" : "border-slate-200 opacity-90"
+                      )}>
+                        {/* IMAGE SECTION */}
+                        <div className="relative h-[200px] w-full bg-slate-100 shrink-0 overflow-hidden">
+                          <img
+                            src={event.image_url || '/placeholder.svg'}
+                            alt={event.title}
+                            className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                          />
+                          
+                          {/* Status Badge */}
+                          <div className={cn(
+                            "absolute top-4 left-4 px-3 py-1.5 rounded-lg text-[11px] font-extrabold shadow-sm flex items-center gap-2 z-10 backdrop-blur-md",
+                            isAttended 
+                              ? "bg-emerald-500 text-white" 
+                              : "bg-blue-500 text-white"
+                          )}>
+                            {isAttended ? 'Attended & Verified' : 'Registered'}
+                          </div>
+                        </div>
+
+                        {/* AVATAR OVERLAY */}
+                        <div className="px-6 relative h-0">
+                          <div className="absolute -top-10 left-6 w-[80px] h-[80px] bg-white border-4 border-white rounded-lg flex items-center justify-center shadow-md overflow-hidden z-20">
+                            {event.club?.logo_url ? (
+                              <img src={event.club.logo_url} className="w-full h-full object-cover bg-white" alt="Club logo" />
+                            ) : (
+                              <span className="text-slate-800 font-black text-2xl">{event.club?.name?.charAt(0) || 'C'}</span>
                             )}
                           </div>
+                        </div>
 
-                          <h3 className="font-bold text-slate-900 text-base sm:text-lg tracking-tight group-hover:text-indigo-600 transition-colors truncate">
-                            {event.title}
-                          </h3>
+                        {/* CONTENT SECTION */}
+                        <div className="pt-14 px-6 pb-6 flex flex-col flex-1">
+                          
+                          {/* Title & Registered Count */}
+                          <div className="flex items-start justify-between gap-3">
+                            <h3 className="font-extrabold text-xl text-slate-900 leading-tight tracking-tight line-clamp-2 group-hover:text-indigo-600 transition-colors">
+                              {event.title}
+                            </h3>
+                            <div className="shrink-0 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-bold mt-0.5 border border-indigo-100">
+                              <Users className="w-3.5 h-3.5" />
+                              {attendees.totalCount} joined
+                            </div>
+                          </div>
 
-                          <div className="flex items-center gap-4 text-xs text-slate-500 font-medium">
-                            <span className="flex items-center gap-1.5">
-                              <Calendar className="h-3.5 w-3.5 text-slate-400" />
-                              {eventDate}
+                          {/* Subtitle */}
+                          <p className="mt-2 text-xs font-bold text-slate-500 uppercase tracking-wider line-clamp-1">
+                            {event.club?.name || 'DKTE'} <span className="text-slate-300 mx-1">&bull;</span> {collegeName}
+                          </p>
+
+                          {/* Badges */}
+                          <div className="flex items-center gap-2 mt-3.5">
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-purple-50 text-purple-700 text-xs font-bold border border-purple-100">
+                              <Trophy className="w-3.5 h-3.5" />
+                              {event.type || 'Competition'}
                             </span>
-                            <span className="flex items-center gap-1.5 truncate">
-                              <MapPin className="h-3.5 w-3.5 text-slate-400 shrink-0" />
-                              {event.venue || event.location || 'Campus Auditorium'}
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold capitalize border border-slate-200">
+                              <span className="w-2 h-2 rounded-lg bg-slate-500" />
+                              {event.mode || 'Offline'}
                             </span>
                           </div>
 
-                          {/* Attendees Stack */}
-                          <div className="pt-1 flex items-center gap-2">
-                            {attendees.users.length > 0 ? (
-                              <>
-                                <div className="flex -space-x-1.5 overflow-hidden">
-                                  {attendees.users.map((student, idx) => (
-                                    <div
-                                      key={student.id || idx}
-                                      title={student.name}
-                                      className={cn(
-                                        "inline-flex h-6 w-6 rounded-full ring-2 ring-white items-center justify-center text-[9px] font-bold text-white shadow-xs select-none",
-                                        avatarColors[idx % avatarColors.length]
-                                      )}
-                                    >
-                                      {student.initials}
-                                    </div>
-                                  ))}
+                          {/* Description */}
+                          <p className="mt-4 text-[13px] text-slate-600 font-medium leading-relaxed line-clamp-2">
+                            {event.description || 'An exciting event coming up.'}
+                          </p>
+
+                          <div className="mt-auto pt-6">
+                            {/* Stats Box */}
+                            <div className="border border-slate-100 rounded-xl p-3 flex items-center justify-between shadow-sm bg-slate-50/50">
+                              <div className="flex items-center gap-2.5 w-1/3">
+                                <div className="w-10 h-10 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center shrink-0">
+                                  <Trophy className="w-4 h-4" />
                                 </div>
-                                <span className="text-[11px] font-medium text-slate-500">
-                                  {attendees.totalCount} participants registered
-                                </span>
-                              </>
-                            ) : null}
+                                <div className="min-w-0">
+                                  <p className="text-sm font-black text-slate-900 truncate">
+                                    {event.prize_pool && Number(event.prize_pool) > 0 ? `₹${Number(event.prize_pool).toLocaleString()}` : '-'}
+                                  </p>
+                                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wide mt-0.5">Prize</p>
+                                </div>
+                              </div>
+
+                              <div className="w-px h-8 bg-slate-200 shrink-0" />
+
+                              <div className="flex items-center gap-2.5 w-1/3 justify-center">
+                                <div className="w-10 h-10 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center shrink-0">
+                                  <Calendar className="w-4 h-4" />
+                                </div>
+                                <div className="min-w-0">
+                                  <p className="text-sm font-black text-slate-900 truncate">
+                                    {new Date(event.start_date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' })}
+                                  </p>
+                                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wide mt-0.5">Date</p>
+                                </div>
+                              </div>
+
+                              <div className="w-px h-8 bg-slate-200 shrink-0" />
+
+                              <div className="flex items-center gap-2.5 w-1/3 justify-end pr-1">
+                                <div className="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                                  <IndianRupee className="w-4 h-4" />
+                                </div>
+                                <div className="min-w-0">
+                                  <p className="text-sm font-black text-slate-900 truncate">
+                                    {event.entry_fee === 0 ? 'Free' : `₹${event.entry_fee}`}
+                                  </p>
+                                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wide mt-0.5">Entry</p>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <div className="mt-4 flex gap-2 w-full">
+                              <Button variant="outline" className="flex-1 rounded-lg border-slate-200 hover:bg-slate-50 h-11" asChild>
+                                <Link href="/dashboard/student/qr">
+                                  QR Pass
+                                </Link>
+                              </Button>
+                              <Button className="flex-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-white h-11" asChild>
+                                <Link href={`/dashboard/student/events/${event.id}`}>
+                                  View
+                                </Link>
+                              </Button>
+                            </div>
                           </div>
                         </div>
-
-                        <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
-                          <Link href="/dashboard/student/qr">
-                            <Button size="sm" variant="outline" className="rounded-xl border-slate-200 text-xs font-semibold h-9 px-3 hover:bg-slate-50">
-                              <QrCode className="h-3.5 w-3.5 mr-1 text-slate-600" /> QR Pass
-                            </Button>
-                          </Link>
-                          <Link href={`/dashboard/student/events/${event.id}`}>
-                            <Button size="sm" className="bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold h-9 px-4">
-                              View Event
-                            </Button>
-                          </Link>
-                        </div>
-                      </CardContent>
-                    </Card>
+                      </Card>
+                    </Link>
                   );
                 })
               )}
+ )}
             </TabsContent>
           </Tabs>
         </div>
@@ -831,7 +943,7 @@ export default function StudentDashboard() {
         <div className="space-y-6 lg:mt-[62px]">
 
           {/* Joined Clubs Snapshot */}
-          <Card className="border border-slate-200 rounded-2xl bg-white overflow-hidden">
+          <Card className="border border-slate-200 rounded-xl bg-white overflow-hidden">
             <CardHeader className="pb-3 border-b border-slate-100 flex flex-row items-center justify-between">
               <CardTitle className="text-sm font-bold text-slate-900 flex items-center gap-2">
                 <Users className="h-4 w-4 text-purple-600" />
@@ -875,7 +987,7 @@ export default function StudentDashboard() {
 
           {/* Recent Credentials Snapshot */}
           {recentCerts.length > 0 && (
-            <Card className="border border-black/5 shadow-sm rounded-2xl bg-white overflow-hidden">
+            <Card className="border border-black/5 shadow-sm rounded-xl bg-white overflow-hidden">
               <CardHeader className="pb-3 border-b border-slate-100 flex flex-row items-center justify-between">
                 <CardTitle className="text-sm font-bold text-slate-900 flex items-center gap-2">
                   <Award className="h-4 w-4 text-emerald-600" />
